@@ -13,7 +13,7 @@ target_lang = sys.argv[1]
 path_to_files = sys.argv[2]
 assert target_lang in langs, "Unknown language: {}".format(target_lang)
 
-handles = [open("{}/{}-ud-test.conllu.lex".format(path_to_files, target_lang))]
+handles = [open("{}/test/{}-ud-test.conllu.lex".format(path_to_files, target_lang))]
 pos_sources_per_handle = []
 source_langs_per_handle = []
 
