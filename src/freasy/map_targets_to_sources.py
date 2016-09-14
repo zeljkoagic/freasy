@@ -83,7 +83,7 @@ for lang in all_languages:
     trigram_freqs_for_sources[lang] = klcpos3.get_trigram_freqs(sentences)
 
 # read the target language sentences
-target_sentences = read_sentences("{}/test/{}-ud-test.conllu.lex".format(path, target_language))
+target_sentences = read_sentences("{}/test/{}-ud-test.conllu.lex.with_proj_pos".format(path, target_language))  # FIXME POS issues!!!
 # target_sentences = target_sentences[:10]
 
 # magic happens here
@@ -109,6 +109,8 @@ for approach, get_distribution in approaches.items():
     # FIXME Add granularity = ALL --- is it really necessary? Supposedly the thing converges quickly.
 
 dill.dump(all_mappings, open("{}.source_language_mappings.pickle".format(target_language), "wb"))
+
+# FIXME KLcpos3 needs ***three*** tagging setups: gold, pred, and proj!!!
 
 #for approach in approaches:
 #    for a, b in all_mappings[approach][10][0][1]:
