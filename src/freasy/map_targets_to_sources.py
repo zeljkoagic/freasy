@@ -15,6 +15,7 @@ from functools import partial
 import wals
 import klcpos3
 from softmax import softmax, invert
+import dill
 
 
 def read_sentences(filename):
@@ -107,6 +108,7 @@ for approach, get_distribution in approaches.items():
 
     # FIXME Add granularity = ALL --- is it really necessary? Supposedly the thing converges quickly.
 
+dill.dump(all_mappings, open("{}.source_language_mappings.pickle".format(target_language), "wb"))
 
 #for approach in approaches:
 #    for a, b in all_mappings[approach][10][0][1]:
@@ -114,6 +116,5 @@ for approach, get_distribution in approaches.items():
 #    print()
 
 #print(all_mappings.keys())
-print(all_mappings["wals"].keys())
-
+#print(all_mappings["wals"].keys())
 #print(all_mappings["wals"][6][9])
