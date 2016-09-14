@@ -20,7 +20,7 @@ source_langs_per_handle = []
 for source_lang in set(langs) - set([target_lang]):
     for pos_source in pos_sources:
         assert source_lang != target_lang, "Target cannot be source!"
-        handles.append(open("{}/{}-ud-test.conllu.delex.sampled_10k.with_{}_pos."
+        handles.append(open("{}/test/{}-ud-test.conllu.delex.sampled_10k.with_{}_pos."
                             "parsed_with_{}".format(path_to_files, target_lang, pos_source, source_lang)))
 
         pos_sources_per_handle.append(pos_source)
