@@ -92,7 +92,7 @@ approaches = {"klcpos3": partial(klcpos3.get_distribution_from_klcpos3,
 
 for lang in all_languages:
     # FIXME Should this POS be compatible with the test set POS? Currently: train=gold, test=gold,pred,proj!
-    sentences = read_sentences("{}/train/{}-ud-train.conllu.lex".format(path_to_data_files, lang))
+    sentences = read_sentences("{}/train/{}-ud-train.conllu.lex.sampled_10k".format(path_to_data_files, lang))
     trigram_freqs_for_sources[lang] = klcpos3.get_trigram_freqs(sentences)
 
 # read the target language sentences
