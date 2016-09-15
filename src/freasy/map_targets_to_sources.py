@@ -8,6 +8,7 @@
 
 # pip install git+https://github.com/saffsd/langid.py.git
 
+import argparse
 import sys
 from collections import defaultdict
 from langid.langid import LanguageIdentifier, model
@@ -46,15 +47,26 @@ def get_distributions_from_langid(target_sentence_sample, identifier, list_of_so
     return best_source, distribution_of_sources
 
 
+# argparse stuff
+parser = argparse.ArgumentParser(description="Predicts appropriate sources for a given target language.")
+parser.add_argument("--target_name", required=True, help="target language name")
+parser.add_argument("--data_root", required=True, help="root for data files")
+parser.add_argument("--wals_data", required=True, help="path to WALS database CSV")
+parser.add_argument("--iso_mappings", required=True, help="path to ISO 639-2/3 mappings file")
+parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "proj"], help="POS source")
+args = parser.parse_args()
+
 # list of all languages used in the experiment
 all_languages = sorted(["ar", "bg", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "he", "hi", "hr", "hu",
                         "id", "it", "nl", "no", "pl", "pt", "ro", "sl", "sv", "ta"])
 
 # target language name comes in from the console, to make it target-centric for parallel
-target_language = sys.argv[1]
-source_languages = sorted(set(all_languages) - {target_language})  # get the list of sources for convenience
+target_language = args.target_name
 
-path = sys.argv[2]  # path to all data files
+# get the list of source language names for convenience
+source_languages = sorted(set(all_languages) - {target_language})
+
+path_to_data_files = args.data_root  # path to all data files
 
 # results are stored here: all_mappings[METHOD][GRANULARITY][target_sentence_id] = (best_source, sources_distribution)
 all_mappings = defaultdict(lambda: defaultdict(lambda: defaultdict(tuple)))
@@ -68,8 +80,8 @@ identifier_raw.set_languages(source_languages)  # only sources here, raw langid 
 identifier_wals = LanguageIdentifier.from_modelstring(model, norm_probs=True)
 identifier_wals.set_languages(all_languages)
 
-wals_data = wals.read_wals_csv(sys.argv[3])
-iso_to, iso_back = wals.read_iso_mappings(sys.argv[4])
+wals_data = wals.read_wals_csv(args.wals_data)
+iso_to, iso_back = wals.read_iso_mappings(args.iso_mappings)
 
 # list of approaches to getting source language distributions for target, granularity, etc.
 approaches = {"klcpos3": partial(klcpos3.get_distribution_from_klcpos3,
@@ -79,14 +91,15 @@ approaches = {"klcpos3": partial(klcpos3.get_distribution_from_klcpos3,
                               iso_to=iso_to, iso_back=iso_back, wals=wals_data)}
 
 for lang in all_languages:
-    sentences = read_sentences("{}/train/{}-ud-train.conllu.lex".format(path, lang))
+    # FIXME Should this POS be compatible with the test set POS? Currently: train=gold, test=gold,pred,proj!
+    sentences = read_sentences("{}/train/{}-ud-train.conllu.lex".format(path_to_data_files, lang))
     trigram_freqs_for_sources[lang] = klcpos3.get_trigram_freqs(sentences)
 
 # read the target language sentences
-target_sentences = read_sentences("{}/test/{}-ud-test.conllu.lex.with_proj_pos".format(path, target_language))  # FIXME POS issues!!!
-# target_sentences = target_sentences[:10]
+target_sentences = read_sentences("{}/test/{}-ud-test.conllu.lex.with_{}_pos"
+                                  .format(path_to_data_files, target_language, args.pos_source))
 
-# magic happens here
+# the magic happens here
 for approach, get_distribution in approaches.items():
     for granularity in [1, 2, 3, 4, 5, 10, 20, 30, 40, 50, 100]:  # sliding window size for estimating source relevance
 
@@ -96,10 +109,11 @@ for approach, get_distribution in approaches.items():
             # the window slides here
             sentence_sample = target_sentences[i-granularity:i]
 
+            # get_distribution() is approach-dependent
             best_source, distribution = get_distribution(target_sentence_sample=sentence_sample,
                                                          list_of_source_languages=source_languages)
 
-            # distribution = softmax(distribution, temperature=0.5)  # FIXME Maybe a parameter to play with LATER!
+            # distribution = softmax(distribution, temperature=0.5)  # TODO Maybe a parameter to play with, but LATER!
 
             # Assign this best source & distribution to the sample
             for j in range(i - granularity, i):
@@ -108,15 +122,6 @@ for approach, get_distribution in approaches.items():
 
     # FIXME Add granularity = ALL --- is it really necessary? Supposedly the thing converges quickly.
 
-dill.dump(all_mappings, open("{}.source_language_mappings.pickle".format(target_language), "wb"))
-
-# FIXME KLcpos3 needs ***three*** tagging setups: gold, pred, and proj!!!
-
-#for approach in approaches:
-#    for a, b in all_mappings[approach][10][0][1]:
-#        print(approach, b, a)
-#    print()
-
-#print(all_mappings.keys())
-#print(all_mappings["wals"].keys())
-#print(all_mappings["wals"][6][9])
+# finally store the results
+dill.dump(all_mappings, open("{}/pickles/{}.source_language_mappings.with_{}_pos.pickle"
+                             .format(path_to_data_files, target_language, args.pos_source), "wb"))

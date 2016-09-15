@@ -39,7 +39,7 @@ for sentence in target_sentences:
         heads, _ = chu_liu_edmonds(tensor[:, :, idx])
         heads = heads[1:]
 
-        correct[source] += sum([predicted == gold for predicted, gold in zip(heads, [arc.source for arc in sentence.gold_arcs])])
+        correct[source] += sum([predicted == gold for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
         total[source] += len(sentence.tokens)
 
     voted = np.sum(tensor, axis=2)
@@ -47,7 +47,7 @@ for sentence in target_sentences:
     heads, _ = chu_liu_edmonds(voted)
     heads = heads[1:]
 
-    correct["ALL"] += sum([predicted == gold for predicted, gold in zip(heads, [arc.source for arc in sentence.gold_arcs])])
+    correct["ALL"] += sum([predicted == gold for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
     total["ALL"] += len(sentence.tokens)
 
 

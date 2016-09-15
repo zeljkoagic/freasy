@@ -1,18 +1,21 @@
 class Arc(object):
-    def __init__(self, lang, source, target, deprel, pos_source, weight=1.0):
+    """
+    Dependency edges between tokens.
+    """
+    def __init__(self, lang, head, dependent, deprel, pos_source, weight=1.0):
         self.lang = lang
-        self.source = source
-        self.target = target
+        self.head = head
+        self.dependent = dependent
         self.deprel = deprel
         self.weight = weight
         self.pos_source = pos_source
 
     def __repr__(self):
-        return "{}:{}->{}|{}|{}|{}".format(self.lang, self.source, self.target, self.deprel, self.weight,
+        return "{}:{}->{}|{}|{}|{}".format(self.lang, self.head, self.dependent, self.deprel, self.weight,
                                            self.pos_source)
 
     def __eq__(self, other):
-        if self.lang == other.lang and self.source == other.source and self.target == other.target and \
+        if self.lang == other.lang and self.head == other.head and self.dependent == other.dependent and \
                         self.weight == other.weight and self.pos_source == other.pos_source:
             return True
         return False
@@ -30,5 +33,4 @@ class TargetSentence:
         self.pos = pos
         self.arcs_from_sources = arcs_from_sources
 
-    #def __str__(self):
-    #    return "{}\n{}\n{}\n{}".format(self.tokens, self.gold_pos, self.pred_pos, self.proj_pos)
+# TODO Should a target sentence have different calculate() methods for LAS, UAS, POS accuracy, etc.?
