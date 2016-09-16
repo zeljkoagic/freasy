@@ -91,8 +91,10 @@ approaches = {"klcpos3": partial(klcpos3.get_distribution_from_klcpos3,
                               iso_to=iso_to, iso_back=iso_back, wals=wals_data)}
 
 for lang in all_languages:
-    # FIXME Should this POS be compatible with the test set POS? Currently: train=gold, test=gold,pred,proj!
-    sentences = read_sentences("{}/train/{}-ud-train.conllu.lex.sampled_10k".format(path_to_data_files, lang))
+    # TODO Note that gold=pred for train files, proj is what really matters as gold is close to pred.
+    sentences = read_sentences("{}/train/{}-ud-train.conllu.lex.sampled_10k.with_{}_pos"
+                               .format(path_to_data_files, lang, args.pos_source))
+
     trigram_freqs_for_sources[lang] = klcpos3.get_trigram_freqs(sentences)
 
 # read the target language sentences
@@ -120,7 +122,7 @@ for approach, get_distribution in approaches.items():
                 if j not in all_mappings[approach][granularity]:  # to avoid reassignment
                     all_mappings[approach][granularity][j] = (best_source, distribution)
 
-    # FIXME Add granularity = ALL --- is it really necessary? Supposedly the thing converges quickly.
+    # TODO Add granularity = ALL---is it really necessary? Supposedly the thing converges quickly.
 
 # finally store the results
 dill.dump(all_mappings, open("{}/pickles/{}.source_language_mappings.with_{}_pos.pickle"

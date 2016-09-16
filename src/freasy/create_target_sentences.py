@@ -5,9 +5,7 @@ from target_sentence import Arc, TargetSentence
 
 # list of languages used in the experiment (WTC constrained)
 langs = sorted(["ar", "bg", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "he", "hi", "hr", "hu", "id",
-                "it", "nl", "no", "pl", "pt", "ro", "sl", "sv", "ta"])
-
-# FIXME ALL has a mistake: it should *exclude* the target, i.e., there would be multiple ALL models (leave-one-out).
+                "it", "nl", "no", "pl", "pt", "ro", "sl", "sv", "ta", "ALL"])
 
 # POS tag sources in the experiment: gold, predicted (in-language), projected-predicted (cross-language)
 pos_sources = ["gold", "pred", "proj"]
