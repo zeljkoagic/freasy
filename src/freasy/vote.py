@@ -55,8 +55,8 @@ for sentence in target_sentences:
     for idx, source in enumerate(sources):
 
         # FIXME This will not work, we need to index by source!!!
-        if source != "ALL":
-            tensor[:, :, idx] *= math.pow(1 / source_weights["wals"][100][sentence.idx][1][source], 2)
+        #if source != "ALL":
+        #    tensor[:, :, idx] *= math.pow(1 / source_weights["wals"][100][sentence.idx][1][source], 2)
 
         heads, _ = chu_liu_edmonds(tensor[:, :, idx])
         heads = heads[1:]
