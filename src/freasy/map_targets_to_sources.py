@@ -83,19 +83,19 @@ identifier_wals.set_languages(all_languages)
 wals_data = wals.read_wals_csv(args.wals_data)
 iso_to, iso_back = wals.read_iso_mappings(args.iso_mappings)
 
-# list of approaches to getting source language distributions for target, granularity, etc.
-approaches = {"klcpos3": partial(klcpos3.get_distribution_from_klcpos3,
-                                 trigram_freqs_of_sources=trigram_freqs_for_sources),
-              "langid": partial(get_distributions_from_langid, identifier=identifier_raw),
-              "wals": partial(wals.get_distributions_from_wals, identifier=identifier_wals,
-                              iso_to=iso_to, iso_back=iso_back, wals=wals_data)}
-
 for lang in all_languages:
     # TODO Note that gold=pred for train files, proj is what really matters as gold is close to pred.
     sentences = read_sentences("{}/train/{}-ud-train.conllu.lex.sampled_10k.with_{}_pos"
                                .format(path_to_data_files, lang, args.pos_source))
 
     trigram_freqs_for_sources[lang] = klcpos3.get_trigram_freqs(sentences)
+
+# list of approaches to getting source language distributions for target, granularity, etc.
+approaches = {"klcpos3": partial(klcpos3.get_distribution_from_klcpos3,
+                                 trigram_freqs_of_sources=trigram_freqs_for_sources),
+              "langid": partial(get_distributions_from_langid, identifier=identifier_raw),
+              "wals": partial(wals.get_distributions_from_wals, identifier=identifier_wals,
+                              iso_to=iso_to, iso_back=iso_back, wals=wals_data)}
 
 # read the target language sentences
 target_sentences = read_sentences("{}/test/{}-ud-test.conllu.lex.with_{}_pos"
