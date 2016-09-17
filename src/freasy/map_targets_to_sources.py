@@ -69,7 +69,7 @@ source_languages = sorted(set(all_languages) - {target_language})
 path_to_data_files = args.data_root  # path to all data files
 
 # results are stored here: all_mappings[METHOD][GRANULARITY][target_sentence_id] = (best_source, sources_distribution)
-all_mappings = defaultdict(lambda: defaultdict(lambda: defaultdict()))
+all_mappings = defaultdict(lambda: defaultdict(lambda: defaultdict(tuple)))
 
 # get all trigram frequencies for klcpos3
 trigram_freqs_for_sources = defaultdict()
@@ -120,8 +120,7 @@ for approach, get_distribution in approaches.items():
             # Assign this best source & distribution to the sample
             for j in range(i - granularity, i):
                 if j not in all_mappings[approach][granularity]:  # to avoid reassignment
-                    all_mappings[approach][granularity][j]["best"] = best_source
-                    all_mappings[approach][granularity][j]["all"] = dict(distribution)  # TODO Check this dict() thing!
+                    all_mappings[approach][granularity][j] = (best_source, dict(distribution))  # TODO Check this dict() thing!
 
     # TODO Add granularity = ALL---is it really necessary? Supposedly the thing converges quickly.
 
