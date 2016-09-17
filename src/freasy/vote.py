@@ -12,6 +12,7 @@ from target_sentence import Arc, TargetSentence
 from dependency_decoding import chu_liu_edmonds
 import dill
 from collections import defaultdict
+import math
 
 
 def load_tensor(n, arcs):
@@ -52,7 +53,7 @@ for sentence in target_sentences:
 
         # FIXME This will not work, we need to index by source!!!
         if source != "ALL":
-            tensor[:, :, idx] *= 1 / source_weights["wals"][100][sentence.idx][1][source]
+            tensor[:, :, idx] *= math.pow(1 / source_weights["wals"][100][sentence.idx][1][source], 4)
 
         heads, _ = chu_liu_edmonds(tensor[:, :, idx])
         heads = heads[1:]
