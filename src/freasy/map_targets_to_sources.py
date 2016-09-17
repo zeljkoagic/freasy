@@ -69,7 +69,7 @@ source_languages = sorted(set(all_languages) - {target_language})
 path_to_data_files = args.data_root  # path to all data files
 
 # results are stored here: all_mappings[METHOD][GRANULARITY][target_sentence_id] = (best_source, sources_distribution)
-all_mappings = defaultdict(lambda: defaultdict(lambda: defaultdict(tuple)))
+all_mappings = defaultdict(lambda: defaultdict(lambda: defaultdict()))
 
 # get all trigram frequencies for klcpos3
 trigram_freqs_for_sources = defaultdict()
