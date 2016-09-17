@@ -31,7 +31,7 @@ def load_tensor(n, arcs):
     for lang_index, (lang, lang_arcs) in enumerate(arcs.items()):
         sources.append(lang)  # store the languages in a particular order
 
-        for arc in lang_arcs["gold"]:
+        for arc in lang_arcs["proj"]:
             tensor[arc.dependent, arc.head, lang_index] = arc.weight  # fill the tensor with weights
 
     return tensor, sources
