@@ -35,6 +35,9 @@ def load_tensor(n, arcs):
 # load the target sentence pickle
 target_sentences = dill.load(open(sys.argv[1], "rb"))
 
+# FIXME load the source weights
+source_weights = dill.load(open(sys.argv[2], "rb"))
+
 correct = defaultdict(int)
 total = defaultdict(int)
 
@@ -46,6 +49,9 @@ for sentence in target_sentences:
     # TODO This decoding is trivial because individual slices are already trees!
     # source order is important because the tensor is not explicitly indexed by source names
     for idx, source in enumerate(sources):
+
+        # FIXME This will not work, we need to index by source!!!
+        tensor[:, :, idx] *= source_weights["klcpos3"][100][sentence.idx]["all"][source]
 
         heads, _ = chu_liu_edmonds(tensor[:, :, idx])
         heads = heads[1:]

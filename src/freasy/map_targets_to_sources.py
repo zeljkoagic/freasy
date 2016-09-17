@@ -120,7 +120,8 @@ for approach, get_distribution in approaches.items():
             # Assign this best source & distribution to the sample
             for j in range(i - granularity, i):
                 if j not in all_mappings[approach][granularity]:  # to avoid reassignment
-                    all_mappings[approach][granularity][j] = (best_source, distribution)
+                    all_mappings[approach][granularity][j]["best"] = best_source
+                    all_mappings[approach][granularity][j]["all"] = dict(distribution)  # TODO Check this dict() thing!
 
     # TODO Add granularity = ALL---is it really necessary? Supposedly the thing converges quickly.
 
