@@ -75,5 +75,5 @@ for sentence in target_sentences:
 
 
 for source, corr in correct.items():
-    print("%s\t%.2f" % source, (corr/total[source])*100)
+    print("%s\t%.2f" % (source, (corr/total[source])*100))
 
