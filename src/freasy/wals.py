@@ -2,6 +2,7 @@ from collections import defaultdict
 import csv
 import scipy.spatial.distance as dist
 import sys
+from softmax import softmax
 
 
 def read_iso_mappings(filename):
@@ -95,4 +96,4 @@ def get_distributions_from_wals(target_sentence_sample, list_of_source_languages
                 if min_distance_for_this_source != sys.float_info.max:
                     distribution_of_sources.append((iso_back[source_name], min_distance_for_this_source))
 
-    return iso_back[closest_source], distribution_of_sources
+    return iso_back[closest_source], softmax(distribution_of_sources)
