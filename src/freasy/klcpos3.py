@@ -1,6 +1,7 @@
 import sys
 from collections import defaultdict
 import math
+from softmax import softmax
 
 
 def get_trigram_freqs(sentences):
@@ -62,4 +63,4 @@ def get_distribution_from_klcpos3(target_sentence_sample, list_of_source_languag
             lowest_kl_score = kl_value
             best_source = source_language
 
-    return best_source, distribution_of_sources
+    return best_source,softmax(distribution_of_sources)

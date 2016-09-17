@@ -14,6 +14,9 @@ import dill
 from collections import defaultdict
 import math
 
+# FIXME Maybe better to softmax entire matrix?
+from softmax import softmax
+
 
 def load_tensor(n, arcs):
     """
@@ -53,7 +56,7 @@ for sentence in target_sentences:
 
         # FIXME This will not work, we need to index by source!!!
         if source != "ALL":
-            tensor[:, :, idx] *= math.pow(1 / source_weights["wals"][10][sentence.idx][1][source], 3)
+            tensor[:, :, idx] *= math.pow(1 / source_weights["wals"][100][sentence.idx][1][source], 4)
 
         heads, _ = chu_liu_edmonds(tensor[:, :, idx])
         heads = heads[1:]
