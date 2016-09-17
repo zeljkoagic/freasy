@@ -92,7 +92,7 @@ for lang in all_languages:
 
 # list of approaches to getting source language distributions for target, granularity, etc.
 approaches = {"klcpos3": partial(klcpos3.get_distribution_from_klcpos3,
-                                 trigram_freqs_of_sources=trigram_freqs_for_sources),
+                                 trigram_fs_of_sources=trigram_freqs_for_sources),
               "langid": partial(get_distributions_from_langid, identifier=identifier_raw),
               "wals": partial(wals.get_distributions_from_wals, identifier=identifier_wals,
                               iso_to=iso_to, iso_back=iso_back, wals=wals_data)}
