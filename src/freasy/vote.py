@@ -16,7 +16,7 @@ import math
 import argparse
 
 # FIXME Maybe better to softmax entire matrix? Softmax makes sense after the language weights are applied.
-from softmax import softmax
+from softmax import softmax, invert
 
 
 def load_tensor(n, arcs, pos_source):
@@ -80,8 +80,8 @@ for sentence in target_sentences:
 
     # apply softmax
     if args.use_softmax:
-        source_weights_for_sentence = softmax(sources_distribution=source_weights_for_sentence,
-                                              temperature=args.temperature)
+        source_weights_for_sentence = invert(softmax(sources_distribution=source_weights_for_sentence,
+                                                     temperature=args.temperature))
 
     print(source_weights_for_sentence)
 

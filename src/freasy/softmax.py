@@ -18,7 +18,7 @@ def softmax(sources_distribution, temperature=1.0):
 
 
 def invert(sources_distribution):
-    sources = [s for s, _ in sources_distribution]
-    weights = [1.0 - w for _, w in sources_distribution]
+    sources = [s for s, _ in sources_distribution.items()]
+    weights = [1.0 - w for _, w in sources_distribution.items()]
 
-    return list(zip(sources, weights))
+    return dict(zip(sources, weights))
