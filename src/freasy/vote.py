@@ -89,10 +89,6 @@ for sentence in target_sentences:
     # source order is important because the tensor is not explicitly indexed by source names
     for idx, source in enumerate(sources):
 
-        # apply weights
-        if source != "ALL" and args.use_softmax:
-            tensor[:, :, idx] *= source_weights_for_sentence[source]
-
         # TODO Individual slices are already trees! Makes sense only to decode for voted.
         heads, _ = chu_liu_edmonds(tensor[:, :, idx])
         heads = heads[1:]
@@ -100,6 +96,10 @@ for sentence in target_sentences:
         correct[source] += sum([predicted == gold for predicted, gold
                                 in zip(heads, [arc.head for arc in sentence.gold_arcs])])
         total[source] += len(sentence.tokens)
+
+        # apply weights TODO is this the right place to do it?
+        if source != "ALL" and args.use_softmax:
+            tensor[:, :, idx] *= source_weights_for_sentence[source]
 
     # this is where voting happens, currently all weights are 1.0
     voted = np.sum(tensor, axis=2)
