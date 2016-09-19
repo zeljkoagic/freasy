@@ -14,7 +14,7 @@ import dill
 from collections import defaultdict
 import math
 
-# FIXME Maybe better to softmax entire matrix?
+# FIXME Maybe better to softmax entire matrix? Softmax makes sense after the language weights are applied.
 from softmax import softmax
 
 
@@ -50,7 +50,7 @@ for sentence in target_sentences:
     tensor, sources = load_tensor(len(sentence.tokens), sentence.arcs_from_sources)
 
     # here we decode for the individual sources
-    # TODO This decoding is trivial because individual slices are already trees!
+    # TODO This decoding is trivial because individual slices are already trees! Makes sense only to decode for voted.
     # source order is important because the tensor is not explicitly indexed by source names
     for idx, source in enumerate(sources):
 
