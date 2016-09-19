@@ -78,6 +78,8 @@ for sentence in target_sentences:
     # extract the weights
     best_source_for_sentence, source_weights_for_sentence = source_weights_for_method_and_granularity[sentence.idx]
 
+    print(source_weights_for_sentence)
+
     # apply softmax
     if args.use_softmax:
         source_weights_for_sentence = softmax(sources_distribution=source_weights_for_sentence,
