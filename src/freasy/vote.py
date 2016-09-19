@@ -106,9 +106,9 @@ for sentence in target_sentences:
     heads, _ = chu_liu_edmonds(voted)
     heads = heads[1:]
 
-    correct["voted"] += sum([predicted == gold for predicted, gold
+    correct["voted_weighted"] += sum([predicted == gold for predicted, gold
                              in zip(heads, [arc.head for arc in sentence.gold_arcs])])
-    total["voted"] += len(sentence.tokens)
+    total["voted_weighted"] += len(sentence.tokens)
 
 
 for source, corr in correct.items():
