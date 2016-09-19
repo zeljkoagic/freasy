@@ -64,7 +64,8 @@ source_weights_for_method_and_granularity = source_weights[args.weighting_method
 assert args.granularity in source_weights[args.weighting_method], \
     "You must choose one of these as granularity: %s" % source_weights[args.weighting_method].keys()
 
-assert bool(args.use_softmax) == bool(args.temperature), "If args.softmax, then args.temperature as well!"
+if args.use_softmax:
+    assert args.temperature, "If args.softmax, then args.temperature as well!"
 
 correct = defaultdict(int)
 total = defaultdict(int)
