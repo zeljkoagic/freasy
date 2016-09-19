@@ -36,7 +36,7 @@ def klcpos3(source_trigram_fs, target_trigram_fs, source_sum):
         if trigram not in source_trigram_fs:
             source_trigram_fs[trigram] = 1 / source_sum  # following Rosa & Zabokrtsky (2015)
 
-        kl_score += freq * math.log10(freq / target_trigram_fs[trigram])
+        kl_score += freq * math.log10(freq / source_trigram_fs[trigram])
 
     print(kl_score)
     return kl_score
