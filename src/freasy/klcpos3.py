@@ -47,6 +47,9 @@ def get_distribution_from_klcpos3(target_sentence_sample, list_of_source_languag
     """
     target_trigram_fs, _ = get_trigram_freqs(target_sentence_sample)
 
+    print(trigram_fs_of_sources)
+    quit(1)
+
     # for capturing the results
     distribution_of_sources = []
     lowest_kl_score = sys.float_info.max
@@ -56,8 +59,6 @@ def get_distribution_from_klcpos3(target_sentence_sample, list_of_source_languag
         # calculate KL value for a given sample from the target sentences
         source_trigram_fs, source_trigram_sum = trigram_fs_of_sources[source_language]
         kl_value = klcpos3(source_trigram_fs, target_trigram_fs, source_trigram_sum)
-
-        print(source_language, kl_value)
 
         distribution_of_sources.append((source_language, kl_value))
 
