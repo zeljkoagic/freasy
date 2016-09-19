@@ -8,7 +8,7 @@ def softmax(sources_distribution, temperature=1.0):
     e = np.exp(weights / temperature)
     softmaxed = e / np.sum(e)
 
-    sources_distribution_softmaxed = list(zip(sources, softmaxed))
+    sources_distribution_softmaxed = dict(zip(sources, softmaxed))
 
     return sources_distribution_softmaxed
 
