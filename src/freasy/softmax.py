@@ -2,8 +2,8 @@ import numpy as np
 
 
 def softmax(sources_distribution, temperature=1.0):
-    sources = [s for s, _ in sources_distribution]
-    weights = np.array([w for _, w in sources_distribution])
+    sources = [s for s, _ in sources_distribution.items()]
+    weights = np.array([w for _, w in sources_distribution.items()])
 
     e = np.exp(weights / temperature)
     softmaxed = e / np.sum(e)
