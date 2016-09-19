@@ -38,6 +38,7 @@ def klcpos3(source_trigram_fs, target_trigram_fs, source_sum):
 
         kl_score += freq * math.log10(freq / target_trigram_fs[trigram])
 
+    print(kl_score)
     return kl_score
 
 
@@ -46,9 +47,6 @@ def get_distribution_from_klcpos3(target_sentence_sample, list_of_source_languag
     Predicts source language appropriateness for a given target sentence sample.
     """
     target_trigram_fs, _ = get_trigram_freqs(target_sentence_sample)
-
-    print(trigram_fs_of_sources)
-    quit(1)
 
     # for capturing the results
     distribution_of_sources = []
