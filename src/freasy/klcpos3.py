@@ -56,13 +56,14 @@ def get_distribution_from_klcpos3(target_sentence_sample, list_of_source_languag
         # calculate KL value for a given sample from the target sentences
         source_trigram_fs, source_trigram_sum = trigram_fs_of_sources[source_language]
         kl_value = klcpos3(source_trigram_fs, target_trigram_fs, source_trigram_sum)
+
+        print(source_language, kl_value)
+
         distribution_of_sources.append((source_language, kl_value))
 
         # capture the best source language
         if kl_value < lowest_kl_score:
             lowest_kl_score = kl_value
             best_source = source_language
-
-    print(distribution_of_sources)
 
     return best_source, dict(distribution_of_sources)
