@@ -96,4 +96,4 @@ def get_distributions_from_wals(target_sentence_sample, list_of_source_languages
                 if min_distance_for_this_source != sys.float_info.max:
                     distribution_of_sources.append((iso_back[source_name], min_distance_for_this_source))
 
-    return iso_back[closest_source], distribution_of_sources
+    return iso_back[closest_source], dict(distribution_of_sources)

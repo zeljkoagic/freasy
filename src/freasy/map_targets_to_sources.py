@@ -42,7 +42,7 @@ def get_distributions_from_langid(target_sentence_sample, identifier, list_of_so
     target_string = " ".join(target_tokens)
 
     best_source = identifier.classify(target_string)[0]
-    distribution_of_sources = invert(identifier.rank(target_string))
+    distribution_of_sources = invert(dict(identifier.rank(target_string)))
 
     return best_source, distribution_of_sources
 
@@ -120,7 +120,7 @@ for approach, get_distribution in approaches.items():
             # Assign this best source & distribution to the sample
             for j in range(i - granularity, i):
                 if j not in all_mappings[approach][granularity]:  # to avoid reassignment
-                    all_mappings[approach][granularity][j] = (best_source, dict(distribution))  # TODO Check this dict() thing!
+                    all_mappings[approach][granularity][j] = (best_source, distribution)
 
     # TODO Add granularity = ALL---is it really necessary? Supposedly the thing converges quickly.
 
