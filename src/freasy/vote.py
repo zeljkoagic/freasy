@@ -80,7 +80,8 @@ for sentence in target_sentences:
 
     # apply softmax
     if args.use_softmax:
-        source_weights_for_sentence = softmax(source_weights_for_sentence, temperature=args.temperature)
+        source_weights_for_sentence = softmax(sources_distribution=source_weights_for_sentence,
+                                              temperature=args.temperature)
 
     # here we decode for the individual sources
     # source order is important because the tensor is not explicitly indexed by source names
