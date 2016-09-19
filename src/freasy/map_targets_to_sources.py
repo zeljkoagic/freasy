@@ -36,13 +36,16 @@ def read_sentences(filename):
     return sentences
 
 
-def get_distributions_from_langid(target_sentence_sample, identifier, list_of_source_languages=None):
+def get_distributions_from_langid(target_sentence_sample, identifier, list_of_source_languages):
     # get all tokens from the sample in a list
     target_tokens = [token for target_sentence in target_sentence_sample for token, _ in target_sentence]
     target_string = " ".join(target_tokens)
 
     best_source = identifier.classify(target_string)[0]
-    distribution_of_sources = invert(dict(identifier.rank(target_string)))
+    # distribution_of_sources = invert(dict(identifier.rank(target_string)))
+    # TODO Dummy distribution, as langid does not participate in that part of the experiment
+    distribution_of_sources = dict([(source, sys.float_info.min) for source in list_of_source_languages])
+    distribution_of_sources[best_source] = sys.float_info.max
 
     return best_source, distribution_of_sources
 
