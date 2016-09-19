@@ -79,7 +79,7 @@ for sentence in target_sentences:
     best_source_for_sentence, source_weights_for_sentence = source_weights_for_method_and_granularity[sentence.idx]
 
     # apply softmax
-    if args.softmax:
+    if args.use_softmax:
         source_weights_for_sentence = softmax(source_weights_for_sentence, temperature=args.temperature)
 
     # here we decode for the individual sources
@@ -87,7 +87,7 @@ for sentence in target_sentences:
     for idx, source in enumerate(sources):
 
         # apply weights
-        if source != "ALL" and args.softmax:
+        if source != "ALL" and args.use_softmax:
             tensor[:, :, idx] *= source_weights_for_sentence[source]
 
         # TODO Individual slices are already trees! Makes sense only to decode for voted.
