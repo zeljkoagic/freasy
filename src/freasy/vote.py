@@ -84,8 +84,6 @@ for sentence in target_sentences:
         source_weights_for_sentence = invert(softmax(sources_distribution=source_weights_for_sentence,
                                                      temperature=args.temperature))
 
-    print(source_weights_for_sentence)
-
     # here we decode for the individual sources
     # source order is important because the tensor is not explicitly indexed by source names
     for idx, source in enumerate(sources):
