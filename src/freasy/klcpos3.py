@@ -63,6 +63,6 @@ def get_distribution_from_klcpos3(target_sentence_sample, list_of_source_languag
             lowest_kl_score = kl_value
             best_source = source_language
 
-    print(dict(distribution_of_sources))
+    print(distribution_of_sources)
 
     return best_source, dict(distribution_of_sources)
