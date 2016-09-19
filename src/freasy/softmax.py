@@ -19,6 +19,6 @@ def softmax(sources_distribution, temperature=1.0):
 
 def invert(sources_distribution):
     sources = [s for s, _ in sources_distribution.items()]
-    weights = [1.0 - w for _, w in sources_distribution.items()]  # FIXME 1-x or 1/x?
+    weights = [1.0 / w for _, w in sources_distribution.items()]  # FIXME 1-x or 1/x?
 
     return dict(zip(sources, weights))
