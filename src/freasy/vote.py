@@ -124,6 +124,6 @@ for sentence in target_sentences:
 for pos_source in pos_sources:
     for weighting_method in weighting_methods:
         for granularity in source_weights[pos_source][weighting_method].keys():
-            for temperature in  np.arange(0.2, 1.1, 0.2):
+            for temperature in np.arange(0.2, 0.4, 0.05):
                 uas = correct[pos_source][weighting_method][granularity][temperature]["voted"] / total[pos_source][weighting_method][granularity][temperature]["voted"]
                 print(pos_source, weighting_method, granularity, temperature, uas*100)
