@@ -91,7 +91,7 @@ target_sentences = dill.load(open("{}/pickles/{}.as_target_language.all_parses.p
 
 weighting_methods = ["wals"]
 pos_sources = ["proj"]
-granularities = [20]
+granularities = [100]
 temperatures = [0.2]
 
 source_weights = defaultdict()
