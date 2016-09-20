@@ -18,6 +18,8 @@ import argparse
 # FIXME Maybe better to softmax entire matrix? Softmax makes sense after the language weights are applied.
 from softmax import softmax, invert
 
+# FIXME Reduce number of pickle loadings by moving parameters from command line to source
+# FIXME Includes: pos_source, weighting_method, granularity, softmax & temperature
 
 def load_tensor(n, arcs, pos_source):
     """
@@ -41,13 +43,13 @@ def load_tensor(n, arcs, pos_source):
 parser = argparse.ArgumentParser(description="Performs language weighting experiments.")
 parser.add_argument("--target_name", required=True, help="target language name")
 parser.add_argument("--data_root", required=True, help="root for data files")
-parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "proj"], help="POS source")
-parser.add_argument("--weighting_method", required=True, choices=["klcpos3", "wals", "langid"],
-                    help="source weighting method")
-parser.add_argument("--granularity", required=True, help="target language estimation granularity", type=int)
-parser.add_argument('--use_softmax', required=True, choices=[0, 1],
-                    help="use softmax to smooth source contributions?", type=int)
-parser.add_argument("--temperature", required=False, help="softmax temperature", type=float)
+#parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "proj"], help="POS source")
+#parser.add_argument("--weighting_method", required=True, choices=["klcpos3", "wals", "langid"],
+#                    help="source weighting method")
+#parser.add_argument("--granularity", required=True, help="target language estimation granularity", type=int)
+#parser.add_argument('--use_softmax', required=True, choices=[0, 1],
+#                    help="use softmax to smooth source contributions?", type=int)
+#parser.add_argument("--temperature", required=False, help="softmax temperature", type=float)
 args = parser.parse_args()
 
 # load the target sentence pickle
@@ -55,60 +57,73 @@ target_sentences = dill.load(open("{}/pickles/{}.as_target_language.all_parses.p
                                   .format(args.data_root, args.target_name), "rb"))
 
 # load the source weights
-source_weights = dill.load(open("{}/pickles/{}.source_language_mappings.with_{}_pos.pickle"
-                                .format(args.data_root, args.target_name, args.pos_source), "rb"))
+#source_weights = dill.load(open("{}/pickles/{}.source_language_mappings.with_{}_pos.pickle"
+#                                .format(args.data_root, args.target_name, args.pos_source), "rb"))
 
-# TODO Isn't this now redundant?
-source_weights_for_method_and_granularity = source_weights[args.weighting_method][args.granularity]
+#assert args.granularity in source_weights[args.weighting_method], \
+#    "You must choose one of these as granularity: %s" % source_weights[args.weighting_method].keys()
 
-assert args.granularity in source_weights[args.weighting_method], \
-    "You must choose one of these as granularity: %s" % source_weights[args.weighting_method].keys()
-
-if args.use_softmax:
-    assert args.temperature, "If args.softmax, then args.temperature as well!"
+#if args.use_softmax:
+#    assert args.temperature, "If args.softmax, then args.temperature as well!"
 
 correct = defaultdict(int)
 total = defaultdict(int)
 
+weighting_methods = ["klcpos3", "wals"]
+pos_sources = ["gold", "pred", "proj"]
+
+source_weights = defaultdict()
+for pos_source in pos_sources:
+    source_weights[pos_source] = dill.load(open("{}/pickles/{}.source_language_mappings.with_{}_pos.pickle"
+                                                .format(args.data_root, args.target_name, pos_source), "rb"))
+
 # process each sentence
 for sentence in target_sentences:
 
-    # create tensor from arcs
-    tensor, sources = load_tensor(len(sentence.tokens), sentence.arcs_from_sources, args.pos_source)
+    for pos_source in pos_sources:
 
-    # extract the weights
-    best_source_for_sentence, source_weights_for_sentence = source_weights_for_method_and_granularity[sentence.idx]
+        # FIXME Tensor can also be created when creating TargetSentence!
+        # create tensor from arcs
+        tensor, sources = load_tensor(len(sentence.tokens), sentence.arcs_from_sources, pos_source)
 
-    # apply softmax
-    if args.use_softmax:
-        source_weights_for_sentence = invert(softmax(sources_distribution=source_weights_for_sentence,
-                                                     temperature=args.temperature))
+        for weighting_method in weighting_methods:
+            for granularity in source_weights[weighting_methods].keys():
+                for temperature in range(0.1, 2.0, 0.1):
 
-    # here we decode for the individual sources
-    # source order is important because the tensor is not explicitly indexed by source names
-    for idx, source in enumerate(sources):
+                    # get the weighting results
+                    best_source_for_sentence, source_weights_for_sentence = \
+                        source_weights[pos_source][weighting_method][granularity][sentence.idx]
 
-        # TODO Individual slices are already trees! Makes sense only to decode for voted.
-        heads, _ = chu_liu_edmonds(tensor[:, :, idx])
-        heads = heads[1:]
+                    # apply softmax
+                    #if args.use_softmax:
+                    source_weights_for_sentence = invert(softmax(sources_distribution=source_weights_for_sentence,
+                                                                 temperature=temperature))
 
-        correct[source] += sum([predicted == gold for predicted, gold
-                                in zip(heads, [arc.head for arc in sentence.gold_arcs])])
-        total[source] += len(sentence.tokens)
+                    # here we decode for the individual sources
+                    # source order is important because the tensor is not explicitly indexed by source names
+                    for idx, source in enumerate(sources):
 
-        # apply weights TODO is this the right place to do it?
-        if source != "ALL" and args.use_softmax:
-            tensor[:, :, idx] *= source_weights_for_sentence[source]
+                        # TODO Individual slices are already trees! Makes sense only to decode for voted.
+                        heads, _ = chu_liu_edmonds(tensor[:, :, idx])
+                        heads = heads[1:]
 
-    # this is where voting happens, currently all weights are 1.0
-    voted = np.sum(tensor, axis=2)
+                        correct[source] += sum([predicted == gold for predicted, gold
+                                                in zip(heads, [arc.head for arc in sentence.gold_arcs])])
+                        total[source] += len(sentence.tokens)
 
-    heads, _ = chu_liu_edmonds(voted)
-    heads = heads[1:]
+                        # apply weights TODO is this the right place to do it?
+                        if source != "ALL":# and args.use_softmax:
+                            tensor[:, :, idx] *= source_weights_for_sentence[source]
 
-    correct["voted_weighted"] += sum([predicted == gold for predicted, gold
-                             in zip(heads, [arc.head for arc in sentence.gold_arcs])])
-    total["voted_weighted"] += len(sentence.tokens)
+                    # this is where voting happens, currently all weights are 1.0
+                    voted = np.sum(tensor, axis=2)
+
+                    heads, _ = chu_liu_edmonds(voted)
+                    heads = heads[1:]
+
+                    correct["voted_weighted"] += sum([predicted == gold for predicted, gold
+                                             in zip(heads, [arc.head for arc in sentence.gold_arcs])])
+                    total["voted_weighted"] += len(sentence.tokens)
 
 
 for source, corr in correct.items():
