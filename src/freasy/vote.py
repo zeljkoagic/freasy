@@ -2,24 +2,15 @@
 # take a sentence
 # create a cle-input matrix from all the arcs
 # decode, evaluate
-
 # pip install git+https://github.com/andersjo/dependency_decoding.git
 
-import sys
-import pickle
 import numpy as np
-from target_sentence import Arc, TargetSentence
 from dependency_decoding import chu_liu_edmonds
 import dill
 from collections import defaultdict
-import math
 import argparse
-
-# FIXME Maybe better to softmax entire matrix? Softmax makes sense after the language weights are applied.
 from softmax import softmax, invert
 
-# FIXME Reduce number of pickle loadings by moving parameters from command line to source
-# FIXME Includes: pos_source, weighting_method, granularity, softmax & temperature
 
 def load_tensor(n, arcs, pos_source):
     """
@@ -27,17 +18,44 @@ def load_tensor(n, arcs, pos_source):
     """
     # 3-dimensional tensor: [dependent, head, source_language]
     # TODO Currently does not support labels.
-    tensor = np.zeros((n+1, n+1, len(arcs)), dtype=float)
+    single_source_tensor = np.zeros((n+1, n+1, len(arcs)), dtype=float)
     sources = []
+    multi_source_matrix = np.zeros((n+1, n+1))
 
     # iterate through arcs
     for lang_index, (lang, lang_arcs) in enumerate(arcs.items()):
-        sources.append(lang)  # store the languages in a particular order
+        # we do this for all single languages
+        if lang != "ALL":
+            sources.append(lang)  # store the languages in a particular order
+            for arc in lang_arcs[pos_source]:
+                single_source_tensor[arc.dependent, arc.head, lang_index] = arc.weight  # fill the tensor with weights
+        else:
+            # multisource gets special treatment
+            multi_source_matrix[arc.dependent, arc.head] = arc.weight
 
-        for arc in lang_arcs[pos_source]:
-            tensor[arc.dependent, arc.head, lang_index] = arc.weight  # fill the tensor with weights
+    return single_source_tensor, multi_source_matrix, sources
 
-    return tensor, sources
+
+def get_heads(matrix):
+    """
+    Converts matrix representation of dependency tree to heads list.
+    """
+    heads = np.array(matrix.shape[0])
+
+    for dependent, row in enumerate(matrix[1:]):  # we skip heads of ROOT
+        for head in row:
+            if head != 0:
+                heads[dependent] = head
+
+    return heads.tolist()
+
+
+def count_correct(heads_predicted, heads_gold):
+    """
+    Counts number of correct heads.
+    """
+    return sum([int(predicted == gold) for predicted, gold in zip(heads_predicted, heads_gold)])
+
 
 # argparse stuff
 parser = argparse.ArgumentParser(description="Performs language weighting experiments.")
@@ -56,20 +74,13 @@ args = parser.parse_args()
 target_sentences = dill.load(open("{}/pickles/{}.as_target_language.all_parses.pickle"
                                   .format(args.data_root, args.target_name), "rb"))
 
-# load the source weights
-#source_weights = dill.load(open("{}/pickles/{}.source_language_mappings.with_{}_pos.pickle"
-#                                .format(args.data_root, args.target_name, args.pos_source), "rb"))
-
 #assert args.granularity in source_weights[args.weighting_method], \
 #    "You must choose one of these as granularity: %s" % source_weights[args.weighting_method].keys()
 
 #if args.use_softmax:
 #    assert args.temperature, "If args.softmax, then args.temperature as well!"
 
-correct = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int)))))
-total = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int)))))
-
-weighting_methods = ["klcpos3", "wals"]
+weighting_methods = ["wals"]
 pos_sources = ["proj"]
 granularities = [100]
 temperatures = [0.2]
@@ -79,19 +90,32 @@ for pos_source in pos_sources:
     source_weights[pos_source] = dill.load(open("{}/pickles/{}.source_language_mappings.with_{}_pos.pickle"
                                                 .format(args.data_root, args.target_name, pos_source), "rb"))
 
+correct_ss_estimated = 0
+correct_ss_true = 0
+correct_ms = 0
+correct_voted_weighted = 0
+correct_voted = 0
+total = 0
+
 # process each sentence
 for sentence in target_sentences:
+
+    heads_gold = [arc.head for arc in sentence.gold_arcs]  # FIXME How does this ensure ordering?
 
     for pos_source in pos_sources:
         for weighting_method in weighting_methods:
             for granularity in granularities:
                 for temperature in temperatures:
 
-                    # FIXME Tensor can also be created when creating TargetSentence!
+                    # TODO Find *true* best single source---WHICH GRANULARITY?
+
                     # create tensor from arcs
-                    tensor, sources = load_tensor(len(sentence.tokens), sentence.arcs_from_sources, pos_source)
-                    weighted_tensor = tensor  # for weighting
-                    print(sources)
+                    ss_tensor, ms_matrix, sources = load_tensor(len(sentence.tokens), sentence.arcs_from_sources,
+                                                                pos_source)
+
+                    ss_tensor_weighted = ss_tensor  # for weighting
+                    heads_ms = get_heads(ms_matrix)
+                    correct_ms += count_correct(heads_ms, heads_gold)
 
                     # get the weighting results
                     estimated_best_source_for_sentence, source_weights_for_sentence = \
@@ -105,32 +129,30 @@ for sentence in target_sentences:
                     # source order is important because the tensor is not explicitly indexed by source names
                     for idx, source in enumerate(sources):
 
-                        # TODO Individual slices are already trees! Makes sense only to decode for voted.
-                        # heads, _ = chu_liu_edmonds(tensor[:, :, idx])
-                        # heads = heads[1:]
-
-                        # correct[pos_source][weighting_method][granularity][temperature][source] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
-                        # total[pos_source][weighting_method][granularity][temperature][source] += len(sentence.tokens)
-
-                        # TODO Find best single source
+                        # get the best source heads
+                        if source == estimated_best_source_for_sentence:
+                            heads_ss = get_heads(ss_tensor[:, :, idx])
+                            correct_ss_estimated += count_correct(heads_ss, heads_gold)
 
                         # apply weights
-                        if source != "ALL":
-                            weighted_tensor[:, :, idx] *= source_weights_for_sentence[source]
+                        ss_tensor_weighted[:, :, idx] *= source_weights_for_sentence[source]
 
                     # weighted voting
-                    voted = np.sum(tensor, axis=2)
-                    voted_weighted = np.sum(weighted_tensor, axis=2)
+                    matrix_voted = np.sum(ss_tensor, axis=2)  # TODO Should be done only once for this one
+                    matrix_voted_weighted = np.sum(ss_tensor_weighted, axis=2)
 
-                    heads, _ = chu_liu_edmonds(voted_weighted)
-                    heads = heads[1:]
+                    heads_voted, _ = chu_liu_edmonds(matrix_voted)
+                    heads_voted = heads_voted[1:]
 
-                    correct[pos_source][weighting_method][granularity][temperature]["voted"] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
-                    total[pos_source][weighting_method][granularity][temperature]["voted"] += len(sentence.tokens)
+                    heads_voted_weighted, _ = chu_liu_edmonds(matrix_voted_weighted)
+                    heads_voted_weighted = heads_voted_weighted[1:]
 
-for pos_source in pos_sources:
-    for weighting_method in weighting_methods:
-        for granularity in granularities:
-            for temperature in temperatures:
-                uas = correct[pos_source][weighting_method][granularity][temperature]["voted"] / total[pos_source][weighting_method][granularity][temperature]["voted"]
-                print(pos_source, weighting_method, granularity, temperature, uas*100)
+                    correct_voted += count_correct(heads_voted, heads_gold)
+                    correct_voted_weighted += count_correct(heads_voted_weighted, heads_gold)
+
+                    total += len(sentence.tokens)
+
+print(correct_ss_estimated/total)
+print(correct_ms/total)
+print(correct_voted/total)
+print(correct_voted_weighted/total)
