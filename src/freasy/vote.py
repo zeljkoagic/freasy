@@ -52,7 +52,7 @@ def get_heads(matrix):
 
     for dependent, row in enumerate(matrix):
         for head in row:
-            if head != 0:
+            if head != 0.0:
                 heads[dependent] = head
 
     return heads.tolist()[1:]
