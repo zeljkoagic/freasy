@@ -87,7 +87,7 @@ for sentence in target_sentences:
         tensor, sources = load_tensor(len(sentence.tokens), sentence.arcs_from_sources, pos_source)
 
         for weighting_method in weighting_methods:
-            for granularity in source_weights[weighting_methods].keys():
+            for granularity in source_weights[weighting_method].keys():
                 for temperature in range(0.1, 2.0, 0.1):
 
                     # get the weighting results
