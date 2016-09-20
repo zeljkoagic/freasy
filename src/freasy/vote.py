@@ -51,8 +51,8 @@ def get_heads(matrix):
     heads = np.zeros(matrix.shape[0])
 
     for dependent, row in enumerate(matrix):
-        for head in row:
-            if head != 0.0:
+        for head, weight in enumerate(row):
+            if weight != 0.0:
                 heads[dependent] = head
                 print(dependent, head)
 
