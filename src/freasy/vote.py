@@ -110,9 +110,6 @@ total = 0
 for sentence in target_sentences:
 
     heads_gold = get_heads(get_matrix(len(sentence.tokens), sentence.gold_arcs))
-    print(get_matrix(len(sentence.tokens), sentence.gold_arcs))
-    print(sentence.tokens)
-    print(heads_gold)
 
     for pos_source in pos_sources:
         for weighting_method in weighting_methods:
