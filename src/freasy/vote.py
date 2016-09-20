@@ -70,7 +70,7 @@ correct = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdic
 total = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int)))))
 
 weighting_methods = ["klcpos3", "wals"]
-pos_sources = ["gold", "pred", "proj"]
+pos_sources = ["proj"]
 
 source_weights = defaultdict()
 for pos_source in pos_sources:
@@ -83,7 +83,7 @@ for sentence in target_sentences:
     for pos_source in pos_sources:
         for weighting_method in weighting_methods:
             for granularity in source_weights[pos_source][weighting_method].keys():
-                for temperature in np.arange(0.2, 0.4, 0.05):
+                for temperature in [0.2]:
 
                     # FIXME Tensor can also be created when creating TargetSentence!
                     # create tensor from arcs
@@ -93,7 +93,7 @@ for sentence in target_sentences:
                     best_source_for_sentence, source_weights_for_sentence = \
                         source_weights[pos_source][weighting_method][granularity][sentence.idx]
 
-                    # apply softmax
+                    # apply softmax, temperature, and inverse
                     source_weights_for_sentence = invert(softmax(sources_distribution=source_weights_for_sentence,
                                                                  temperature=temperature))
 
@@ -102,11 +102,11 @@ for sentence in target_sentences:
                     for idx, source in enumerate(sources):
 
                         # TODO Individual slices are already trees! Makes sense only to decode for voted.
-                        heads, _ = chu_liu_edmonds(tensor[:, :, idx])
-                        heads = heads[1:]
+                        # heads, _ = chu_liu_edmonds(tensor[:, :, idx])
+                        # heads = heads[1:]
 
-                        correct[pos_source][weighting_method][granularity][temperature][source] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
-                        total[pos_source][weighting_method][granularity][temperature][source] += len(sentence.tokens)
+                        # correct[pos_source][weighting_method][granularity][temperature][source] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
+                        # total[pos_source][weighting_method][granularity][temperature][source] += len(sentence.tokens)
 
                         # apply weights TODO is this the right place to do it?
                         if source != "ALL":
@@ -124,6 +124,6 @@ for sentence in target_sentences:
 for pos_source in pos_sources:
     for weighting_method in weighting_methods:
         for granularity in source_weights[pos_source][weighting_method].keys():
-            for temperature in np.arange(0.2, 0.4, 0.05):
+            for temperature in [0.2]:
                 uas = correct[pos_source][weighting_method][granularity][temperature]["voted"] / total[pos_source][weighting_method][granularity][temperature]["voted"]
                 print(pos_source, weighting_method, granularity, temperature, uas*100)
