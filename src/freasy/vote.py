@@ -54,7 +54,6 @@ def get_heads(matrix):
         for head, weight in enumerate(row):
             if weight != 0.0:
                 heads[dependent] = head
-                print(dependent, head)
 
     return heads.tolist()[1:]
 
@@ -91,7 +90,7 @@ target_sentences = dill.load(open("{}/pickles/{}.as_target_language.all_parses.p
 
 weighting_methods = ["wals"]
 pos_sources = ["proj"]
-granularities = [100]
+granularities = [1]
 temperatures = [0.2]
 
 source_weights = defaultdict()
