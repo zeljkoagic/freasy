@@ -109,7 +109,7 @@ total = 0
 for sentence in target_sentences:
 
     heads_gold = get_heads(get_matrix(len(sentence.tokens), sentence.gold_arcs))
-    print(get_matrix(sentence.gold_arcs))
+    print(get_matrix(len(sentence.tokens), sentence.gold_arcs))
     print(sentence.tokens)
     print(heads_gold)
 
