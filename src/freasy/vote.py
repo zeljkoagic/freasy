@@ -54,6 +54,7 @@ def get_heads(matrix):
         for head in row:
             if head != 0.0:
                 heads[dependent] = head
+                print(dependent, head)
 
     return heads.tolist()[1:]
 
