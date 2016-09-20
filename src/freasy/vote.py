@@ -81,21 +81,19 @@ for pos_source in pos_sources:
 for sentence in target_sentences:
 
     for pos_source in pos_sources:
-
-        # FIXME Tensor can also be created when creating TargetSentence!
-        # create tensor from arcs
-        tensor, sources = load_tensor(len(sentence.tokens), sentence.arcs_from_sources, pos_source)
-
         for weighting_method in weighting_methods:
             for granularity in source_weights[pos_source][weighting_method].keys():
-                for temperature in np.arange(0.1, 2.1, 0.1):
+                for temperature in np.arange(0.2, 1.1, 0.2):
+
+                    # FIXME Tensor can also be created when creating TargetSentence!
+                    # create tensor from arcs
+                    tensor, sources = load_tensor(len(sentence.tokens), sentence.arcs_from_sources, pos_source)
 
                     # get the weighting results
                     best_source_for_sentence, source_weights_for_sentence = \
                         source_weights[pos_source][weighting_method][granularity][sentence.idx]
 
                     # apply softmax
-                    #if args.use_softmax:
                     source_weights_for_sentence = invert(softmax(sources_distribution=source_weights_for_sentence,
                                                                  temperature=temperature))
 
@@ -106,12 +104,12 @@ for sentence in target_sentences:
                         # TODO Individual slices are already trees! Makes sense only to decode for voted.
                         heads, _ = chu_liu_edmonds(tensor[:, :, idx])
                         heads = heads[1:]
-                        
+
                         correct[pos_source][weighting_method][granularity][source] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
                         total[pos_source][weighting_method][granularity][source] += len(sentence.tokens)
 
                         # apply weights TODO is this the right place to do it?
-                        if source != "ALL":# and args.use_softmax:
+                        if source != "ALL":
                             tensor[:, :, idx] *= source_weights_for_sentence[source]
 
                     # this is where voting happens, currently all weights are 1.0
