@@ -88,7 +88,7 @@ for sentence in target_sentences:
 
         for weighting_method in weighting_methods:
             for granularity in source_weights[pos_source][weighting_method].keys():
-                for temperature in range(0.1, 2.0, 0.1):
+                for temperature in np.arange(0.1, 2.0, 0.1):
 
                     # get the weighting results
                     best_source_for_sentence, source_weights_for_sentence = \
