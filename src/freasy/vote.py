@@ -124,4 +124,4 @@ for sentence in target_sentences:
 for pos_source in pos_sources:
     for weighting_method in weighting_methods:
         for granularity in np.arange(0.2, 1.1, 0.2):
-            print((correct[pos_source][weighting_method][granularity]["voted"]/total[pos_source][weighting_method][granularity]["voted"])*100)
+            print(pos_source, weighting_method, granularity, (correct[pos_source][weighting_method][granularity]["voted"]/total[pos_source][weighting_method][granularity]["voted"])*100)
