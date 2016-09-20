@@ -88,7 +88,7 @@ for sentence in target_sentences:
 
         for weighting_method in weighting_methods:
             for granularity in source_weights[pos_source][weighting_method].keys():
-                for temperature in np.arange(0.1, 2.0, 0.1):
+                for temperature in np.arange(0.1, 2.1, 0.1):
 
                     # get the weighting results
                     best_source_for_sentence, source_weights_for_sentence = \
@@ -107,9 +107,9 @@ for sentence in target_sentences:
                         heads, _ = chu_liu_edmonds(tensor[:, :, idx])
                         heads = heads[1:]
 
-                        correct[source] += sum([predicted == gold for predicted, gold
+                        correct[pos_source][weighting_method][granularity][source] += sum([predicted == gold for predicted, gold
                                                 in zip(heads, [arc.head for arc in sentence.gold_arcs])])
-                        total[source] += len(sentence.tokens)
+                        total[pos_source][weighting_method][granularity][source] += len(sentence.tokens)
 
                         # apply weights TODO is this the right place to do it?
                         if source != "ALL":# and args.use_softmax:
@@ -121,11 +121,8 @@ for sentence in target_sentences:
                     heads, _ = chu_liu_edmonds(voted)
                     heads = heads[1:]
 
-                    correct["voted_weighted"] += sum([predicted == gold for predicted, gold
+                    correct[pos_source][weighting_method][granularity]["voted"] += sum([predicted == gold for predicted, gold
                                              in zip(heads, [arc.head for arc in sentence.gold_arcs])])
-                    total["voted_weighted"] += len(sentence.tokens)
+                    total[pos_source][weighting_method][granularity]["voted"] += len(sentence.tokens)
 
-
-for source, corr in correct.items():
-    print("%.2f\t%s" % ((corr/total[source])*100, source))
-
+print(correct)
