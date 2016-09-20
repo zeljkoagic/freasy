@@ -66,8 +66,8 @@ target_sentences = dill.load(open("{}/pickles/{}.as_target_language.all_parses.p
 #if args.use_softmax:
 #    assert args.temperature, "If args.softmax, then args.temperature as well!"
 
-correct = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int))))
-total = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int))))
+correct = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int)))))
+total = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int)))))
 
 weighting_methods = ["klcpos3", "wals"]
 pos_sources = ["gold", "pred", "proj"]
@@ -105,8 +105,8 @@ for sentence in target_sentences:
                         heads, _ = chu_liu_edmonds(tensor[:, :, idx])
                         heads = heads[1:]
 
-                        correct[pos_source][weighting_method][granularity][source] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
-                        total[pos_source][weighting_method][granularity][source] += len(sentence.tokens)
+                        correct[pos_source][weighting_method][granularity][temperature][source] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
+                        total[pos_source][weighting_method][granularity][temperature][source] += len(sentence.tokens)
 
                         # apply weights TODO is this the right place to do it?
                         if source != "ALL":
@@ -118,10 +118,10 @@ for sentence in target_sentences:
                     heads, _ = chu_liu_edmonds(voted)
                     heads = heads[1:]
 
-                    correct[pos_source][weighting_method][granularity]["voted"] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
-                    total[pos_source][weighting_method][granularity]["voted"] += len(sentence.tokens)
+                    correct[pos_source][weighting_method][granularity][temperature]["voted"] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
+                    total[pos_source][weighting_method][granularity][temperature]["voted"] += len(sentence.tokens)
 
 for pos_source in pos_sources:
     for weighting_method in weighting_methods:
         for granularity in np.arange(0.2, 1.1, 0.2):
-            print(pos_source, weighting_method, granularity, (correct[pos_source][weighting_method][granularity]["voted"]))
+            print(pos_source, weighting_method, granularity, (correct[pos_source][weighting_method][granularity][temperature]["voted"]))
