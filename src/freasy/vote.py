@@ -121,4 +121,7 @@ for sentence in target_sentences:
                     correct[pos_source][weighting_method][granularity]["voted"] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
                     total[pos_source][weighting_method][granularity]["voted"] += len(sentence.tokens)
 
-print(correct)
+for pos_source in pos_sources:
+    for weighting_method in weighting_methods:
+        for granularity in np.arange(0.2, 1.1, 0.2):
+            print((correct[pos_source][weighting_method][granularity]["voted"]/total[pos_source][weighting_method][granularity]["voted"])*100)
