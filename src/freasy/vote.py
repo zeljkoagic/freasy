@@ -30,8 +30,9 @@ def load_tensor(n, arcs, pos_source):
             for arc in lang_arcs[pos_source]:
                 single_source_tensor[arc.dependent, arc.head, lang_index] = arc.weight  # fill the tensor with weights
         else:
-            # multisource gets special treatment
-            multi_source_matrix[arc.dependent, arc.head] = arc.weight
+            for arc in lang_arcs[pos_source]:
+                # multisource gets special treatment
+                multi_source_matrix[arc.dependent, arc.head] = arc.weight
 
     return single_source_tensor, single_source_tensor, multi_source_matrix, sources
 
