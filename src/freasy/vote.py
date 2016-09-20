@@ -36,6 +36,13 @@ def load_tensor(n, arcs, pos_source):
     return single_source_tensor, single_source_tensor, multi_source_matrix, sources
 
 
+def get_matrix(n, arcs):
+    matrix = np.zeros((n+1, n+1))
+    for arc in arcs:
+        matrix[arc.dependent, arc.head] = arc.weight
+    return matrix
+
+
 def get_heads(matrix):
     """
     Converts matrix representation of dependency tree to heads list.
@@ -100,7 +107,7 @@ total = 0
 # process each sentence
 for sentence in target_sentences:
 
-    heads_gold = [arc.head for arc in sentence.gold_arcs]  # FIXME How does this ensure ordering?
+    heads_gold = get_heads(get_matrix(sentence.gold_arcs))
 
     for pos_source in pos_sources:
         for weighting_method in weighting_methods:
@@ -112,7 +119,6 @@ for sentence in target_sentences:
                     # create tensor from arcs
                     ss_tensor, ss_tensor_weighted, ms_matrix, sources = \
                         load_tensor(len(sentence.tokens), sentence.arcs_from_sources, pos_source)
-
 
                     heads_ms = get_heads(ms_matrix)
                     correct_ms += count_correct(heads_ms, heads_gold)
