@@ -69,7 +69,7 @@ target_sentences = dill.load(open("{}/pickles/{}.as_target_language.all_parses.p
 correct = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int)))))
 total = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int)))))
 
-weighting_methods = ["klcpos3", "wals"]
+weighting_methods = ["klcpos3", "wals", "langid"]
 pos_sources = ["proj"]
 
 source_weights = defaultdict()
