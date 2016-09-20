@@ -66,8 +66,8 @@ target_sentences = dill.load(open("{}/pickles/{}.as_target_language.all_parses.p
 #if args.use_softmax:
 #    assert args.temperature, "If args.softmax, then args.temperature as well!"
 
-correct = defaultdict(lambda: defaultdict(int))
-total = defaultdict(lambda: defaultdict(int))
+correct = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int))))
+total = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int))))
 
 weighting_methods = ["klcpos3", "wals"]
 pos_sources = ["gold", "pred", "proj"]
