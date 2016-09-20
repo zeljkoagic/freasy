@@ -69,8 +69,10 @@ target_sentences = dill.load(open("{}/pickles/{}.as_target_language.all_parses.p
 correct = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int)))))
 total = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(int)))))
 
-weighting_methods = ["klcpos3", "wals", "langid"]
+weighting_methods = ["klcpos3", "wals"]
 pos_sources = ["proj"]
+granularities = [100]
+temperatures = [0.2]
 
 source_weights = defaultdict()
 for pos_source in pos_sources:
@@ -82,15 +84,17 @@ for sentence in target_sentences:
 
     for pos_source in pos_sources:
         for weighting_method in weighting_methods:
-            for granularity in source_weights[pos_source][weighting_method].keys():
-                for temperature in [0.2]:
+            for granularity in granularities:
+                for temperature in temperatures:
 
                     # FIXME Tensor can also be created when creating TargetSentence!
                     # create tensor from arcs
                     tensor, sources = load_tensor(len(sentence.tokens), sentence.arcs_from_sources, pos_source)
+                    weighted_tensor = tensor  # for weighting
+                    print(sources)
 
                     # get the weighting results
-                    best_source_for_sentence, source_weights_for_sentence = \
+                    estimated_best_source_for_sentence, source_weights_for_sentence = \
                         source_weights[pos_source][weighting_method][granularity][sentence.idx]
 
                     # apply softmax, temperature, and inverse
@@ -108,14 +112,17 @@ for sentence in target_sentences:
                         # correct[pos_source][weighting_method][granularity][temperature][source] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
                         # total[pos_source][weighting_method][granularity][temperature][source] += len(sentence.tokens)
 
-                        # apply weights TODO is this the right place to do it?
+                        # TODO Find best single source
+
+                        # apply weights
                         if source != "ALL":
-                            tensor[:, :, idx] *= source_weights_for_sentence[source]
+                            weighted_tensor[:, :, idx] *= source_weights_for_sentence[source]
 
-                    # this is where voting happens, currently all weights are 1.0
+                    # weighted voting
                     voted = np.sum(tensor, axis=2)
+                    voted_weighted = np.sum(weighted_tensor, axis=2)
 
-                    heads, _ = chu_liu_edmonds(voted)
+                    heads, _ = chu_liu_edmonds(voted_weighted)
                     heads = heads[1:]
 
                     correct[pos_source][weighting_method][granularity][temperature]["voted"] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
@@ -123,7 +130,7 @@ for sentence in target_sentences:
 
 for pos_source in pos_sources:
     for weighting_method in weighting_methods:
-        for granularity in source_weights[pos_source][weighting_method].keys():
-            for temperature in [0.2]:
+        for granularity in granularities:
+            for temperature in temperatures:
                 uas = correct[pos_source][weighting_method][granularity][temperature]["voted"] / total[pos_source][weighting_method][granularity][temperature]["voted"]
                 print(pos_source, weighting_method, granularity, temperature, uas*100)
