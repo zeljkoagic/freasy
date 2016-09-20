@@ -10,6 +10,7 @@ import dill
 from collections import defaultdict
 import argparse
 from softmax import softmax, invert
+import copy
 
 
 def load_tensor(n, arcs, pos_source):
@@ -34,7 +35,7 @@ def load_tensor(n, arcs, pos_source):
                 # multisource gets special treatment
                 multi_source_matrix[arc.dependent, arc.head] = arc.weight
 
-    return single_source_tensor, single_source_tensor, multi_source_matrix, sources
+    return single_source_tensor, multi_source_matrix, sources
 
 
 def get_matrix(n, arcs):
@@ -121,8 +122,10 @@ for sentence in target_sentences:
                     # TODO Find *true* best single source---WHICH GRANULARITY?
 
                     # create tensor from arcs
-                    ss_tensor, ss_tensor_weighted, ms_matrix, sources = \
+                    ss_tensor, ms_matrix, sources = \
                         load_tensor(len(sentence.tokens), sentence.arcs_from_sources, pos_source)
+
+                    ss_tensor_weighted = copy.deepcopy(ss_tensor)
 
                     heads_ms = get_heads(ms_matrix)
                     correct_ms += count_correct(heads_ms, heads_gold)
