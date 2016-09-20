@@ -106,6 +106,7 @@ for sentence in target_sentences:
                         # TODO Individual slices are already trees! Makes sense only to decode for voted.
                         heads, _ = chu_liu_edmonds(tensor[:, :, idx])
                         heads = heads[1:]
+                        print(idx, source, heads)
 
                         correct[pos_source][weighting_method][granularity][source] += sum([int(predicted == gold) for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
                         total[pos_source][weighting_method][granularity][source] += len(sentence.tokens)
