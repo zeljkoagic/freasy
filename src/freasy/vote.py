@@ -40,14 +40,14 @@ def get_heads(matrix):
     """
     Converts matrix representation of dependency tree to heads list.
     """
-    heads = np.array(matrix.shape[0])
+    heads = np.zeros(matrix.shape[0])
 
-    for dependent, row in enumerate(matrix[1:]):  # we skip heads of ROOT
+    for dependent, row in enumerate(matrix):
         for head in row:
             if head != 0:
                 heads[dependent] = head
 
-    return heads.tolist()
+    return heads.tolist()[1:]
 
 
 def count_correct(heads_predicted, heads_gold):
