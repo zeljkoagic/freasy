@@ -107,8 +107,7 @@ for sentence in target_sentences:
                         heads, _ = chu_liu_edmonds(tensor[:, :, idx])
                         heads = heads[1:]
 
-                        correct[pos_source][weighting_method][granularity][source] += sum([predicted == gold for predicted, gold
-                                                in zip(heads, [arc.head for arc in sentence.gold_arcs])])
+                        correct[pos_source][weighting_method][granularity][source] += sum([predicted == gold for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
                         total[pos_source][weighting_method][granularity][source] += len(sentence.tokens)
 
                         # apply weights TODO is this the right place to do it?
@@ -121,8 +120,7 @@ for sentence in target_sentences:
                     heads, _ = chu_liu_edmonds(voted)
                     heads = heads[1:]
 
-                    correct[pos_source][weighting_method][granularity]["voted"] += sum([predicted == gold for predicted, gold
-                                             in zip(heads, [arc.head for arc in sentence.gold_arcs])])
+                    correct[pos_source][weighting_method][granularity]["voted"] += sum([predicted == gold for predicted, gold in zip(heads, [arc.head for arc in sentence.gold_arcs])])
                     total[pos_source][weighting_method][granularity]["voted"] += len(sentence.tokens)
 
 print(correct)
