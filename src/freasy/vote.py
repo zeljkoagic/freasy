@@ -50,4 +50,4 @@ for source_language, correct_heads in ss_correct.items():
         true_best_single_source = source_language
 
 print(true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
-print(correct_heads)
+print(ss_correct)
