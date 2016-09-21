@@ -9,13 +9,11 @@
 # pip install git+https://github.com/saffsd/langid.py.git
 
 import argparse
-import sys
 from collections import defaultdict
 from langid.langid import LanguageIdentifier, model
 from functools import partial
 import wals
 import klcpos3
-from softmax import softmax, invert
 import dill
 
 
@@ -44,8 +42,8 @@ def get_distributions_from_langid(target_sentence_sample, identifier, list_of_so
     best_source = identifier.classify(target_string)[0]
     # distribution_of_sources = invert(dict(identifier.rank(target_string)))
     # TODO Dummy distribution, as langid does not participate in that part of the experiment
-    distribution_of_sources = dict([(source, sys.float_info.min) for source in list_of_source_languages])
-    distribution_of_sources[best_source] = sys.float_info.max
+    distribution_of_sources = dict([(source, 0.99) for source in list_of_source_languages])
+    distribution_of_sources[best_source] = 0.01
 
     return best_source, distribution_of_sources
 

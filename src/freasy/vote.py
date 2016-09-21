@@ -70,13 +70,15 @@ def count_correct(heads_predicted, heads_gold):
 parser = argparse.ArgumentParser(description="Performs language weighting experiments.")
 parser.add_argument("--target_name", required=True, help="target language name")
 parser.add_argument("--data_root", required=True, help="root for data files")
-#parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "proj"], help="POS source")
+parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "proj"], help="POS source")
+parser.add_argument("--granularity", required=True, help="target language estimation granularity", type=int)
+parser.add_argument("--temperature", required=True, help="softmax temperature", type=float)
+
 #parser.add_argument("--weighting_method", required=True, choices=["klcpos3", "wals", "langid"],
 #                    help="source weighting method")
-#parser.add_argument("--granularity", required=True, help="target language estimation granularity", type=int)
 #parser.add_argument('--use_softmax', required=True, choices=[0, 1],
 #                    help="use softmax to smooth source contributions?", type=int)
-#parser.add_argument("--temperature", required=False, help="softmax temperature", type=float)
+
 args = parser.parse_args()
 
 # load the target sentence pickle
