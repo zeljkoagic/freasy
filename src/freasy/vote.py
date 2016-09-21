@@ -42,10 +42,11 @@ for sentence in target_sentences:
 
     # record scores of single-source parsers
     for source_language, this_source_heads in sentence.single_source_heads.items():
-        ss_correct[source_language] += count_correct_heads(this_source_heads, sentence.gold_heads)
+        correct_heads = count_correct_heads(this_source_heads, sentence.gold_heads)
+        ss_correct[source_language] += correct_heads
         # TODO
         if source_language == predicted_best_single_source:
-            ss_predicted_correct += count_correct_heads(this_source_heads, sentence.gold_heads)
+            ss_predicted_correct += correct_heads
 
     # evaluate the multi-source
     # decode the voted, with or without weights for the given weighting method
