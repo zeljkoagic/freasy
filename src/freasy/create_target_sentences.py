@@ -1,57 +1,46 @@
 import argparse
 import dill
 from collections import defaultdict
-from target_sentence import Arc, TargetSentence
+from target_sentence import TargetSentence
 
-# list of languages used in the experiment (WTC constrained)
-langs = sorted(["ar", "bg", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "he", "hi", "hr", "hu", "id",
-                "it", "nl", "no", "pl", "pt", "ro", "sl", "sv", "ta", "ALL"])
-
-# POS tag sources in the experiment: gold, predicted (in-language), projected-predicted (cross-language)
-pos_sources = ["gold", "pred", "proj"]
+# list of languages used in the experiment (WTC constrained), note "ALL" (multi-source delex)
+all_languages = sorted(["ar", "bg", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "he", "hi", "hr", "hu",
+                        "id", "it", "nl", "no", "pl", "pt", "ro", "sl", "sv", "ta", "ALL"])
 
 # argparse stuff
 parser = argparse.ArgumentParser(description="Collect target sentences into a pickle file.")
 parser.add_argument("--target_name", required=True, help="target language name")
 parser.add_argument("--data_root", required=True, help="root for data files")
+parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "proj"], help="root for data files")
 args = parser.parse_args()
 
-target_lang = args.target_name
-path_to_data_files = args.data_root
+assert args.target_name in all_languages, "Unknown language: {}".format(args.target_name)
 
-assert target_lang in langs, "Unknown language: {}".format(target_lang)
+# add the target first; note this is a *gold* POS file
+handles = [open("{}/test/{}-ud-test.conllu.lex.with_gold_pos".format(args.data_root, args.target_name))]
 
-# add the target first
-# TODO Don't forget that this is a *gold POS* file
-handles = [open("{}/test/{}-ud-test.conllu.lex.with_gold_pos".format(path_to_data_files, target_lang))]
+source_languages = sorted(set(all_languages) - {args.target_name})
+source_languages_per_handle = [] # remember the sequence of source languages, just in case
 
-# this remembers the sequence of POS sources and source languages, just in case
-pos_sources_per_handle = []
-source_langs_per_handle = []
-
-source_languages = sorted(set(langs) - {target_lang})
-
-# open all the source file handles x different POS sources
-for source_lang in source_languages:
-    for pos_source in pos_sources:
-        assert source_lang != target_lang, "Target cannot be source!"
-        handles.append(open("{}/test/{}-ud-test.conllu.delex.sampled_10k.with_{}_pos."
-                            "parsed_with_{}".format(path_to_data_files, target_lang, pos_source, source_lang)))
-
-        # record the sequence
-        pos_sources_per_handle.append(pos_source)
-        source_langs_per_handle.append(source_lang)
+# open all the source file handles
+for source_language in source_languages:
+    assert source_language != args.target_name, "Target cannot be source!"
+    handles.append(open("{}/test/{}-ud-test.conllu.delex.sampled_10k.with_{}_pos.parsed_with_{}"
+                        .format(args.data_root, args.target_name, args.pos_source, source_language)))
+    source_languages_per_handle.append(source_language)  # record the sequence
 
 # list of target sentences as final result of the script
 target_sentences = []
 
 # buffers
 current_tokens = []
-current_pos = defaultdict(list)  # indexed by POS source
-current_gold_arcs = []
-current_source_arcs = defaultdict(lambda: defaultdict(list))  # indexed by language and POS source
+current_gold_pos = []
+current_predicted_pos = []
+current_gold_heads = []
+current_multi_source_heads = []
+current_single_source_heads = defaultdict(list)  # indexed by source language name
 current_token_id = 0
-current_target_sentence_id = 0  # important, stores sentence ids
+current_target_sentence_id = 0
 
 # iterate through *all* the file handles line by line
 for lines in zip(*handles):
@@ -67,45 +56,53 @@ for lines in zip(*handles):
 
         # add all the gold stuff
         current_tokens.append(token)
-        current_pos["gold"].append(pos)
-        current_gold_arcs.append(Arc(lang=target_lang, head=int(head), dependent=current_token_id, deprel=deprel,
-                                     pos_source="gold", weight=1.0))
+        current_gold_pos.append(pos)
+        current_gold_heads.append(int(head))
 
         # and then get all the source stuff
         for idx, source_line in enumerate(source_lines):
-            source_lang = source_langs_per_handle[idx]
-            pos_source = pos_sources_per_handle[idx]
+            source_language = source_languages_per_handle[idx]
 
-            _, _, _, _, pos, _, _, _, _, phead, _, pdeprel, _, _ = source_line.split("\t")
+            _, _, _, _, ppos, _, _, _, _, phead, _, pdeprel, _, _ = source_line.split("\t")
 
-            # harvest the *other* POS tags (i.e., non-gold), and do it only once as all parses have the same
-            if pos_source != "gold" and (idx == 1 or idx == 2):
-                current_pos[pos_source].append(pos)
+            if idx == 0:
+                current_predicted_pos.append(ppos)
 
-            # add an arc to the list
-            current_source_arcs[source_lang][pos_source].append(Arc(lang=source_lang, head=int(phead),
-                                                                    dependent=current_token_id, deprel=pdeprel,
-                                                                    pos_source=pos_source, weight=1.0))
+            # distinction between single- and multi-source parsers
+            if source_language == "ALL":
+                current_multi_source_heads.append(int(phead))
+            else:
+                current_single_source_heads[source_language].append(int(phead))
 
     else:
+
+        assert len(current_single_source_heads) == len(source_languages), \
+            "Source language mismatch in current_source_heads!"
+
+        # todo create sentence tensors
+        # todo we use tensors instead of arc lists from now on, act accordingly
+
         # create and append the sentence
         current_sentence = TargetSentence(idx=current_target_sentence_id,
-                                          lang=target_lang,
+                                          language=args.target_name,
                                           tokens=current_tokens,
-                                          gold_arcs=current_gold_arcs,
-                                          pos=current_pos,
-                                          arcs_from_sources=current_source_arcs)
+                                          gold_heads=current_gold_heads,
+                                          gold_pos=current_gold_pos,
+                                          predicted_pos=current_predicted_pos,
+                                          multi_source_heads=current_multi_source_heads,
+                                          single_source_heads=current_single_source_heads)
 
         target_sentences.append(current_sentence)
 
         # clear the buffers
         current_tokens = []
-        current_gold_arcs = []
-        current_pos = defaultdict(list)
-        current_source_arcs = defaultdict(lambda: defaultdict(list))
-        current_token_id = 0
+        current_gold_pos = []
+        current_predicted_pos = []
+        current_gold_heads = []
+        current_multi_source_heads = []
+        current_single_source_heads = defaultdict(list)
         current_target_sentence_id += 1  # this one provides sentence ids
 
 # finally store the pickle
-dill.dump(target_sentences, open("{}/pickles/{}.as_target_language.all_parses.pickle".format(path_to_data_files,
-                                                                                             target_lang), "wb"))
+dill.dump(target_sentences, open("{}/pickles/{}.as_target_language.all_parses.pickle"
+                                 .format(args.data_root, args.target_name), "wb"))

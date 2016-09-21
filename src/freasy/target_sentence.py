@@ -1,36 +1,28 @@
-class Arc(object):
-    """
-    Dependency edges between tokens.
-    """
-    def __init__(self, lang, head, dependent, deprel, pos_source, weight=1.0):
-        self.lang = lang
-        self.head = head
-        self.dependent = dependent
-        self.deprel = deprel
-        self.weight = weight
-        self.pos_source = pos_source
-
-    def __repr__(self):
-        return "{}:{}->{}|{}|{}|{}".format(self.lang, self.head, self.dependent, self.deprel, self.weight,
-                                           self.pos_source)
-
-    def __eq__(self, other):
-        if self.lang == other.lang and self.head == other.head and self.dependent == other.dependent and \
-                        self.weight == other.weight and self.pos_source == other.pos_source:
-            return True
-        return False
-
-
 class TargetSentence:
     """
     Target sentence with all the parses coming from various sources.
     """
-    def __init__(self, idx, lang, tokens, gold_arcs, pos, arcs_from_sources):
+    def __init__(self, idx, language, tokens, gold_heads, gold_pos, predicted_pos,
+                 multi_source_heads, single_source_heads):
+        """
+        :param idx: Sentence ID in the test set
+        :param language: True language name
+        :param tokens: List of sentence tokens
+        :param gold_heads: List of heads for each sentence token (CoNLL style)
+        :param gold_pos: List of gold POS tags
+        :param predicted_pos: List of predicted POS tags
+        :param multi_source_heads: List of heads predicted by the multi-source delexicalized parser ("ALL")
+        :param multi_source_heads: Dictionary of head lists for different single-source parsers
+        """
         self.idx = idx
-        self.lang = lang
+        self.language = language
         self.tokens = tokens
-        self.gold_arcs = gold_arcs
-        self.pos = pos
-        self.arcs_from_sources = arcs_from_sources
+        self.gold_heads = gold_heads
+        self.gold_pos = gold_pos
+        self.predicted_pos = predicted_pos
+        self.multi_source_heads = multi_source_heads
+        self.single_source_heads = single_source_heads
 
-# TODO Should a target sentence have different calculate() methods for LAS, UAS, POS accuracy, etc.?
+
+def count_correct_heads(heads_predicted, heads_gold):
+    return sum([int(predicted == gold) for predicted, gold in zip(heads_predicted, heads_gold)])
