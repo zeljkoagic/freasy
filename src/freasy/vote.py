@@ -43,4 +43,4 @@ for sentence in target_sentences:
     # evaluate the multi-source
     # decode the voted, with or without weights for the given weighting method
 
-print("{%.2f}".format((ss_correct["cs"]/total)*100))
+print("{.2f}".format((ss_correct["cs"]/total)*100))
