@@ -101,7 +101,7 @@ for source_language, correct_heads in ss_correct.items():
         max_correct = correct_heads
 
 print(true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
-print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100), ss_oracle_sources_counter)
+print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100))
 print("ms: {0:.2f}".format((ms_correct/total)*100))
 print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
 print("vote w=x: {0:.2f}".format((ss_voted_weighted_correct/total)*100))
