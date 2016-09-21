@@ -48,6 +48,7 @@ max_correct = -1
 for source_language, correct_heads in ss_correct.items():
     if correct_heads > max_correct:
         true_best_single_source = source_language
+        max_correct = correct_heads
 
 print(true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
 print(ss_correct)
