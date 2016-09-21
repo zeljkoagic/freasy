@@ -76,11 +76,6 @@ for lines in zip(*handles):
 
     else:
 
-        print(len(current_single_source_heads), len(source_languages))
-
-        assert len(current_single_source_heads) == len(source_languages), \
-            "Source language mismatch in current_source_heads!"
-
         # todo create sentence tensors
         # todo we use tensors instead of arc lists from now on, act accordingly
 
