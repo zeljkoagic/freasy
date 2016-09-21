@@ -74,7 +74,7 @@ for sentence in target_sentences:
         correct_heads = count_correct_heads(this_source_heads, sentence.gold_heads)
         ss_correct[source_language] += correct_heads  # record scores of single-source parsers
 
-        if correct_heads > max_correct:
+        if correct_heads > max_correct:  # FIXME There are multiple languages with equal scores here, thus the non-determinism.
             true_best_single_source = source_language
             max_correct = correct_heads
 
@@ -119,8 +119,8 @@ for source_language, correct_heads in ss_correct.items():
 
 print(true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
 
-print("ss oracle: {0:.2f}".format((ss_oracle_correct/total)*100), sorted(ss_oracle_sources_counter.items(), key=operator.itemgetter(1)))
-print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100), sorted(ss_predicted_sources_counter.items(), key=operator.itemgetter(1)))
+print("ss oracle: {0:.2f}".format((ss_oracle_correct/total)*100), sorted(ss_oracle_sources_counter.items(), key=operator.itemgetter(1), reversed=True))
+print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100), sorted(ss_predicted_sources_counter.items(), key=operator.itemgetter(1), reversed=True))
 
 print("ms: {0:.2f}".format((ms_correct/total)*100))
 print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
