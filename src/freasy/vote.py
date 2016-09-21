@@ -37,7 +37,7 @@ for sentence in target_sentences:
 
     # find the REAL best single source
     for source_language, this_source_heads in sentence.single_source_heads.items():
-        ss_correct += count_correct_heads(this_source_heads, sentence.gold_heads)
+        ss_correct[source_language] += count_correct_heads(this_source_heads, sentence.gold_heads)
 
     # also the PREDICTED best single source
     # evaluate the multi-source
