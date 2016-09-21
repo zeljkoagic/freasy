@@ -42,6 +42,7 @@ source_weights = dill.load(open("{}/pickles/{}.source_language_mappings.with_{}_
 ss_correct = defaultdict(int)  # record single source performance
 ss_predicted_correct = 0
 ss_voted_unweighted_correct = 0
+ss_voted_weighted_correct = 0
 ms_correct = 0
 total = 0
 
@@ -65,11 +66,22 @@ for sentence in target_sentences:
 
     ms_correct += count_correct_heads(sentence.multi_source_heads, sentence.gold_heads)
 
-    # decode the voted, with or without weights for the given weighting method
+    # TODO
     ss_tensor, ss_ordering = create_ss_tensor(len(sentence.tokens), sentence.single_source_heads)
+
+    # vote and decode without weights
     ss_matrix_voted_unweighted = np.sum(ss_tensor, axis=2)
     ss_voted_unweighted_heads, _ = chu_liu_edmonds(ss_matrix_voted_unweighted)
     ss_voted_unweighted_correct += count_correct_heads(ss_voted_unweighted_heads[1:], sentence.gold_heads)
+
+    # vote and decode with weighting
+    for idx, source_language in enumerate(ss_ordering):
+        weight = source_distribution[source_language]
+        ss_tensor[:, :, idx] *= weight
+
+    ss_matrix_voted_weighted = np.sum(ss_tensor, axis=2)
+    ss_voted_weighted_heads, _ = chu_liu_edmonds(ss_matrix_voted_weighted)
+    ss_voted_weighted_correct += count_correct_heads(ss_voted_weighted_heads[1:], sentence.gold_heads)
 
 # extract the REAL best single source
 true_best_single_source = None
@@ -83,3 +95,4 @@ print(true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_sou
 print("{0:.2f}".format((ss_predicted_correct/total)*100))
 print("{0:.2f}".format((ms_correct/total)*100))
 print("{0:.2f}".format((ss_voted_unweighted_correct/total)*100))
+print("{0:.2f}".format((ss_voted_weighted_correct/total)*100))
