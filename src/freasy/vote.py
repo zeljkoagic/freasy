@@ -36,16 +36,16 @@ for sentence in target_sentences:
 
     total += len(sentence.tokens)
 
-    # record scores of single-source parsers
-    for source_language, this_source_heads in sentence.single_source_heads.items():
-        ss_correct[source_language] += count_correct_heads(this_source_heads, sentence.gold_heads)
-
     # read the predicted best single-source parser, and the source weights
     predicted_best_single_source, source_distribution = \
         source_weights[args.weighting_method][args.granularity][sentence.idx]
 
-    ss_predicted_correct += ss_correct[predicted_best_single_source]
-
+    # record scores of single-source parsers
+    for source_language, this_source_heads in sentence.single_source_heads.items():
+        ss_correct[source_language] += count_correct_heads(this_source_heads, sentence.gold_heads)
+        # TODO
+        if source_language == predicted_best_single_source:
+            ss_predicted_correct += ss_correct[predicted_best_single_source]
 
     # evaluate the multi-source
     # decode the voted, with or without weights for the given weighting method
