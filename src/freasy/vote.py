@@ -35,14 +35,19 @@ for sentence in target_sentences:
 
     total += len(sentence.tokens)
 
-    # find the REAL best single source
+    # record scores of single-source parsers
     for source_language, this_source_heads in sentence.single_source_heads.items():
         ss_correct[source_language] += count_correct_heads(this_source_heads, sentence.gold_heads)
 
+    predicted_best_single_source = source_weights[args.weighting_method][args.granularity][sentence.idx]
+    print(predicted_best_single_source)
+
     # also the PREDICTED best single source
+
     # evaluate the multi-source
     # decode the voted, with or without weights for the given weighting method
 
+# extract the REAL best single source
 true_best_single_source = None
 max_correct = -1
 for source_language, correct_heads in ss_correct.items():
