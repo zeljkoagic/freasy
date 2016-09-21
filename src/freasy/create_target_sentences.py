@@ -104,5 +104,5 @@ for lines in zip(*handles):
         current_target_sentence_id += 1  # this one provides sentence ids
 
 # finally store the pickle
-dill.dump(target_sentences, open("{}/pickles/{}.as_target_language.all_parses.pickle"
-                                 .format(args.data_root, args.target_name), "wb"))
+dill.dump(target_sentences, open("{}/pickles/{}.as_target_language.all_parses.with_{}_pos.pickle"
+                                 .format(args.data_root, args.target_name, args.pos_source), "wb"))
