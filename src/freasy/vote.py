@@ -10,6 +10,7 @@ from target_sentence import count_correct_heads
 from collections import defaultdict
 import numpy as np
 from dependency_decoding import chu_liu_edmonds
+from softmax import invert, softmax
 
 
 def create_ss_tensor(n, single_source_heads):
@@ -75,6 +76,8 @@ for sentence in target_sentences:
     ss_voted_unweighted_correct += count_correct_heads(ss_voted_unweighted_heads[1:], sentence.gold_heads)
 
     # vote and decode with weighting
+    source_distribution = invert(softmax(source_distribution, args.temperature))
+    
     for idx, source_language in enumerate(ss_ordering):
         weight = source_distribution[source_language]
         ss_tensor[:, :, idx] *= weight
