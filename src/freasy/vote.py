@@ -8,6 +8,17 @@ import dill
 import argparse
 from target_sentence import count_correct_heads
 from collections import defaultdict
+import numpy as np
+
+
+def create_ss_tensor(n, single_source_heads):
+    tensor = np.zeros((n+1, n+1, len(single_source_heads)), dtype=float)
+    language_sequence = []
+    for lang_idx, (language, heads) in enumerate(single_source_heads.items()):
+        language_sequence.append(language)
+        for j, head in enumerate(heads):
+            tensor[j+1, head, lang_idx] = 1.0
+    return tensor, language_sequence
 
 # argparse stuff
 parser = argparse.ArgumentParser(description="Performs language weighting experiments.")
@@ -52,8 +63,9 @@ for sentence in target_sentences:
 
     ms_correct += count_correct_heads(sentence.multi_source_heads, sentence.gold_heads)
 
-    # evaluate the multi-source
     # decode the voted, with or without weights for the given weighting method
+    ss_tensor, ss_ordering = create_ss_tensor(len(sentence.tokens), sentence.single_source_heads)
+    print(ss_tensor[:, :, 0])
 
 # extract the REAL best single source
 true_best_single_source = None
