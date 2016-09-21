@@ -65,7 +65,7 @@ for sentence in target_sentences:
     ss_predicted_sources_counter[predicted_best_single_source] += 1
 
     # capture the best source for this sentence!
-    true_best_single_source = None
+    tbss = None
     max_correct = -1
 
     for source_language, this_source_heads in sentence.single_source_heads.items():
@@ -74,7 +74,7 @@ for sentence in target_sentences:
         ss_correct[source_language] += correct_heads  # record scores of single-source parsers
 
         if correct_heads > max_correct:
-            true_best_single_source = source_language
+            tbss = source_language
             max_correct = correct_heads
 
         # collect score for the predicted best single-source parser
@@ -83,8 +83,8 @@ for sentence in target_sentences:
 
     # for each target sentence, we always pick the best source
     ss_oracle_correct += \
-        count_correct_heads(sentence.single_source_heads[true_best_single_source], sentence.gold_heads)
-    ss_oracle_sources_counter[true_best_single_source] += 1
+        count_correct_heads(sentence.single_source_heads[tbss], sentence.gold_heads)
+    ss_oracle_sources_counter[tbss] += 1
 
     ms_correct += count_correct_heads(sentence.multi_source_heads, sentence.gold_heads)
 
