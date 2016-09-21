@@ -77,7 +77,7 @@ for sentence in target_sentences:
 
     # vote and decode with weighting
     source_distribution = invert(softmax(source_distribution, args.temperature))
-    print(source_distribution)
+
     for idx, source_language in enumerate(ss_ordering):
         weight = source_distribution[source_language]
         ss_tensor[:, :, idx] *= weight
@@ -95,7 +95,7 @@ for source_language, correct_heads in ss_correct.items():
         max_correct = correct_heads
 
 print(true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
-print("{0:.2f}".format((ss_predicted_correct/total)*100))
-print("{0:.2f}".format((ms_correct/total)*100))
-print("{0:.2f}".format((ss_voted_unweighted_correct/total)*100))
-print("{0:.2f}".format((ss_voted_weighted_correct/total)*100))
+print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100))
+print("ms: {0:.2f}".format((ms_correct/total)*100))
+print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
+print("vote w=x: {0:.2f}".format((ss_voted_weighted_correct/total)*100))
