@@ -126,3 +126,4 @@ print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
 print("vote w=x: {0:.2f}".format((ss_voted_weighted_correct/total)*100))
 
 # TODO Do we need a sentence-level best gold single-source score?
+print(ss_correct)
