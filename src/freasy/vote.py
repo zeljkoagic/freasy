@@ -42,6 +42,9 @@ source_weights = dill.load(open("{}/pickles/{}.source_language_mappings.with_{}_
 
 ss_correct = defaultdict(int)  # record single source performance
 
+ss_oracle_correct = 0  # always choose best source for given sentence!
+ss_oracle_sources_counter = defaultdict(int)  # its corresponding counter
+
 ss_predicted_correct = 0
 ss_predicted_sources_counter = defaultdict(int)  # for counting the contributing sources
 
@@ -61,14 +64,27 @@ for sentence in target_sentences:
 
     ss_predicted_sources_counter[predicted_best_single_source] += 1
 
+    # capture the best source for this sentence!
+    true_best_single_source = None
+    max_correct = -1
+
     for source_language, this_source_heads in sentence.single_source_heads.items():
 
         correct_heads = count_correct_heads(this_source_heads, sentence.gold_heads)
         ss_correct[source_language] += correct_heads  # record scores of single-source parsers
 
+        if correct_heads > max_correct:
+            true_best_single_source = source_language
+            max_correct = correct_heads
+
         # collect score for the predicted best single-source parser
         if source_language == predicted_best_single_source:
             ss_predicted_correct += correct_heads
+
+    # for each target sentence, we always pick the best source
+    ss_oracle_correct += \
+        count_correct_heads(sentence.single_source_heads[true_best_single_source], sentence.gold_heads)
+    ss_oracle_sources_counter[true_best_single_source] += 1
 
     ms_correct += count_correct_heads(sentence.multi_source_heads, sentence.gold_heads)
 
@@ -101,9 +117,13 @@ for source_language, correct_heads in ss_correct.items():
         max_correct = correct_heads
 
 print(true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
-print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100))
+
+print("ss oracle: {0:.2f}".format((ss_oracle_correct/total)*100), ss_oracle_sources_counter)
+print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100), ss_predicted_sources_counter)
+
 print("ms: {0:.2f}".format((ms_correct/total)*100))
 print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
 print("vote w=x: {0:.2f}".format((ss_voted_weighted_correct/total)*100))
 
 # TODO Do we need a sentence-level best gold single-source score?
+print(ss_correct)
