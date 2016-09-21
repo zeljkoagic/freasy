@@ -9,13 +9,13 @@ import argparse
 from target_sentence import count_correct_heads
 from collections import defaultdict
 import numpy as np
+from dependency_decoding import chu_liu_edmonds
 
 
 def create_ss_tensor(n, single_source_heads):
     tensor = np.zeros((n+1, n+1, len(single_source_heads)), dtype=float)
     language_sequence = []
     for lang_idx, (language, heads) in enumerate(single_source_heads.items()):
-        print(heads)
         language_sequence.append(language)
         for j, head in enumerate(heads):
             tensor[j+1, head, lang_idx] = 1.0
@@ -41,6 +41,7 @@ source_weights = dill.load(open("{}/pickles/{}.source_language_mappings.with_{}_
 
 ss_correct = defaultdict(int)  # record single source performance
 ss_predicted_correct = 0
+ss_voted_unweighted_correct = 0
 ms_correct = 0
 total = 0
 
@@ -66,7 +67,9 @@ for sentence in target_sentences:
 
     # decode the voted, with or without weights for the given weighting method
     ss_tensor, ss_ordering = create_ss_tensor(len(sentence.tokens), sentence.single_source_heads)
-    print(ss_tensor[:, :, 0])
+    ss_matrix_voted_unweighted = np.sum(ss_tensor, axis=2)
+    ss_voted_unweighted_heads, _ = chu_liu_edmonds(ss_matrix_voted_unweighted)
+    ss_voted_unweighted_correct += count_correct_heads(ss_voted_unweighted_heads[1:], sentence.gold_heads)
 
 # extract the REAL best single source
 true_best_single_source = None
@@ -79,3 +82,4 @@ for source_language, correct_heads in ss_correct.items():
 print(true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
 print("{0:.2f}".format((ss_predicted_correct/total)*100))
 print("{0:.2f}".format((ms_correct/total)*100))
+print("{0:.2f}".format((ss_voted_unweighted_correct/total)*100))
