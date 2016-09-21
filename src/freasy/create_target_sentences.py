@@ -87,7 +87,8 @@ for lines in zip(*handles):
                                           gold_pos=current_gold_pos,
                                           predicted_pos=current_predicted_pos,
                                           multi_source_heads=current_multi_source_heads,
-                                          single_source_heads=current_single_source_heads)
+                                          single_source_heads=current_single_source_heads,
+                                          pos_source_type=args.pos_source)
 
         target_sentences.append(current_sentence)
 
