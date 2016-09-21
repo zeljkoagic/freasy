@@ -15,6 +15,7 @@ def create_ss_tensor(n, single_source_heads):
     tensor = np.zeros((n+1, n+1, len(single_source_heads)), dtype=float)
     language_sequence = []
     for lang_idx, (language, heads) in enumerate(single_source_heads.items()):
+        print(heads)
         language_sequence.append(language)
         for j, head in enumerate(heads):
             tensor[j+1, head, lang_idx] = 1.0
@@ -65,7 +66,6 @@ for sentence in target_sentences:
 
     # decode the voted, with or without weights for the given weighting method
     ss_tensor, ss_ordering = create_ss_tensor(len(sentence.tokens), sentence.single_source_heads)
-    print(sentence.gold_heads)
     print(ss_tensor[:, :, 0])
 
 # extract the REAL best single source
