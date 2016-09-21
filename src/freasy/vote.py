@@ -39,7 +39,9 @@ for sentence in target_sentences:
     for source_language, this_source_heads in sentence.single_source_heads.items():
         ss_correct[source_language] += count_correct_heads(this_source_heads, sentence.gold_heads)
 
-    predicted_best_single_source = source_weights[args.weighting_method][args.granularity][sentence.idx]
+    predicted_best_single_source, source_distribution = \
+        source_weights[args.weighting_method][args.granularity][sentence.idx]
+
     print(predicted_best_single_source)
 
     # also the PREDICTED best single source
