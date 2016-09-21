@@ -8,7 +8,6 @@ import dill
 import argparse
 from target_sentence import count_correct_heads
 from collections import defaultdict
-import sys
 
 # argparse stuff
 parser = argparse.ArgumentParser(description="Performs language weighting experiments.")
@@ -45,7 +44,7 @@ for sentence in target_sentences:
     # decode the voted, with or without weights for the given weighting method
 
 true_best_single_source = None
-max_correct = sys.int_info.min
+max_correct = -1
 for source_language, correct_heads in ss_correct.items():
     if correct_heads > max_correct:
         true_best_single_source = source_language
