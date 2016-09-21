@@ -17,7 +17,7 @@ def create_ss_tensor(n, single_source_heads):
     for lang_idx, (language, heads) in enumerate(single_source_heads.items()):
         language_sequence.append(language)
         for j, head in enumerate(heads):
-            tensor[j+1, head+1, lang_idx] = 1.0
+            tensor[j+1, head-1, lang_idx] = 1.0
     return tensor, language_sequence
 
 # argparse stuff
