@@ -68,6 +68,7 @@ for sentence in target_sentences:
     ss_tensor, ss_ordering = create_ss_tensor(len(sentence.tokens), sentence.single_source_heads)
     print(sentence.gold_heads)
     print(ss_tensor[:, :, 0])
+    break
 
 # extract the REAL best single source
 true_best_single_source = None
