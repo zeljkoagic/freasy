@@ -45,7 +45,7 @@ for sentence in target_sentences:
         ss_correct[source_language] += count_correct_heads(this_source_heads, sentence.gold_heads)
         # TODO
         if source_language == predicted_best_single_source:
-            ss_predicted_correct += ss_correct[predicted_best_single_source]
+            ss_predicted_correct += count_correct_heads(this_source_heads, sentence.gold_heads)
 
     # evaluate the multi-source
     # decode the voted, with or without weights for the given weighting method
