@@ -65,6 +65,7 @@ for sentence in target_sentences:
 
     # decode the voted, with or without weights for the given weighting method
     ss_tensor, ss_ordering = create_ss_tensor(len(sentence.tokens), sentence.single_source_heads)
+    print(sentence.gold_heads)
     print(ss_tensor[:, :, 0])
 
 # extract the REAL best single source
