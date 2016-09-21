@@ -20,7 +20,7 @@ assert args.target_name in all_languages, "Unknown language: {}".format(args.tar
 handles = [open("{}/test/{}-ud-test.conllu.lex.with_gold_pos".format(args.data_root, args.target_name))]
 
 source_languages = sorted(set(all_languages) - {args.target_name})
-source_languages_per_handle = [] # remember the sequence of source languages, just in case
+source_languages_per_handle = []  # remember the sequence of source languages, just in case
 
 # open all the source file handles
 for source_language in source_languages:
@@ -75,6 +75,8 @@ for lines in zip(*handles):
                 current_single_source_heads[source_language].append(int(phead))
 
     else:
+
+        print(len(current_single_source_heads), len(source_languages))
 
         assert len(current_single_source_heads) == len(source_languages), \
             "Source language mismatch in current_source_heads!"
