@@ -17,7 +17,6 @@ def create_ss_tensor(n, single_source_heads):
     for lang_idx, (language, heads) in enumerate(single_source_heads.items()):
         language_sequence.append(language)
         for j, head in enumerate(heads):
-            print(j+1, head)
             tensor[j+1, head, lang_idx] = 1.0
     return tensor, language_sequence
 
@@ -68,7 +67,6 @@ for sentence in target_sentences:
     ss_tensor, ss_ordering = create_ss_tensor(len(sentence.tokens), sentence.single_source_heads)
     print(sentence.gold_heads)
     print(ss_tensor[:, :, 0])
-    break
 
 # extract the REAL best single source
 true_best_single_source = None
