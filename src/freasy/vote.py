@@ -42,6 +42,7 @@ source_weights = dill.load(open("{}/pickles/{}.source_language_mappings.with_{}_
 
 ss_correct = defaultdict(int)  # record single source performance
 ss_predicted_correct = 0
+ss_predicted_sources_counter = defaultdict(int)  # for counting the contributing sources
 ss_voted_unweighted_correct = 0
 ss_voted_weighted_correct = 0
 ms_correct = 0
@@ -55,6 +56,8 @@ for sentence in target_sentences:
     # read the predicted best single-source parser, and the source weights
     predicted_best_single_source, source_distribution = \
         source_weights[args.weighting_method][args.granularity][sentence.idx]
+
+    ss_predicted_sources_counter[predicted_best_single_source] += 1
 
     for source_language, this_source_heads in sentence.single_source_heads.items():
 
@@ -95,7 +98,7 @@ for source_language, correct_heads in ss_correct.items():
         max_correct = correct_heads
 
 print(true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
-print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100))
+print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100), ss_predicted_sources_counter)
 print("ms: {0:.2f}".format((ms_correct/total)*100))
 print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
 print("vote w=x: {0:.2f}".format((ss_voted_weighted_correct/total)*100))
