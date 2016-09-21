@@ -28,6 +28,7 @@ source_weights = dill.load(open("{}/pickles/{}.source_language_mappings.with_{}_
                                 .format(args.data_root, args.target_name, args.pos_source), "rb"))
 
 ss_correct = defaultdict(int)  # record single source performance
+ss_predicted_correct = 0
 total = 0
 
 # process each sentence
@@ -39,12 +40,12 @@ for sentence in target_sentences:
     for source_language, this_source_heads in sentence.single_source_heads.items():
         ss_correct[source_language] += count_correct_heads(this_source_heads, sentence.gold_heads)
 
+    # read the predicted best single-source parser, and the source weights
     predicted_best_single_source, source_distribution = \
         source_weights[args.weighting_method][args.granularity][sentence.idx]
 
-    print(predicted_best_single_source)
+    ss_predicted_correct += ss_correct[predicted_best_single_source]
 
-    # also the PREDICTED best single source
 
     # evaluate the multi-source
     # decode the voted, with or without weights for the given weighting method
@@ -58,4 +59,4 @@ for source_language, correct_heads in ss_correct.items():
         max_correct = correct_heads
 
 print(true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
-print(ss_correct)
+print("{0:.2f}".format((ss_predicted_correct/total)*100))
