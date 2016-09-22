@@ -135,7 +135,8 @@ true_source_ranking = [l for l, p in true_source_ranking]
 
 avg = 0
 for ranking in predicted_source_rankings:
-    avg += kendalltau(ranking, true_source_ranking)
+    t, _ = kendalltau(ranking, true_source_ranking)
+    avg += t 
 avg /= len(predicted_source_rankings)
 
 print("kendall tau: ", avg)
