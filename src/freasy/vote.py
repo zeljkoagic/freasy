@@ -12,7 +12,7 @@ import numpy as np
 from dependency_decoding import chu_liu_edmonds
 from softmax import invert, softmax
 import operator
-from scipy.stats import kendalltau
+from scipy.stats import kendalltau, spearmanr
 
 
 def create_ss_tensor(n, single_source_heads):
@@ -135,7 +135,7 @@ true_source_ranking = [l for l, p in true_source_ranking]
 
 avg = 0
 for ranking in predicted_source_rankings:
-    t, _ = kendalltau(ranking, true_source_ranking)
+    t, _ = spearmanr(ranking, true_source_ranking)
     avg += t
 
 avg /= len(predicted_source_rankings)
