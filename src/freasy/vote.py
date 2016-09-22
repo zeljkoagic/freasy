@@ -56,6 +56,8 @@ total = 0
 
 correct_pos = 0
 
+rankings = defaultdict(list)  # to store lists of source rankings for later averaging
+
 # process each sentence
 for sentence in target_sentences:
 
@@ -103,7 +105,8 @@ for sentence in target_sentences:
 
     # vote and decode with weighting
     source_distribution = invert(softmax(source_distribution, args.temperature))
-    print(source_distribution)
+    print(sorted(source_distribution))
+    break
 
     for idx, source_language in enumerate(ss_ordering):
         weight = source_distribution[source_language]
