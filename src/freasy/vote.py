@@ -54,6 +54,8 @@ ss_voted_weighted_correct = 0
 ms_correct = 0
 total = 0
 
+correct_pos = 0
+
 # process each sentence
 for sentence in target_sentences:
 
@@ -110,6 +112,8 @@ for sentence in target_sentences:
     ss_voted_weighted_heads, _ = chu_liu_edmonds(ss_matrix_voted_weighted)
     ss_voted_weighted_correct += count_correct_heads(ss_voted_weighted_heads[1:], sentence.gold_heads)
 
+    correct_pos += count_correct_heads(sentence.predicted_pos, sentence.gold_pos)
+
 # extract the REAL best single source TODO This is macro!
 true_best_single_source = None
 max_correct = -1
@@ -128,3 +132,4 @@ print("ms: {0:.2f}".format((ms_correct/total)*100))
 
 print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
 print("vote w=x: {0:.2f}".format((ss_voted_weighted_correct/total)*100))
+print("pos acc: {0:.2f}".format((correct_pos/total)*100))
