@@ -133,17 +133,21 @@ for source_language, correct_heads in ss_correct.items():
 true_source_ranking = sorted(ss_correct.items(), key=operator.itemgetter(1), reverse=True)
 true_source_ranking = [l for l, p in true_source_ranking]
 
-avg = 0
+avg_kt = 0
+avg_sr = 0
 p1 = 0
 for ranking in predicted_source_rankings:
     t, _ = kendalltau(ranking, true_source_ranking, nan_policy="omit")
+    r, _ = spearmanr(ranking, true_source_ranking, nan_policy="omit")
     p1 += int(ranking[0] == true_source_ranking[0])
-    avg += t
+    avg_kt += t
+    avg_sr += r
 
-avg /= len(predicted_source_rankings)
+avg_kt /= len(predicted_source_rankings)
+avg_sr /= len(predicted_source_rankings)
 p1 /= len(predicted_source_rankings)
 
-print("kendall tau_b, ap1: ", avg, p1)
+print("kendall tau_b, spearmanr, ap1: ", avg_kt, avg_sr, p1)
 
 print("true best ss: ", true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
 
