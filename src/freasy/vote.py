@@ -135,7 +135,7 @@ true_source_ranking = [l for l, p in true_source_ranking]
 
 avg = 0
 for ranking in predicted_source_rankings:
-    t, _ = spearmanr(ranking, true_source_ranking)
+    t, _ = kendalltau(ranking, true_source_ranking, nan_policy="omit")
     avg += t
 
 avg /= len(predicted_source_rankings)
