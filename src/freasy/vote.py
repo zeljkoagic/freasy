@@ -136,10 +136,11 @@ true_source_ranking = [l for l, p in true_source_ranking]
 avg = 0
 for ranking in predicted_source_rankings:
     t, _ = kendalltau(ranking, true_source_ranking)
-    avg += t 
+    avg += t
+    print(t)
 avg /= len(predicted_source_rankings)
 
-print("kendall tau: ", avg)
+#print("kendall tau: ", avg)
 
 print("true best ss: ", true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
 
