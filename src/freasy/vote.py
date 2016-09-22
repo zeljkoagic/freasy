@@ -105,7 +105,7 @@ for sentence in target_sentences:
 
     # vote and decode with weighting
     source_distribution = invert(softmax(source_distribution, args.temperature))
-    print(sorted(source_distribution))
+    print(sorted(source_distribution.items(), key=operator.itemgetter(1), reverse=True))
     break
 
     for idx, source_language in enumerate(ss_ordering):
