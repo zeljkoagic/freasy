@@ -43,10 +43,10 @@ source_weights = dill.load(open("{}/pickles/{}.source_language_mappings.with_{}_
 
 ss_correct = defaultdict(int)  # record single source performance
 
-ss_oracle_correct = 0  # always choose best source for given sentence!
+ss_oracle_correct = 0  # always choose best source parse for each sentence!
 ss_oracle_sources_counter = defaultdict(int)  # its corresponding counter
 
-ss_predicted_correct = 0
+ss_predicted_correct = 0  # accuracy of source weighting-based best single source detection
 ss_predicted_sources_counter = defaultdict(int)  # for counting the contributing sources
 
 ss_voted_unweighted_correct = 0
@@ -74,7 +74,8 @@ for sentence in target_sentences:
         correct_heads = count_correct_heads(this_source_heads, sentence.gold_heads)
         ss_correct[source_language] += correct_heads  # record scores of single-source parsers
 
-        if correct_heads > max_correct:  # FIXME There are multiple languages with equal scores here, thus the non-determinism.
+        # TODO There are multiple languages with equal scores here, thus the non-determinism in the output.
+        if correct_heads > max_correct:
             true_best_single_source = source_language
             max_correct = correct_heads
 
@@ -109,19 +110,21 @@ for sentence in target_sentences:
     ss_voted_weighted_heads, _ = chu_liu_edmonds(ss_matrix_voted_weighted)
     ss_voted_weighted_correct += count_correct_heads(ss_voted_weighted_heads[1:], sentence.gold_heads)
 
-# extract the REAL best single source
+# extract the REAL best single source TODO This is macro!
 true_best_single_source = None
 max_correct = -1
+
 for source_language, correct_heads in ss_correct.items():
     if correct_heads > max_correct:
         true_best_single_source = source_language
         max_correct = correct_heads
 
-print(true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
+print("true best ss: ", true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
 
-print("ss oracle: {0:.2f}".format((ss_oracle_correct/total)*100), sorted(ss_oracle_sources_counter.items(), key=operator.itemgetter(1), reverse=True))
-print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100), sorted(ss_predicted_sources_counter.items(), key=operator.itemgetter(1), reverse=True))
+print("ss per-sentence oracle: {0:.2f}".format((ss_oracle_correct/total)*100))  #, sorted(ss_oracle_sources_counter.items(), key=operator.itemgetter(1), reverse=True))
+print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100))  #, sorted(ss_predicted_sources_counter.items(), key=operator.itemgetter(1), reverse=True))
 
 print("ms: {0:.2f}".format((ms_correct/total)*100))
+
 print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
 print("vote w=x: {0:.2f}".format((ss_voted_weighted_correct/total)*100))
