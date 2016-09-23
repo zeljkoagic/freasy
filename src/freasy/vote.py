@@ -149,10 +149,10 @@ avg_kt = 0
 avg_sr = 0
 p1 = 0
 
-lang_to_rank_mapping_gold = dict(zip(true_source_ranking, range(len(true_source_ranking))))
+lang_to_rank_mapping_gold = dict(zip(true_source_ranking, range(1, len(true_source_ranking)+1)))
 gold_ranking = list(lang_to_rank_mapping_gold.values())
 for ranking in predicted_source_rankings:
-    lang_to_rank_mapping_system = dict(zip(ranking, range(len(ranking))))
+    lang_to_rank_mapping_system = dict(zip(ranking, range(1, len(true_source_ranking)+1)))
     system_ranking = list(lang_to_rank_mapping_system.values())
 
     t, _ = kendalltau(system_ranking, gold_ranking, nan_policy="omit")
