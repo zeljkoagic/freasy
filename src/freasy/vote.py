@@ -148,19 +148,22 @@ true_source_ranking = [l for l, _ in true_source_ranking]
 avg_kt = 0
 avg_sr = 0
 p1 = 0
+
+lang_to_rank_mapping_gold = dict(zip(true_source_ranking, range(len(true_source_ranking))))
+gold_ranking = list(lang_to_rank_mapping_gold.values())
 for ranking in predicted_source_rankings:
-    t, _ = kendalltau(ranking, true_source_ranking, nan_policy="omit")
-    r, _ = spearmanr(ranking, true_source_ranking, nan_policy="omit")
-    p1 += int(ranking[0] == true_source_ranking[0])
+    lang_to_rank_mapping_system = dict(zip(ranking, range(len(ranking))))
+    system_ranking = list(lang_to_rank_mapping_system.values())
+
+    t, _ = kendalltau(system_ranking, gold_ranking, nan_policy="omit")
+    r, _ = spearmanr(system_ranking, gold_ranking, nan_policy="omit")
     avg_kt += t
     avg_sr += r
-    print(average_precision_at_n(ranking, true_source_ranking))
 
 avg_kt /= len(predicted_source_rankings)
 avg_sr /= len(predicted_source_rankings)
-p1 /= len(predicted_source_rankings)
 
-print("kendall tau_b, spearmanr, ap1: ", avg_kt, avg_sr, p1)
+print("kendall tau_b, spearmanr: ", avg_kt, avg_sr)
 
 print("true best ss: ", true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
 
