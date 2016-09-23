@@ -147,7 +147,7 @@ true_source_ranking = [l for l, _ in true_source_ranking]
 
 avg_kt = 0  # for kendall's tau
 avg_sr = 0  # for spearman's rho
-avg_pr = 0  # TODO
+avg_rank_of_first_pick = 0  # TODO
 
 # map the language names to numeric ranks
 lang_to_rank_mapping_gold = dict(zip(true_source_ranking, range(1, len(true_source_ranking)+1)))
@@ -161,7 +161,7 @@ for ranking in predicted_source_rankings:
 
     predicted_best_source = ranking[0]
     predicted_best_source_rank_in_gold = lang_to_rank_mapping_gold[predicted_best_source]
-    avg_pr += 1/predicted_best_source_rank_in_gold
+    avg_rank_of_first_pick += predicted_best_source_rank_in_gold
 
     t, _ = kendalltau(system_ranking, gold_ranking, nan_policy="omit")
     r, _ = spearmanr(system_ranking, gold_ranking, nan_policy="omit")
@@ -171,9 +171,9 @@ for ranking in predicted_source_rankings:
 
 avg_kt /= len(predicted_source_rankings)
 avg_sr /= len(predicted_source_rankings)
-avg_pr /= len(predicted_source_rankings)
+avg_rank_of_first_pick /= len(predicted_source_rankings)
 
-print("kendall tau_b, spearmanr, WEIRD THING: ", avg_kt, avg_sr, avg_pr)
+print("kendall tau_b, spearmanr, WEIRD THING: ", avg_kt, avg_sr, avg_rank_of_first_pick)
 
 print("true best ss: ", true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
 
