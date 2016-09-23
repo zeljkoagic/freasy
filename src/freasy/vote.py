@@ -31,6 +31,7 @@ def average_precision_at_n(system, gold):
         p_at_k = sum([int(s == g) for s, g in zip(system[0:k], gold[0:k])])
         p_at_k /= k
         precisions_at_k.append(p_at_k)
+    print(precisions_at_k)
     return sum(precisions_at_k) / len(system)
 
 
