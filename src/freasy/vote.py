@@ -145,25 +145,35 @@ for source_language, correct_heads in ss_correct.items():
 true_source_ranking = sorted(ss_correct.items(), key=operator.itemgetter(1), reverse=True)
 true_source_ranking = [l for l, _ in true_source_ranking]
 
-avg_kt = 0
-avg_sr = 0
-p1 = 0
+avg_kt = 0  # for kendall's tau
+avg_sr = 0  # for spearman's rho
+avg_pr = 0  # TODO
 
+# map the language names to numeric ranks
 lang_to_rank_mapping_gold = dict(zip(true_source_ranking, range(1, len(true_source_ranking)+1)))
 gold_ranking = list(lang_to_rank_mapping_gold.values())
+
 for ranking in predicted_source_rankings:
-    lang_to_rank_mapping_system = dict(zip(ranking, range(1, len(true_source_ranking)+1)))
+
+    # map the language names to numeric ranks
+    lang_to_rank_mapping_system = dict(zip(ranking, range(1, len(ranking)+1)))
     system_ranking = list(lang_to_rank_mapping_system.values())
+
+    predicted_best_source = predicted_source_rankings[0]
+    predicted_best_source_rank_in_gold = lang_to_rank_mapping_gold[predicted_best_source]
+    avg_pr += 1/predicted_best_source_rank_in_gold
 
     t, _ = kendalltau(system_ranking, gold_ranking, nan_policy="omit")
     r, _ = spearmanr(system_ranking, gold_ranking, nan_policy="omit")
+
     avg_kt += t
     avg_sr += r
 
 avg_kt /= len(predicted_source_rankings)
 avg_sr /= len(predicted_source_rankings)
+avg_pr /= len(predicted_source_rankings)
 
-print("kendall tau_b, spearmanr: ", avg_kt, avg_sr)
+print("kendall tau_b, spearmanr, WEIRD THING: ", avg_kt, avg_sr, avg_pr)
 
 print("true best ss: ", true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
 
