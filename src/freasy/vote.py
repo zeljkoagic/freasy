@@ -24,6 +24,16 @@ def create_ss_tensor(n, single_source_heads):
             tensor[j+1, head, lang_idx] = 1.0
     return tensor, language_sequence
 
+
+def average_precision_at_n(system, gold):
+    precisions_at_k = []
+    for k in range(1, len(system)+1):
+        p_at_k = sum([system[0:k] == gold[0:k]])
+        p_at_k /= k
+        precisions_at_k.append(p_at_k)
+    return sum(precisions_at_k) / len(system)
+
+
 # argparse stuff
 parser = argparse.ArgumentParser(description="Performs language weighting experiments.")
 parser.add_argument("--target_name", required=True, help="target language name")
@@ -109,7 +119,7 @@ for sentence in target_sentences:
 
     # get the sorted source language list, i.e., source ranking
     sorted_source_distribution = sorted(source_distribution.items(), key=operator.itemgetter(1), reverse=True)
-    predicted_source_rankings.append([l for l, p in sorted_source_distribution])
+    predicted_source_rankings.append([l for l, _ in sorted_source_distribution])
 
     for idx, source_language in enumerate(ss_ordering):
         weight = source_distribution[source_language]
@@ -131,7 +141,7 @@ for source_language, correct_heads in ss_correct.items():
         max_correct = correct_heads
 
 true_source_ranking = sorted(ss_correct.items(), key=operator.itemgetter(1), reverse=True)
-true_source_ranking = [l for l, p in true_source_ranking]
+true_source_ranking = [l for l, _ in true_source_ranking]
 
 avg_kt = 0
 avg_sr = 0
@@ -142,6 +152,7 @@ for ranking in predicted_source_rankings:
     p1 += int(ranking[0] == true_source_ranking[0])
     avg_kt += t
     avg_sr += r
+    print(average_precision_at_n(ranking, true_source_ranking))
 
 avg_kt /= len(predicted_source_rankings)
 avg_sr /= len(predicted_source_rankings)
@@ -159,4 +170,3 @@ print("ms: {0:.2f}".format((ms_correct/total)*100))
 print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
 print("vote w=x: {0:.2f}".format((ss_voted_weighted_correct/total)*100))
 print("pos acc: {0:.2f}".format((correct_pos/total)*100))
-
