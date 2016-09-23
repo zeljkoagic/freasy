@@ -159,8 +159,7 @@ for ranking in predicted_source_rankings:
     lang_to_rank_mapping_system = dict(zip(ranking, range(1, len(ranking)+1)))
     system_ranking = list(lang_to_rank_mapping_system.values())
 
-    predicted_best_source = predicted_source_rankings[0]
-    print(predicted_best_source)
+    predicted_best_source = ranking[0]
     predicted_best_source_rank_in_gold = lang_to_rank_mapping_gold[predicted_best_source]
     avg_pr += 1/predicted_best_source_rank_in_gold
 
