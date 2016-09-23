@@ -28,7 +28,7 @@ def create_ss_tensor(n, single_source_heads):
 def average_precision_at_n(system, gold):
     precisions_at_k = []
     for k in range(1, len(system)+1):
-        p_at_k = sum([system[0:k] == gold[0:k]])
+        p_at_k = sum([int(s == g) for s, g in zip(system[0:k], gold[0:k])])
         p_at_k /= k
         precisions_at_k.append(p_at_k)
     return sum(precisions_at_k) / len(system)
