@@ -98,8 +98,6 @@ for sentence in target_sentences:
     # TODO Here merge the two approaches
     predicted_best_single_source, source_distribution = vote_kl_and_ws(source_distribution_kl, source_distribution_ws)
 
-    print(predicted_best_single_source_kl, predicted_best_single_source_ws, predicted_best_single_source)
-
     ss_predicted_sources_counter[predicted_best_single_source] += 1
 
     # capture the best source for this sentence!
@@ -119,6 +117,8 @@ for sentence in target_sentences:
         # collect score for the predicted best single-source parser
         if source_language == predicted_best_single_source:
             ss_predicted_correct += correct_heads
+
+    print(true_best_single_source, predicted_best_single_source_kl, predicted_best_single_source_ws, predicted_best_single_source)
 
     # for each target sentence, we always pick the best source
     ss_oracle_correct += \
