@@ -96,6 +96,8 @@ for sentence in target_sentences:
     # TODO Here merge the two approaches
     predicted_best_single_source, source_distribution = vote_kl_and_ws(source_distribution_kl, source_distribution_ws)
 
+    print(predicted_best_single_source_kl, predicted_best_single_source_ws, predicted_best_single_source)
+
     ss_predicted_sources_counter[predicted_best_single_source] += 1
 
     # capture the best source for this sentence!
