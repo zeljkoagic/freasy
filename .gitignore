@@ -5,4 +5,5 @@ translate.txt
 __pycache__
 data/
 models/
+outputs/
 
