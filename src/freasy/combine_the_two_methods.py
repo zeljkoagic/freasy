@@ -79,7 +79,7 @@ def vote_kl_and_ws(dist_kl, dist_ws):
         joint_prob = (prob_kl+prob_ws)/2
         voted.append((lang, joint_prob))
     voted = sorted(voted, reverse=True)
-    return dict(voted), voted[0][0]
+    return voted[0][0], dict(voted)
 
 # process each sentence
 for sentence in target_sentences:
@@ -93,7 +93,6 @@ for sentence in target_sentences:
     predicted_best_single_source_ws, source_distribution_ws = \
         source_weights["wals"][args.granularity][sentence.idx]
 
-    print(source_distribution_ws)
     # TODO Here merge the two approaches
     predicted_best_single_source, source_distribution = vote_kl_and_ws(source_distribution_kl, source_distribution_ws)
 
