@@ -78,7 +78,7 @@ def vote_kl_and_ws(dist_kl, dist_ws):
         prob_ws = dist_ws[lang]
         joint_prob = (prob_kl+prob_ws)/2
         voted.append((lang, joint_prob))
-    voted = sorted(voted, reverse=True)
+    voted = sorted(voted)
     return voted[0][0], dict(voted)
 
 # process each sentence
