@@ -93,6 +93,7 @@ for sentence in target_sentences:
     predicted_best_single_source_ws, source_distribution_ws = \
         source_weights["wals"][args.granularity][sentence.idx]
 
+    print(source_distribution_ws)
     # TODO Here merge the two approaches
     predicted_best_single_source, source_distribution = vote_kl_and_ws(source_distribution_kl, source_distribution_ws)
 
