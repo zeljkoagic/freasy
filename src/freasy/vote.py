@@ -82,6 +82,8 @@ for sentence in target_sentences:
 
     ss_predicted_sources_counter[predicted_best_single_source] += 1
 
+    print(sentence.tokens, predicted_best_single_source)
+
     # capture the best source for this sentence!
     true_best_single_source = None
     max_correct = -1
