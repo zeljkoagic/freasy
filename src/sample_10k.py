@@ -18,7 +18,7 @@ def read_conll(filename):
 sents = read_conll(sys.argv[1])
 
 #if len(sents) > 385:
-sents = random.sample(sents, 400)
+sents = random.sample(sents, 10000)
 
 for sent in sents:
 	for token in sent:

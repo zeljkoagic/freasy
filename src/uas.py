@@ -12,7 +12,7 @@ for g, s in zip(gold, system):
     if g and s and len(g.split()) > 1:
         gl = g.split()[10]
         sl = s.split()[11]
-	gh = g.split()[8]
+        gh = g.split()[8]
         sh = s.split()[9]
         if gh == sh:
             correct += 1.0
