@@ -6,4 +6,4 @@ __pycache__
 data/
 models/
 outputs/
-
+.ipynb_checkpoints/
