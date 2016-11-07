@@ -58,7 +58,7 @@ ss_correct = defaultdict(int)  # record single source performance
 
 ss_oracle_correct = 0  # always choose best source parse for each sentence!
 ss_oracle_sources_counter = defaultdict(int)  # its corresponding counter
-ss_oracle_sources_counter_with_ties = defaultdict(lambda: defaultdict(int))
+ss_oracle_sources_counter_with_ties = defaultdict(list)
 
 ss_predicted_correct = 0  # accuracy of source weighting-based best single source detection
 ss_predicted_sources_counter = defaultdict(int)  # for counting the contributing sources
@@ -116,8 +116,7 @@ for sentence in target_sentences:
     for src, cnt in all_single_sources:
         if cnt == best_score:
             all_best_single_sources.append(src)
-    for best_single_source in all_best_single_sources:
-        ss_oracle_sources_counter_with_ties[sentence.idx][best_single_source] += 1
+    ss_oracle_sources_counter_with_ties[sentence.idx] = all_best_single_sources
 
     ms_correct += count_correct_heads(sentence.multi_source_heads, sentence.gold_heads)
 
