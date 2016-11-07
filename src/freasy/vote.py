@@ -58,7 +58,7 @@ ss_correct = defaultdict(int)  # record single source performance
 
 ss_oracle_correct = 0  # always choose best source parse for each sentence!
 ss_oracle_sources_counter = defaultdict(int)  # its corresponding counter
-ss_oracle_sources_counter_with_ties = defaultdict(int)
+ss_oracle_sources_counter_with_ties = defaultdict(lambda: defaultdict(int))
 
 ss_predicted_correct = 0  # accuracy of source weighting-based best single source detection
 ss_predicted_sources_counter = defaultdict(int)  # for counting the contributing sources
@@ -117,7 +117,7 @@ for sentence in target_sentences:
         if cnt == best_score:
             all_best_single_sources.append(src)
     for best_single_source in all_best_single_sources:
-        ss_oracle_sources_counter_with_ties[best_single_source] += 1
+        ss_oracle_sources_counter_with_ties[sentence.idx][best_single_source] += 1
 
     ms_correct += count_correct_heads(sentence.multi_source_heads, sentence.gold_heads)
 
@@ -200,8 +200,13 @@ print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
 print("vote w=x: {0:.2f}".format((ss_voted_weighted_correct/total)*100))
 print("pos acc: {0:.2f}".format((correct_pos/total)*100))
 
-print("per sentence oracles: ", [(lang,
-                                  lang_to_rank_mapping_gold[lang],
-                                  (count/sum(ss_oracle_sources_counter_with_ties.values()))*100)
-                                 for lang, count in ss_oracle_sources_counter_with_ties.items()])
+#print("per sentence oracles: ", [(lang,
+#                                  lang_to_rank_mapping_gold[lang],
+#                                  (count/sum(ss_oracle_sources_counter_with_ties.values()))*100)
+#                                 for lang, count in ss_oracle_sources_counter_with_ties.items()])
 
+#cntr = defaultdict(int)
+#for tsid, rest in ss_oracle_sources_counter_with_ties.items():
+#    for srclang, cnt in sorted(rest.items(), key=operator.itemgetter(1), reverse=True):
+
+print(ss_oracle_sources_counter_with_ties)
