@@ -204,8 +204,9 @@ print("pos acc: {0:.2f}".format((correct_pos/total)*100))
 #                                  (count/sum(ss_oracle_sources_counter_with_ties.values()))*100)
 #                                 for lang, count in ss_oracle_sources_counter_with_ties.items()])
 
-#cntr = defaultdict(int)
-#for tsid, rest in ss_oracle_sources_counter_with_ties.items():
-#    for srclang, cnt in sorted(rest.items(), key=operator.itemgetter(1), reverse=True):
+cntr = defaultdict(int)
+for trg_sent_id, src_langs in ss_oracle_sources_counter_with_ties.items():
+    min_rank = min([lang_to_rank_mapping_gold[l] for l in src_langs])
+    cntr[min] += 1
 
-print(ss_oracle_sources_counter_with_ties)
+print(cntr)
