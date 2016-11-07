@@ -83,7 +83,7 @@ for sentence in target_sentences:
 
     ss_predicted_sources_counter[predicted_best_single_source] += 1
 
-    print(sentence.tokens, predicted_best_single_source, source_distribution)
+    #print(sentence.tokens, predicted_best_single_source, source_distribution)
 
     # capture the best source for this sentence!
     true_best_single_source = None
@@ -112,7 +112,7 @@ for sentence in target_sentences:
     # find ALL languages that score best score for sentence, count them
     all_single_sources = sorted(ss_correct.items(), key=operator.itemgetter(1), reverse=True)
     all_best_single_sources = []
-    best_score = all_best_single_sources[0][1]  # the first item has highest score
+    best_score = all_single_sources[0][1]  # the first item has highest score
     for src, cnt in all_single_sources:
         if cnt == best_score:
             all_best_single_sources.append(src)
