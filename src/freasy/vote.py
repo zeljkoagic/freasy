@@ -200,4 +200,6 @@ print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
 print("vote w=x: {0:.2f}".format((ss_voted_weighted_correct/total)*100))
 print("pos acc: {0:.2f}".format((correct_pos/total)*100))
 
-print(ss_oracle_sources_counter_with_ties)
+print("per sentence oracles: ", [(lang, count/len(target_sentences))
+                                 for lang, count in ss_oracle_sources_counter_with_ties.items()])
+
