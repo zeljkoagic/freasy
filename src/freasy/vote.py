@@ -204,9 +204,10 @@ print("pos acc: {0:.2f}".format((correct_pos/total)*100))
 #                                  (count/sum(ss_oracle_sources_counter_with_ties.values()))*100)
 #                                 for lang, count in ss_oracle_sources_counter_with_ties.items()])
 
+# count how many times item ranked N provided the best parse for a sentence
 cntr = defaultdict(int)
 for trg_sent_id, src_langs in ss_oracle_sources_counter_with_ties.items():
     min_rank = min([lang_to_rank_mapping_gold[l] for l in src_langs])
     cntr[min_rank] += 1
 
-print([(l, (p/sum(cntr.values()))*100) for l, p in cntr.items()])
+print(sorted([(l, (p/sum(cntr.values()))*100) for l, p in cntr.items()]))
