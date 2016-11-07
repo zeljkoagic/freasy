@@ -210,7 +210,7 @@ for trg_sent_id, src_langs in ss_oracle_sources_counter_with_ties.items():
     min_rank = min([lang_to_rank_mapping_gold[l] for l in src_langs])
     cntr[min_rank] += 1
 
-for i in range(0, len(ss_correct)+1):
+for i in range(1, len(ss_correct)+1):
     if i not in cntr:
         cntr[i] = 0
 
