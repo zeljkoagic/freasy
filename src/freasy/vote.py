@@ -58,6 +58,7 @@ ss_correct = defaultdict(int)  # record single source performance
 
 ss_oracle_correct = 0  # always choose best source parse for each sentence!
 ss_oracle_sources_counter = defaultdict(int)  # its corresponding counter
+ss_oracle_sources_counter_with_ties = defaultdict(int)
 
 ss_predicted_correct = 0  # accuracy of source weighting-based best single source detection
 ss_predicted_sources_counter = defaultdict(int)  # for counting the contributing sources
@@ -106,6 +107,17 @@ for sentence in target_sentences:
     ss_oracle_correct += \
         count_correct_heads(sentence.single_source_heads[true_best_single_source], sentence.gold_heads)
     ss_oracle_sources_counter[true_best_single_source] += 1
+
+    # same as above, but...
+    # find ALL languages that score best score for sentence, count them
+    all_single_sources = sorted(ss_correct.items(), key=operator.itemgetter(1), reverse=True)
+    all_best_single_sources = []
+    best_score = all_best_single_sources[0][1]  # the first item has highest score
+    for src, cnt in all_single_sources:
+        if cnt == best_score:
+            all_best_single_sources.append(src)
+    for best_single_source in all_best_single_sources:
+        ss_oracle_sources_counter_with_ties[best_single_source] += 1
 
     ms_correct += count_correct_heads(sentence.multi_source_heads, sentence.gold_heads)
 
@@ -175,15 +187,17 @@ avg_kt /= len(predicted_source_rankings)
 avg_sr /= len(predicted_source_rankings)
 avg_rank_of_first_pick /= len(predicted_source_rankings)
 
-print("kendall tau_b, spearmanr, WEIRD THING: ", avg_kt, avg_sr, avg_rank_of_first_pick)
+print("kendall tau_b, spearman r, average rank of first choice: ", avg_kt, avg_sr, avg_rank_of_first_pick)
 
 print("true best ss: ", true_best_single_source, "{0:.2f}".format((ss_correct[true_best_single_source]/total)*100))
 
-print("ss per-sentence oracle: {0:.2f}".format((ss_oracle_correct/total)*100))  #, sorted(ss_oracle_sources_counter.items(), key=operator.itemgetter(1), reverse=True))
-print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100))  #, sorted(ss_predicted_sources_counter.items(), key=operator.itemgetter(1), reverse=True))
+print("ss per-sentence oracle: {0:.2f}".format((ss_oracle_correct/total)*100))
+print("ss predicted: {0:.2f}".format((ss_predicted_correct/total)*100))
 
 print("ms: {0:.2f}".format((ms_correct/total)*100))
 
 print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
 print("vote w=x: {0:.2f}".format((ss_voted_weighted_correct/total)*100))
 print("pos acc: {0:.2f}".format((correct_pos/total)*100))
+
+print(ss_oracle_sources_counter_with_ties)
