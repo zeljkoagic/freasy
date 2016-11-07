@@ -207,6 +207,6 @@ print("pos acc: {0:.2f}".format((correct_pos/total)*100))
 cntr = defaultdict(int)
 for trg_sent_id, src_langs in ss_oracle_sources_counter_with_ties.items():
     min_rank = min([lang_to_rank_mapping_gold[l] for l in src_langs])
-    cntr[min] += 1
+    cntr[min_rank] += 1
 
 print(cntr)
