@@ -152,8 +152,8 @@ for sentence in target_sentences:
 
     correct_pos += count_correct_heads(sentence.predicted_pos, sentence.gold_pos)
 
-    for l, v in ss_correct_for_this_sentence.items():
-        ss_correct_for_this_sentence[l] = v / len(sentence.tokens)
+    #for l, v in ss_correct_for_this_sentence.items():
+    #    ss_correct_for_this_sentence[l] = v / len(sentence.tokens)
     print(sentence.predicted_pos, sorted(ss_correct_for_this_sentence.items(), key=operator.itemgetter(1), reverse=True))
 
     # collect where heads come from
