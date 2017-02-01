@@ -231,4 +231,11 @@ print("pos acc: {0:.2f}".format((correct_pos/total)*100))
 #print(cntr)
 
 # check where the voted edges come from?
-print(where_heads_come_from)
+for sid, rest in where_heads_come_from.items():
+    for tid, contributing_sources in rest.items():
+        min_rank = 100
+        for src in contributing_sources:
+            rank = lang_to_rank_mapping_gold[src]
+            if rank < min_rank:
+                min_rank = rank
+        print(min_rank)
