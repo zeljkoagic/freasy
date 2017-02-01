@@ -13,6 +13,7 @@ from dependency_decoding import chu_liu_edmonds
 from softmax import invert, softmax
 import operator
 from scipy.stats import kendalltau, spearmanr
+import pyximport; pyximport.install()
 
 
 def create_ss_tensor(n, single_source_heads):
