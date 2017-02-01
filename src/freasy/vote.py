@@ -73,7 +73,7 @@ correct_pos = 0
 
 predicted_source_rankings = []  # to store lists of source rankings for later averaging
 
-where_heads_come_from = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+where_heads_come_from = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
 # process each sentence
 for sentence in target_sentences:
