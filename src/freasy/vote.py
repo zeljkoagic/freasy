@@ -152,7 +152,7 @@ for sentence in target_sentences:
     for tokenid, chosen_head in enumerate(ss_voted_weighted_heads[1:]):
         for source_language, this_source_heads in sentence.single_source_heads.items():
             if chosen_head == this_source_heads[tokenid]:
-                where_heads_come_from[sentence.idx][tokenid].append([source_language])
+                where_heads_come_from[sentence.idx][tokenid].append(source_language)
 
 
 # extract the REAL best single source TODO This is macro!
