@@ -154,7 +154,7 @@ for sentence in target_sentences:
 
     for l, v in ss_correct_for_this_sentence.items():
         ss_correct_for_this_sentence[l] = v / len(sentence.tokens)
-    print(sentence.predicted_pos, sorted(ss_correct_for_this_sentence.items(), key=operator.itemgetter(1)))
+    print(sentence.predicted_pos, sorted(ss_correct_for_this_sentence.items(), key=operator.itemgetter(1), reverse=True))
 
     # collect where heads come from
     for tokenid, chosen_head in enumerate(ss_voted_weighted_heads[1:]):
