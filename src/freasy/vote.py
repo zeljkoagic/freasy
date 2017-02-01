@@ -78,6 +78,8 @@ where_heads_come_from = defaultdict(lambda: defaultdict(list))
 # process each sentence
 for sentence in target_sentences:
 
+    ss_correct_for_this_sentence = defaultdict(int)
+
     total += len(sentence.tokens)
 
     # read the predicted best single-source parser, and the source weights
@@ -96,6 +98,7 @@ for sentence in target_sentences:
 
         correct_heads = count_correct_heads(this_source_heads, sentence.gold_heads)
         ss_correct[source_language] += correct_heads  # record scores of single-source parsers
+        ss_correct_for_this_sentence[source_language] = correct_heads
 
         # TODO There are multiple languages with equal scores here, thus the non-determinism in the output.
         if correct_heads > max_correct:
@@ -149,14 +152,13 @@ for sentence in target_sentences:
 
     correct_pos += count_correct_heads(sentence.predicted_pos, sentence.gold_pos)
 
+    print(sentence.predicted_pos, ss_correct_for_this_sentence)
+
     # collect where heads come from
     for tokenid, chosen_head in enumerate(ss_voted_weighted_heads[1:]):
         for source_language, this_source_heads in sentence.single_source_heads.items():
             if chosen_head == this_source_heads[tokenid]:
                 where_heads_come_from[sentence.idx][tokenid].append(source_language)
-
-    print(sentence.predicted_pos)
-
 
 # extract the REAL best single source TODO This is macro!
 true_best_single_source = None
