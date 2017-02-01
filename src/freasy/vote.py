@@ -209,15 +209,15 @@ print(ss_oracle_sources_counter_with_ties)
 
 # count how many times item ranked N provided the best parse for a sentence
 
-cntr = defaultdict(int)
-for trg_sent_id, src_langs in ss_oracle_sources_counter_with_ties.items():
-    min_rank = min([lang_to_rank_mapping_gold[l] for l in src_langs])
-    cntr[min_rank] += 1
+#cntr = defaultdict(int)
+#for trg_sent_id, src_langs in ss_oracle_sources_counter_with_ties.items():
+#    min_rank = min([lang_to_rank_mapping_gold[l] for l in src_langs])
+#    cntr[min_rank] += 1
 
-for i in range(1, len(ss_correct)+1):
-    if i not in cntr:
-        cntr[i] = 0
+#for i in range(1, len(ss_correct)+1):
+#    if i not in cntr:
+#        cntr[i] = 0
 
-for_output = sorted([(l, (p/sum(cntr.values()))*100) for l, p in cntr.items()])
-print("{}\t{}".format("contributions to oracle: ", "\t".join(map(str, [y for x, y in for_output]))))
-print(cntr)
+#for_output = sorted([(l, (p/sum(cntr.values()))*100) for l, p in cntr.items()])
+#print("{}\t{}".format("contributions to oracle: ", "\t".join(map(str, [y for x, y in for_output]))))
+#print(cntr)
