@@ -200,15 +200,15 @@ print("vote w=1: {0:.2f}".format((ss_voted_unweighted_correct/total)*100))
 print("vote w=x: {0:.2f}".format((ss_voted_weighted_correct/total)*100))
 print("pos acc: {0:.2f}".format((correct_pos/total)*100))
 
-<<<<<<< HEAD
 print(ss_oracle_sources_counter_with_ties)
-=======
+
 #print("per sentence oracles: ", [(lang,
 #                                  lang_to_rank_mapping_gold[lang],
 #                                  (count/sum(ss_oracle_sources_counter_with_ties.values()))*100)
 #                                 for lang, count in ss_oracle_sources_counter_with_ties.items()])
 
 # count how many times item ranked N provided the best parse for a sentence
+
 cntr = defaultdict(int)
 for trg_sent_id, src_langs in ss_oracle_sources_counter_with_ties.items():
     min_rank = min([lang_to_rank_mapping_gold[l] for l in src_langs])
@@ -220,4 +220,3 @@ for i in range(1, len(ss_correct)+1):
 
 for_output = sorted([(l, (p/sum(cntr.values()))*100) for l, p in cntr.items()])
 print("{}\t{}".format("contributions to oracle: ", "\t".join(map(str, [y for x, y in for_output]))))
->>>>>>> f17b8217b9f93819a50bca4aee894981a28923a8
