@@ -220,3 +220,4 @@ for i in range(1, len(ss_correct)+1):
 
 for_output = sorted([(l, (p/sum(cntr.values()))*100) for l, p in cntr.items()])
 print("{}\t{}".format("contributions to oracle: ", "\t".join(map(str, [y for x, y in for_output]))))
+print(cntr)
