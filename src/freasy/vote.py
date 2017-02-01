@@ -152,7 +152,7 @@ for sentence in target_sentences:
 
     correct_pos += count_correct_heads(sentence.predicted_pos, sentence.gold_pos)
 
-    print(sentence.predicted_pos, sorted(ss_correct_for_this_sentence, key=operator.itemgetter(1), reverse=True))
+    print(sentence.predicted_pos, ss_correct_for_this_sentence)
 
     # collect where heads come from
     for tokenid, chosen_head in enumerate(ss_voted_weighted_heads[1:]):
