@@ -73,7 +73,7 @@ correct_pos = 0
 
 predicted_source_rankings = []  # to store lists of source rankings for later averaging
 
-where_heads_come_from = defaultdict(int)
+where_heads_come_from = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
 
 # process each sentence
 for sentence in target_sentences:
@@ -152,7 +152,7 @@ for sentence in target_sentences:
     for tokenid, chosen_head in enumerate(ss_voted_weighted_heads[1:]):
         for source_language, this_source_heads in sentence.single_source_heads.items():
             if chosen_head == this_source_heads[tokenid]:
-                where_heads_come_from[source_language] += 1
+                where_heads_come_from[sentence.idx][tokenid].append([source_language])
 
 
 # extract the REAL best single source TODO This is macro!
