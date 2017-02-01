@@ -152,7 +152,7 @@ for sentence in target_sentences:
 
     correct_pos += count_correct_heads(sentence.predicted_pos, sentence.gold_pos)
 
-    print(sentence.predicted_pos, ss_correct_for_this_sentence)
+    print(sentence.predicted_pos, invert(softmax(ss_correct_for_this_sentence, temperature=0.2)))
 
     # collect where heads come from
     for tokenid, chosen_head in enumerate(ss_voted_weighted_heads[1:]):
