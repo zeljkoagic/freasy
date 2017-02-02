@@ -253,5 +253,5 @@ print("pos acc: {0:.2f}".format((correct_pos/total)*100))
 #print(minranks)
 
 # store the nn learning mappings
-dill.dump(target_sentences, open("{}/pickles/{}.nn_training_data.with_{}_pos"
-                                 .format(args.data_root, args.target_name, args.pos_source), "wb"))
+dill.dump(source_rankings_for_sentences, open("{}/pickles/{}.nn_training_data.with_{}_pos"
+                                              .format(args.data_root, args.target_name, args.pos_source), "wb"))
