@@ -14,6 +14,7 @@ from softmax import invert, softmax
 import operator
 from scipy.stats import kendalltau, spearmanr
 import pyximport; pyximport.install()
+import dill
 
 
 def create_ss_tensor(n, single_source_heads):
@@ -74,6 +75,8 @@ correct_pos = 0
 predicted_source_rankings = []  # to store lists of source rankings for later averaging
 
 where_heads_come_from = defaultdict(lambda: defaultdict(list))
+
+source_rankings_for_sentences = []  # here we capture the "POS list -> source rankings" for NN training
 
 # process each sentence
 for sentence in target_sentences:
@@ -154,7 +157,7 @@ for sentence in target_sentences:
 
     #for l, v in ss_correct_for_this_sentence.items():
     #    ss_correct_for_this_sentence[l] = v / len(sentence.tokens)
-    print(args.target_name, sentence.idx, sentence.predicted_pos, softmax(ss_correct_for_this_sentence))
+    source_rankings_for_sentences.append(sentence.idx, sentence.predicted_pos, ss_correct_for_this_sentence)
 
     # collect where heads come from
     for tokenid, chosen_head in enumerate(ss_voted_weighted_heads[1:]):
@@ -238,13 +241,17 @@ print("pos acc: {0:.2f}".format((correct_pos/total)*100))
 #print(cntr)
 
 # check where the voted edges come from?
-minranks = defaultdict(int)
-for sid, rest in where_heads_come_from.items():
-    for tid, contributing_sources in rest.items():
-        min_rank = 100
-        for src in contributing_sources:
-            rank = lang_to_rank_mapping_gold[src]
-            if rank < min_rank:
-                min_rank = rank
-        minranks[min_rank] += 1
-print(minranks)
+#minranks = defaultdict(int)
+#for sid, rest in where_heads_come_from.items():
+#    for tid, contributing_sources in rest.items():
+#        min_rank = 100
+#        for src in contributing_sources:
+#            rank = lang_to_rank_mapping_gold[src]
+#            if rank < min_rank:
+#                min_rank = rank
+#        minranks[min_rank] += 1
+#print(minranks)
+
+# store the nn learning mappings
+dill.dump(target_sentences, open("{}/pickles/{}.nn_training_data.with_{}_pos"
+                                 .format(args.data_root, args.target_name, args.pos_source), "wb"))
