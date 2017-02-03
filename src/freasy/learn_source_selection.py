@@ -99,9 +99,9 @@ X_test = sequence.pad_sequences(X_test, maxlen=100)
 print('X_train shape:', X_train.shape)
 
 model = Sequential()
-model.add(Embedding(20000, 512, input_length=100))
-model.add(Bidirectional(GRU(64)))
-#model.add(Dropout(0.5))
+model.add(Embedding(40000, 512, input_length=100))
+model.add(Bidirectional(GRU(128)))
+model.add(Dropout(0.5))
 model.add(Dense(3, activation='softmax'))
 
 model.compile('adam', 'kullback_leibler_divergence', metrics=['accuracy'])
