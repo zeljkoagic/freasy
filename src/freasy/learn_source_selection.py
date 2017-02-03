@@ -2,6 +2,7 @@
 
 import argparse
 import dill
+import operator
 
 parser = argparse.ArgumentParser(description="TODO")
 parser.add_argument("--data_root", required=True, help="root for data files")
@@ -49,4 +50,4 @@ for item in training_data:
     for pos in poss:
         all += one_hot[pos]
     ranks[lang] = 0
-    print(ranks)
+    print(sorted(ranks.items(), key=operator.itemgetter(1), reverse=True))
