@@ -17,4 +17,4 @@ for lang in dev_langs:
                                       .format(args.data_root, lang, args.pos_source), "rb"))
     training_data.append(target_sentences)
 
-print(len(training_data))
+print(len(training_data[2]))
