@@ -77,7 +77,7 @@ for item in training_data:
     lang, idx, poss, ranks = item
     all = []
     for pos in poss:
-        all += one_hot[pos]
+        all.append(one_hot[pos])
     X_train.append(all)
     ranks[lang] = 0
     ranks = softmax(ranks)
