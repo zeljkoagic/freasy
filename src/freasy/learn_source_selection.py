@@ -79,7 +79,7 @@ model.add(Bidirectional(LSTM(64)))
 model.add(Dropout(0.5))
 model.add(Dense(26, activation='sigmoid'))
 
-model.compile('adam', 'kullback_leibler_divergence', metrics=['kullback_leibler_divergence'])
+model.compile('adam', 'kullback_leibler_divergence')
 
 print('Train...')
 model.fit(X_train, Y_train,
