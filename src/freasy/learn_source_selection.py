@@ -81,7 +81,7 @@ for item in training_data:
     X_train.append(all)
     ranks[lang] = 0
     ranks = softmax(ranks)
-    Y_train.append([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs])
+    Y_train.append([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)]) # if y in dev_langs])
 
 X_train = np.array(X_train[:-100])
 Y_train = np.array(Y_train[:-100])
