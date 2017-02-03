@@ -75,7 +75,7 @@ print('X_train shape:', X_train.shape)
 
 model = Sequential()
 model.add(Embedding(1000000, 64, input_length=100))
-model.add(Bidirectional(GRU(64)))
+model.add(Bidirectional(GRU(32)))
 model.add(Dropout(0.5))
 model.add(Dense(26, activation='softmax'))
 
@@ -83,5 +83,5 @@ model.compile('adam', 'kullback_leibler_divergence')
 
 print('Train...')
 model.fit(X_train, Y_train,
-          batch_size=32,
-          nb_epoch=4)
+          batch_size=72,
+          nb_epoch=10)
