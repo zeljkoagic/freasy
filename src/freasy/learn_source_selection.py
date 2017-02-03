@@ -83,5 +83,5 @@ model.compile('adam', 'kullback_leibler_divergence')
 
 print('Train...')
 model.fit(X_train, Y_train,
-          batch_size=72,
+          batch_size=32,
           nb_epoch=10)
