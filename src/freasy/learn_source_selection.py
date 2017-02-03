@@ -70,12 +70,12 @@ print(X_train.shape, Y_train.shape)
 print(X_train[0], Y_train[0])
 
 print("Pad sequences (samples x time)")
-X_train = sequence.pad_sequences(X_train, maxlen=1000)
+X_train = sequence.pad_sequences(X_train, maxlen=340)
 print('X_train shape:', X_train.shape)
 
 model = Sequential()
-model.add(Embedding(20000, 640, input_length=1000))
-model.add(GRU(128))
+model.add(Embedding(20000, 128, input_length=340))
+model.add(GRU(64))
 model.add(Dropout(0.5))
 model.add(Dense(3, activation='softmax'))
 
