@@ -4,6 +4,7 @@ import argparse
 import dill
 import operator
 from softmax import softmax
+import numpy as np
 
 parser = argparse.ArgumentParser(description="TODO")
 parser.add_argument("--data_root", required=True, help="root for data files")
@@ -43,11 +44,20 @@ one_hot = {
     "X":     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 }
 
+X_train = []
+Y_train = []
+
 for item in training_data:
     lang, idx, poss, ranks = item
     all = []
     for pos in poss:
         all += one_hot[pos]
+    X_train.append(all)
     ranks[lang] = 0
     ranks = softmax(ranks)
-    print([x for y,x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)])
+    Y_train.append([x for y,x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)])
+
+X_train = np.array(X_train)
+Y_train = np.array(Y_train)
+
+print(X_train.shape, Y_train.shape)
