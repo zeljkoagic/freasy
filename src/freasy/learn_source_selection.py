@@ -83,8 +83,11 @@ for item in training_data:
     ranks = softmax(ranks)
     Y_train.append([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs])
 
-X_train = np.array(X_train)
-Y_train = np.array(Y_train)
+X_train = np.array(X_train[:-100])
+Y_train = np.array(Y_train[:-100])
+
+X_test = np.array(X_train[-100:])
+Y_test = np.array(Y_train[-100:])
 
 print(X_train.shape, Y_train.shape)
 
@@ -100,9 +103,10 @@ model.add(Bidirectional(LSTM(64)))
 #model.add(Dropout(0.5))
 model.add(Dense(3, activation='softmax'))
 
-model.compile('adam', 'kullback_leibler_divergence')
+model.compile('adam', 'kullback_leibler_divergence', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train, Y_train,
           batch_size=32,
-          nb_epoch=10)
+          nb_epoch=10,
+          validation_data=[X_test, Y_test])
