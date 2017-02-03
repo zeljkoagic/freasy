@@ -21,4 +21,4 @@ for lang in dev_langs:
 # 2. create arch
 # 3. train
 
-print(len(training_data))
+print(training_data[0])
