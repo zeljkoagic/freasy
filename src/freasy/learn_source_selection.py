@@ -70,13 +70,13 @@ print(X_train.shape, Y_train.shape)
 print(X_train[0], Y_train[0])
 
 print("Pad sequences (samples x time)")
-X_train = sequence.pad_sequences(X_train, maxlen=510)
+X_train = sequence.pad_sequences(X_train, maxlen=100)
 print('X_train shape:', X_train.shape)
 
 model = Sequential()
-model.add(Embedding(1000000, 300, input_length=510))
+model.add(Embedding(1000000, 64, input_length=100))
 model.add(Bidirectional(LSTM(128)))
-model.add(Dropout(0.25))
+model.add(Dropout(0.5))
 model.add(Dense(26, activation='softmax'))
 
 model.compile('adam', 'kullback_leibler_divergence')
