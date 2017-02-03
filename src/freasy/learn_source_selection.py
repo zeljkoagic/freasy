@@ -95,6 +95,7 @@ print(X_train[0], Y_train[0])
 
 print("Pad sequences (samples x time)")
 X_train = sequence.pad_sequences(X_train, maxlen=50)
+X_test = sequence.pad_sequences(X_test, maxlen=50)
 print('X_train shape:', X_train.shape)
 
 model = Sequential()
