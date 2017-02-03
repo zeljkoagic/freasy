@@ -15,7 +15,6 @@ training_data = []
 for lang in dev_langs:
     target_sentences = dill.load(open("{}/pickles/target_lang_{}.pos_source_{}.nn_training_data"
                                       .format(args.data_root, lang, args.pos_source), "rb"))
-    target_sentences[3][lang] = 0
     training_data += target_sentences
 
 # 1. map data to one-hot
@@ -49,4 +48,5 @@ for item in training_data:
     all = []
     for pos in poss:
         all += one_hot[pos]
+    ranks[lang] = 0
     print(ranks)
