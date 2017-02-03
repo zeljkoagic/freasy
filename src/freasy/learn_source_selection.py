@@ -61,3 +61,5 @@ X_train = np.array(X_train)
 Y_train = np.array(Y_train)
 
 print(X_train.shape, Y_train.shape)
+
+print(X_train[0], Y_train[0])
