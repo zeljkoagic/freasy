@@ -76,7 +76,6 @@ print('X_train shape:', X_train.shape)
 model = Sequential()
 model.add(Embedding(1000000, 300, input_length=510))
 model.add(Bidirectional(LSTM(128)))
-model.add(Bidirectional(LSTM(128)))
 model.add(Dropout(0.25))
 model.add(Dense(26, activation='softmax'))
 
