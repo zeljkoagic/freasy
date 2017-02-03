@@ -6,6 +6,10 @@ import operator
 from softmax import softmax
 import numpy as np
 
+from keras.preprocessing import sequence
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional
+
 parser = argparse.ArgumentParser(description="TODO")
 parser.add_argument("--data_root", required=True, help="root for data files")
 parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "proj"], help="POS source")
