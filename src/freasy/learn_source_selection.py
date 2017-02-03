@@ -89,7 +89,7 @@ Y_train = np.array(Y_train[:-100])
 X_test = np.array(X_train[-100:])
 Y_test = np.array(Y_train[-100:])
 
-print(X_train.shape, Y_train.shape)
+print(X_train.shape, Y_train.shape, X_test.shape, Y_test.shape)
 
 print(X_train[0], Y_train[0])
 
