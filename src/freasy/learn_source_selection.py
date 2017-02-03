@@ -51,4 +51,4 @@ for item in training_data:
     for pos in poss:
         all += one_hot[pos]
     ranks[lang] = 0
-    print(softmax(sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)))
+    print(softmax(dict(sorted(ranks.items(), key=operator.itemgetter(0), reverse=False))))
