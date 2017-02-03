@@ -49,6 +49,27 @@ one_hot = {
     "X":     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 }
 
+one_hot = {
+    "ADJ":   1,
+    "ADP":   2,
+    "ADV":   3,
+    "AUX":   4,
+    "CONJ":  5,
+    "DET":   6,
+    "INTJ":  7,
+    "NOUN":  8,
+    "NUM":   9,
+    "PART":  10,
+    "PRON":  11,
+    "PROPN": 12,
+    "PUNCT": 13,
+    "SCONJ": 14,
+    "SYM":   15,
+    "VERB":  16,
+    "X":     17
+}
+
+
 X_train = []
 Y_train = []
 
@@ -70,12 +91,12 @@ print(X_train.shape, Y_train.shape)
 print(X_train[0], Y_train[0])
 
 print("Pad sequences (samples x time)")
-X_train = sequence.pad_sequences(X_train, maxlen=340)
+X_train = sequence.pad_sequences(X_train, maxlen=50)
 print('X_train shape:', X_train.shape)
 
 model = Sequential()
-model.add(Embedding(20000, 128, input_length=340))
-model.add(Bidirectional(GRU(64)))
+model.add(Embedding(20000, 300, input_length=50))
+model.add(Bidirectional(LSTM(64)))
 #model.add(Dropout(0.5))
 model.add(Dense(3, activation='softmax'))
 
