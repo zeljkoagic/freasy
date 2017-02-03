@@ -60,7 +60,7 @@ for item in training_data:
     X_train.append(all)
     ranks[lang] = 0
     ranks = softmax(ranks)
-    Y_train.append([x for y,x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)])
+    Y_train.append([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs])
 
 X_train = np.array(X_train)
 Y_train = np.array(Y_train)
@@ -77,7 +77,7 @@ model = Sequential()
 model.add(Embedding(1000000, 640, input_length=1000))
 model.add(GRU(320))
 model.add(Dropout(0.5))
-model.add(Dense(26, activation='softmax'))
+model.add(Dense(3, activation='softmax'))
 
 model.compile('adam', 'kullback_leibler_divergence')
 
