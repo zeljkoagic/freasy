@@ -104,7 +104,7 @@ model.add(Bidirectional(LSTM(64)))
 #model.add(Dropout(0.5))
 model.add(Dense(3, activation='softmax'))
 
-model.compile('adam', 'kullback_leibler_divergence', metrics=['kullback_leibler_divergence'])
+model.compile('adam', 'kullback_leibler_divergence', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train, Y_train,
