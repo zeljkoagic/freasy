@@ -99,7 +99,7 @@ X_test = sequence.pad_sequences(X_test, maxlen=50)
 print('X_train shape:', X_train.shape)
 
 model = Sequential()
-model.add(Embedding(20000, 128, input_length=50))
+model.add(Embedding(50000, 128, input_length=50))
 model.add(Bidirectional(GRU(64)))
 #model.add(Dropout(0.5))
 model.add(Dense(3, activation='softmax'))
