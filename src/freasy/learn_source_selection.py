@@ -3,6 +3,7 @@
 import argparse
 import dill
 import operator
+import softmax
 
 parser = argparse.ArgumentParser(description="TODO")
 parser.add_argument("--data_root", required=True, help="root for data files")
@@ -50,4 +51,4 @@ for item in training_data:
     for pos in poss:
         all += one_hot[pos]
     ranks[lang] = 0
-    print(sorted(ranks.items(), key=operator.itemgetter(0), reverse=False))
+    print(softmax(sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)))
