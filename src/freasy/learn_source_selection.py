@@ -5,6 +5,7 @@ import dill
 import operator
 from softmax import softmax
 import numpy as np
+import tensorflow as tf
 
 from keras.preprocessing import sequence
 from keras.models import Sequential
