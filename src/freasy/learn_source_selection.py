@@ -3,7 +3,7 @@
 import argparse
 import dill
 import operator
-import softmax
+from softmax import softmax
 
 parser = argparse.ArgumentParser(description="TODO")
 parser.add_argument("--data_root", required=True, help="root for data files")
@@ -22,8 +22,6 @@ for lang in dev_langs:
 # 1. map data to one-hot
 # 2. create arch
 # 3. train
-
-print(training_data[0])
 
 one_hot = {
     "ADJ":   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
