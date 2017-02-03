@@ -9,7 +9,7 @@ import tensorflow as tf
 
 from keras.preprocessing import sequence
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional
+from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, GRU
 
 parser = argparse.ArgumentParser(description="TODO")
 parser.add_argument("--data_root", required=True, help="root for data files")
@@ -75,7 +75,7 @@ print('X_train shape:', X_train.shape)
 
 model = Sequential()
 model.add(Embedding(1000000, 64, input_length=100))
-model.add(Bidirectional(LSTM(128)))
+model.add(Bidirectional(GRU(64)))
 model.add(Dropout(0.5))
 model.add(Dense(26, activation='softmax'))
 
