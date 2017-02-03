@@ -48,4 +48,4 @@ for item in training_data:
     all = []
     for pos in poss:
         all += one_hot[pos]
-    print(len(all))
+    print(sorted(ranks))
