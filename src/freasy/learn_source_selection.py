@@ -109,5 +109,5 @@ model.compile('adam', 'kullback_leibler_divergence', metrics=['accuracy'])
 print('Train...')
 model.fit(X_train, Y_train,
           batch_size=32,
-          nb_epoch=10,
+          nb_epoch=100,
           validation_data=[X_test, Y_test])
