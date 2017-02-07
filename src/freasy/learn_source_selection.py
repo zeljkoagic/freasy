@@ -98,8 +98,9 @@ X_train = sequence.pad_sequences(X_train, maxlen=100)
 X_test = sequence.pad_sequences(X_test, maxlen=100)
 print('X_train shape:', X_train.shape)
 
-np.reshape(X_train, X_train.shape + (1,))
+np.reshape(X_train, 3228,50,10)
 print('X_train shape:', X_train.shape)
+exit(1)
 
 model = Sequential()
 model.add(Embedding(40000, 512, input_length=100))
