@@ -100,7 +100,9 @@ print('X_train shape:', X_train.shape)
 
 model = Sequential()
 model.add(Embedding(40000, 512, input_length=100))
-model.add(Bidirectional(LSTM(128, activation="sigmoid")))
+model.add(Bidirectional(LSTM(128, activation="sigmoid", return_sequences=True)))
+model.add(Dropout(0.5))
+model.add(Bidirectional(LSTM(256, activation="sigmoid", return_sequences=False)))
 model.add(Dropout(0.5))
 model.add(Dense(26, activation='softmax'))
 
