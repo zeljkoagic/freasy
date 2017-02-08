@@ -98,7 +98,7 @@ X_train = sequence.pad_sequences(X_train, maxlen=100)
 X_test = sequence.pad_sequences(X_test, maxlen=100)
 print('X_train shape:', X_train.shape)
 
-np.reshape(X_train, (3228, 50, 1))
+np.reshape(X_train, (3228, 100, 1))
 print('X_train shape:', X_train.shape)
 exit(1)
 
