@@ -100,10 +100,9 @@ print('X_train shape:', X_train.shape)
 
 X_train_reshaped = np.reshape(X_train, (3228, 100, 10))
 print('X_train shape:', X_train_reshaped.shape)
-#exit(1)
 
 model = Sequential()
-model.add(Embedding(40000, 512, input_shape=X_train_reshaped.shape))
+model.add(Embedding(40000, 512, input_shape=(100,10)))
 model.add(Bidirectional(
         LSTM(128, activation="sigmoid", return_sequences=True)
     ))
@@ -117,6 +116,5 @@ model.compile('adam', 'kullback_leibler_divergence', metrics=['accuracy'])
 print('Train...')
 model.fit(X_train_reshaped, Y_train,
           batch_size=32,
-          nb_epoch=100)
-    #,
-     #     validation_data=[X_test, Y_test])
+          nb_epoch=100,
+          validation_data=[X_test, Y_test])
