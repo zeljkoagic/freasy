@@ -49,26 +49,25 @@ one_hot = {
     "X":     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 }
 
-#one_hot = {
-#    "ADJ":   1,
-#    "ADP":   2,
-#    "ADV":   3,
-#    "AUX":   4,
-#    "CONJ":  5,
-#    "DET":   6,
-#    "INTJ":  7,
-#    "NOUN":  8,
-#    "NUM":   9,
-#    "PART":  10,
-#    "PRON":  11,
-#    "PROPN": 12,
-#    "PUNCT": 13,
-#    "SCONJ": 14,
-#    "SYM":   15,
-#    "VERB":  16,
-#    "X":     17
-#}
-
+one_hot = {
+    "ADJ":   1,
+    "ADP":   2,
+    "ADV":   3,
+    "AUX":   4,
+    "CONJ":  5,
+    "DET":   6,
+    "INTJ":  7,
+    "NOUN":  8,
+    "NUM":   9,
+    "PART":  10,
+    "PRON":  11,
+    "PROPN": 12,
+    "PUNCT": 13,
+    "SCONJ": 14,
+    "SYM":   15,
+    "VERB":  16,
+    "X":     17
+}
 
 X_train = []
 Y_train = []
@@ -77,7 +76,7 @@ for item in training_data:
     lang, idx, poss, ranks = item
     all = []
     for pos in poss:
-        all += one_hot[pos]
+        all.append(one_hot[pos])
     X_train.append(all)
     ranks[lang] = 0
     ranks = softmax(ranks)
