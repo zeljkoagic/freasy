@@ -98,7 +98,7 @@ X_train = sequence.pad_sequences(X_train, maxlen=1000)
 X_test = sequence.pad_sequences(X_test, maxlen=1000)
 print('X_train shape:', X_train.shape)
 
-#X_train_reshaped = np.reshape(X_train, (3228, 100, 10))
+X_train_reshaped = np.reshape(X_train, (3228, 100, 10))
 #print('X_train reshaped:', X_train_reshaped.shape)
 
 model = Sequential()
@@ -116,7 +116,7 @@ model.add(Dense(26, activation='softmax'))
 model.compile('adam', 'kullback_leibler_divergence', metrics=['accuracy'])
 
 print('Train...')
-model.fit(X_train, Y_train,
+model.fit(X_train_reshaped, Y_train,
           batch_size=32,
           nb_epoch=100,
           validation_data=[X_test, Y_test])
