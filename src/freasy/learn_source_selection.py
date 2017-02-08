@@ -99,10 +99,10 @@ X_test = sequence.pad_sequences(X_test, maxlen=1000)
 print('X_train shape:', X_train.shape)
 
 X_train_reshaped = np.reshape(X_train, (3228, 100, 10))
-print('X_train shape:', X_train_reshaped.shape)
+print('X_train reshaped:', X_train_reshaped.shape)
 
 model = Sequential()
-model.add(Embedding(40000, 512, input_shape=(100,10)))
+#model.add(Embedding(40000, 512))
 model.add(Bidirectional(
         LSTM(128, activation="sigmoid", return_sequences=True)
     ))
