@@ -103,7 +103,7 @@ X_train_reshaped = np.reshape(X_train, (3228, 100, 10))
 
 model = Sequential()
 
-# model.add(Embedding(40000, 512))
+model.add(Embedding(40000, 512))
 
 model.add(LSTM(128, activation="sigmoid", input_shape=(3228, 100, 10), return_sequences=True))
 model.add(Dropout(0.2))
