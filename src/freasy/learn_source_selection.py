@@ -104,7 +104,7 @@ print('X_train shape:', X_train_reshaped.shape)
 
 model = Sequential()
 #model.add(Embedding(40000, 512, input_length=100))
-model.add(Bidirectional(LSTM(128, activation="sigmoid", return_sequences=True, input_shape=(10, 100))))
+model.add(Bidirectional(LSTM(128, activation="sigmoid", return_sequences=True, batch_input_shape=X_train_reshaped.shape)))
 model.add(Dropout(0.2))
 model.add(Bidirectional(LSTM(256, activation="sigmoid", return_sequences=False)))
 model.add(Dropout(0.2))
@@ -113,7 +113,7 @@ model.add(Dense(26, activation='softmax'))
 model.compile('adam', 'kullback_leibler_divergence', metrics=['accuracy'])
 
 print('Train...')
-model.fit(X_train, Y_train,
+model.fit(X_train_reshaped, Y_train,
           batch_size=32,
           nb_epoch=100,
           validation_data=[X_test, Y_test])
