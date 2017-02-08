@@ -99,7 +99,7 @@ print('X_train shape:', X_train.shape)
 
 X_train_reshaped = np.reshape(X_train, (3228, 100, 1))
 print('X_train reshaped:', X_train_reshaped.shape)
-
+print(X_train)
 exit(1)
 
 model = Sequential()
