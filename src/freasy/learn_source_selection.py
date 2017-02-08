@@ -102,13 +102,15 @@ X_train_reshaped = np.reshape(X_train, (3228, 100, 10))
 print('X_train reshaped:', X_train_reshaped.shape)
 
 model = Sequential()
-#model.add(Embedding(40000, 512))
-model.add(Bidirectional(
-        LSTM(128, activation="sigmoid", input_shape=(100, 10))
-    ))
+
+# model.add(Embedding(40000, 512))
+
+model.add(LSTM(128, activation="sigmoid", input_shape=(100, 10)))
 model.add(Dropout(0.2))
-#model.add(Bidirectional(LSTM(256, activation="sigmoid", return_sequences=False)))
-#model.add(Dropout(0.2))
+
+# model.add(Bidirectional(LSTM(256, activation="sigmoid", return_sequences=False)))
+# model.add(Dropout(0.2))
+
 model.add(Dense(26, activation='softmax'))
 
 model.compile('adam', 'kullback_leibler_divergence', metrics=['accuracy'])
