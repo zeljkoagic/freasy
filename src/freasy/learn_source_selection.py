@@ -93,11 +93,11 @@ print(X_train.shape, Y_train.shape, X_test.shape, Y_test.shape)
 print(X_train[0], Y_train[0])
 
 print("Pad sequences (samples x time)")
-X_train = sequence.pad_sequences(X_train, maxlen=1000)
-X_test = sequence.pad_sequences(X_test, maxlen=1000)
+X_train = sequence.pad_sequences(X_train, maxlen=100)
+X_test = sequence.pad_sequences(X_test, maxlen=100)
 print('X_train shape:', X_train.shape)
 
-X_train_reshaped = np.reshape(X_train, (3228, 100, 10))
+X_train_reshaped = np.reshape(X_train, (3228, 100, 1))
 print('X_train reshaped:', X_train_reshaped.shape)
 
 exit(1)
