@@ -98,18 +98,18 @@ X_train = sequence.pad_sequences(X_train, maxlen=1000)
 X_test = sequence.pad_sequences(X_test, maxlen=1000)
 print('X_train shape:', X_train.shape)
 
-X_train_reshaped = np.reshape(X_train, (3228, 100, 10))
-print('X_train reshaped:', X_train_reshaped.shape)
+#X_train_reshaped = np.reshape(X_train, (3228, 100, 10))
+#print('X_train reshaped:', X_train_reshaped.shape)
 
 model = Sequential()
 
 # model.add(Embedding(40000, 512))
 
-model.add(LSTM(128, activation="sigmoid", input_shape=(3228, 100, 10)))
+model.add(LSTM(128, activation="sigmoid", input_dim=1000, return_sequences=True))
 model.add(Dropout(0.2))
 
-# model.add(Bidirectional(LSTM(256, activation="sigmoid", return_sequences=False)))
-# model.add(Dropout(0.2))
+model.add(Bidirectional(LSTM(256, activation="sigmoid", return_sequences=False)))
+model.add(Dropout(0.2))
 
 model.add(Dense(26, activation='softmax'))
 
