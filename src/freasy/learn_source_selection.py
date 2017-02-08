@@ -104,7 +104,7 @@ print('X_train reshaped:', X_train_reshaped.shape)
 model = Sequential()
 #model.add(Embedding(40000, 512))
 model.add(Bidirectional(
-        LSTM(128, activation="sigmoid", input_shape=X_train_reshaped.shape)
+        LSTM(128, activation="sigmoid", input_shape=(100, 10))
     ))
 model.add(Dropout(0.2))
 #model.add(Bidirectional(LSTM(256, activation="sigmoid", return_sequences=False)))
