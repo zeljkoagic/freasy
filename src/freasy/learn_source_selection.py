@@ -49,25 +49,25 @@ one_hot = {
     "X":     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 }
 
-one_hot = {
-    "ADJ":   1,
-    "ADP":   2,
-    "ADV":   3,
-    "AUX":   4,
-    "CONJ":  5,
-    "DET":   6,
-    "INTJ":  7,
-    "NOUN":  8,
-    "NUM":   9,
-    "PART":  10,
-    "PRON":  11,
-    "PROPN": 12,
-    "PUNCT": 13,
-    "SCONJ": 14,
-    "SYM":   15,
-    "VERB":  16,
-    "X":     17
-}
+#one_hot = {
+#    "ADJ":   1,
+#    "ADP":   2,
+#    "ADV":   3,
+#    "AUX":   4,
+#    "CONJ":  5,
+#    "DET":   6,
+#    "INTJ":  7,
+#    "NOUN":  8,
+#    "NUM":   9,
+#    "PART":  10,
+#    "PRON":  11,
+#    "PROPN": 12,
+#    "PUNCT": 13,
+#    "SCONJ": 14,
+#    "SYM":   15,
+#    "VERB":  16,
+#    "X":     17
+#}
 
 
 X_train = []
@@ -94,16 +94,16 @@ print(X_train.shape, Y_train.shape, X_test.shape, Y_test.shape)
 print(X_train[0], Y_train[0])
 
 print("Pad sequences (samples x time)")
-X_train = sequence.pad_sequences(X_train, maxlen=100)
-X_test = sequence.pad_sequences(X_test, maxlen=100)
+X_train = sequence.pad_sequences(X_train, maxlen=1000)
+X_test = sequence.pad_sequences(X_test, maxlen=1000)
 print('X_train shape:', X_train.shape)
 
-np.reshape(X_train, (3228, 100, 1))
+np.reshape(X_train, (3228, 10, 100))
 print('X_train shape:', X_train.shape)
 exit(1)
 
 model = Sequential()
-model.add(Embedding(40000, 512, input_length=100))
+#model.add(Embedding(40000, 512, input_length=100))
 model.add(Bidirectional(LSTM(128, activation="sigmoid", return_sequences=True)))
 model.add(Dropout(0.5))
 model.add(Bidirectional(LSTM(256, activation="sigmoid", return_sequences=False)))
