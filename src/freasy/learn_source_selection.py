@@ -77,7 +77,11 @@ for item in training_data:
     all = []
     for pos in poss:
         all.append(one_hot[pos])
+
+    all = np.array(all, dtype=float)
+    print(all)
     all /= 17.0
+
     X_train.append(all)
     ranks[lang] = 0
     ranks = softmax(ranks)
