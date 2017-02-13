@@ -76,14 +76,13 @@ for item in training_data:
     lang, idx, poss, ranks = item
     all = []
     for pos in poss:
-        all.append(one_hot[pos])
+        all.append((float)(one_hot[pos])/17)
     X_train.append(all)
     ranks[lang] = 0
     ranks = softmax(ranks)
     Y_train.append([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)]) # if y in dev_langs])
 
 X_train = np.array(X_train[:-100])
-X_train /= 17
 Y_train = np.array(Y_train[:-100])
 
 X_test = np.array(X_train[-100:])
