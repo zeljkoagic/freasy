@@ -117,8 +117,6 @@ model = Sequential()
 #model.add(Dropout(0.2))
 
 model.add(Dense(128, input_dim=100, activation="softmax"))
-model.add(Dense(128, input_dim=100, activation="softmax"))
-model.add(Dense(128, input_dim=100, activation="softmax"))
 model.add(Dense(26, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
