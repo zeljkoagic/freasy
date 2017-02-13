@@ -86,7 +86,7 @@ for item in training_data:
     ranks = softmax(ranks)
     yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)], dtype=float)
     am = np.argmax(yval)
-    yval2 = [i == am for i, _ in enumerate(yval)]
+    yval2 = [float(i == am) for i, _ in enumerate(yval)]
     Y_train.append(yval2) # if y in dev_langs])
     print(yval2)
 
