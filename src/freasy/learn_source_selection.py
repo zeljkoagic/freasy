@@ -109,10 +109,10 @@ model = Sequential()
 
 #model.add(Embedding(17, 512))
 
-model.add(LSTM(128, activation="sigmoid", input_shape=(3228, 100), return_sequences=True))
-model.add(Dropout(0.2))
+#model.add(LSTM(128, activation="sigmoid", input_shape=(3228, 100), return_sequences=True))
+#model.add(Dropout(0.2))
 
-model.add(Bidirectional(LSTM(256, activation="sigmoid", return_sequences=False)))
+model.add(Bidirectional(LSTM(256, activation="sigmoid", return_sequences=False, input_dim=100)))
 model.add(Dropout(0.2))
 
 model.add(Dense(26, activation='softmax'))
