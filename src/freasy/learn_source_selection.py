@@ -11,6 +11,11 @@ from keras.preprocessing import sequence
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, GRU
 
+
+def two_argmaxs(y_true, y_pred):
+    return np.argmax(y_true) == np.argmax(y_pred)
+
+
 parser = argparse.ArgumentParser(description="TODO")
 parser.add_argument("--data_root", required=True, help="root for data files")
 parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "proj"], help="POS source")
@@ -113,10 +118,10 @@ model.add(Dropout(0.2))
 
 model.add(Dense(26, activation='softmax'))
 
-model.compile('adam', 'kullback_leibler_divergence', metrics=['accuracy'])
+model.compile('adam', 'kullback_leibler_divergence', metrics=['accuracy', two_argmaxs])
 
 print('Train...')
 model.fit(X_train, Y_train,
           batch_size=32,
-          nb_epoch=100)#,
-          #validation_data=[X_test, Y_test])
+          nb_epoch=100,
+          validation_data=[X_test, Y_test])
