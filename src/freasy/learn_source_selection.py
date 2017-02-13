@@ -15,8 +15,7 @@ from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, GRU
 def two_argmaxs(y_true, y_pred):
     val = np.argmax(y_true) == np.argmax(y_pred)
     return {
-        'true': 1.0,
-        'false': 0.0
+        'm': val
     }
 
 
