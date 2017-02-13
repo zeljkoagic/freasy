@@ -19,6 +19,7 @@ int_to_char = dict((i, c) for i, c in enumerate(alphabet))
 seq_length = 3
 dataX = []
 dataY = []
+
 for i in range(0, len(alphabet) - seq_length, 1):
     seq_in = alphabet[i:i + seq_length]
     seq_out = alphabet[i + seq_length]
@@ -30,7 +31,7 @@ for i in range(0, len(alphabet) - seq_length, 1):
 X = numpy.reshape(dataX, (len(dataX), seq_length, 1))
 
 # normalize
-X = X / float(len(alphabet))
+X /= float(len(alphabet))
 
 # one hot encode the output variable
 y = np_utils.to_categorical(dataY)
@@ -49,7 +50,7 @@ print("Model Accuracy: %.2f%%" % (scores[1] * 100))
 # demonstrate some model predictions
 for pattern in dataX:
     x = numpy.reshape(pattern, (1, len(pattern), 1))
-    x = x / float(len(alphabet))
+    x /= float(len(alphabet))
     prediction = model.predict(x, verbose=0)
     index = numpy.argmax(prediction)
     result = int_to_char[index]
