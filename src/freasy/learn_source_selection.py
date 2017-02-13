@@ -120,7 +120,7 @@ model.add(Dense(512, input_dim=256, activation="relu"))
 model.add(Dropout(0.5))
 model.add(Dense(26, activation='softmax'))
 
-model.compile('adam', 'kullback_leibler_divergence', metrics=['accuracy'])
+model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train, Y_train,
