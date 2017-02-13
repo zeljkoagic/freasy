@@ -116,7 +116,7 @@ model = Sequential()
 #model.add(LSTM(128, activation="sigmoid", input_shape=(3228, 100), return_sequences=True))
 #model.add(Dropout(0.2))
 
-model.add(Dense(128, input_dim=100, activation="softmax"))
+model.add(Dense(128, input_dim=100, activation="relu"))
 model.add(Dense(26, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
