@@ -112,9 +112,8 @@ model = Sequential()
 #model.add(LSTM(128, activation="sigmoid", input_shape=(3228, 100), return_sequences=True))
 #model.add(Dropout(0.2))
 
-model.add(Bidirectional(LSTM(256, activation="sigmoid", input_length=100, input_dim=1)))
+model.add(Dense(128, input_dim=100))
 model.add(Dropout(0.2))
-
 model.add(Dense(26, activation='softmax'))
 
 model.compile('adam', 'kullback_leibler_divergence', metrics=['accuracy'])
