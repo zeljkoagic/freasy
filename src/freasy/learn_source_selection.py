@@ -80,7 +80,6 @@ for item in training_data:
 
     all = np.array(all, dtype=float)
     all /= 17.0
-    print(all)
 
     X_train.append(all)
     ranks[lang] = 0
