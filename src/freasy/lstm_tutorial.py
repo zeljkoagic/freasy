@@ -2,6 +2,7 @@
 import numpy
 from keras.models import Sequential
 from keras.layers import Embedding
+import numpy as np
 
 model = Sequential()
 model.add(Embedding(1000, 64,
