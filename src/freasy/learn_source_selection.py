@@ -111,8 +111,8 @@ print('X_train shape:', X_train.shape)
 
 model = Sequential()
 
-input_array = np.random.randint(17, size=(333, 10))  # 333 datapoints, 10 items each, values from 0 to 16
-output_array = np.random.randint(8, size=(333, 3))  # 333 datapoints, 3 items each, values from 0 to 8
+#input_array = np.random.randint(17, size=(333, 10))  # 333 datapoints, 10 items each, values from 0 to 16
+#output_array = np.random.randint(8, size=(333, 3))  # 333 datapoints, 3 items each, values from 0 to 8
 
 model.add(Embedding(input_dim=17,
                     output_dim=128,
@@ -139,16 +139,12 @@ model.add(Dense(26, activation='softmax'))
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
 
-output_array = model.predict(X_train)
-print(X_train.shape, output_array.shape)
+#output_array = model.predict(X_train)
+#print(X_train.shape, output_array.shape)
 
 
 print('Train...')
 model.fit(X_train, Y_train,
           batch_size=32,
-          nb_epoch=10)
-#          validation_data=[X_test, Y_test])
-
-#x = model.predict(input_array[0])
-#print(x)
-#print(output_array[0])
+          nb_epoch=10,
+          validation_data=[X_test, Y_test])
