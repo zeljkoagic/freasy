@@ -149,5 +149,6 @@ model.fit(input_array, output_array,
           nb_epoch=10)
 #          validation_data=[X_test, Y_test])
 
-model.predict(input_array[0])
+x = model.predict(input_array[0])
+print(x)
 print(output_array[0])
