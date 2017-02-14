@@ -105,7 +105,7 @@ X_train = sequence.pad_sequences(X_train, maxlen=10)
 X_test = sequence.pad_sequences(X_test, maxlen=10)
 print('X_train shape:', X_train.shape)
 
-#X_train_reshaped = np.reshape(X_train, (3228, 100, 1))
+X_train_reshaped = np.reshape(X_train, (3228, 10, 1))
 #print('X_train reshaped:', X_train_reshaped.shape)
 #print(X_train_reshaped)
 
@@ -114,16 +114,16 @@ model = Sequential()
 #input_array = np.random.randint(17, size=(333, 10))  # 333 datapoints, 10 items each, values from 0 to 16
 #output_array = np.random.randint(8, size=(333, 3))  # 333 datapoints, 3 items each, values from 0 to 8
 
-model.add(Embedding(input_dim=17,
-                    output_dim=128,
-                    input_length=10,
-                    mask_zero=False))
+#model.add(Embedding(input_dim=17,
+#                    output_dim=128,
+#                    input_length=10,
+#                    mask_zero=False))
 
 #model.add(Dense(output_dim=64,
 #                input_dim=128, activation="relu"))
 
 model.add(LSTM(output_dim=64,
-               input_dim=128,
+               input_dim=1,
                input_length=10,
                activation="tanh",
                return_sequences=True))
