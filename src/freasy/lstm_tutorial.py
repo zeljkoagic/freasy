@@ -1,5 +1,3 @@
-# Naive LSTM to learn three-char time steps to one-char mapping
-import numpy
 from keras.models import Sequential
 from keras.layers import Embedding
 import numpy as np
@@ -14,4 +12,4 @@ input_array = np.random.randint(1000, size=(32, 10))
 
 model.compile('rmsprop', 'mse')
 output_array = model.predict(input_array)
-assert output_array.shape == (32, 10, 64)
+print(input_array.shape, output_array.shape)
