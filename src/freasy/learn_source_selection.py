@@ -139,8 +139,8 @@ model.add(Dense(26, activation='softmax'))
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
 
-output_array = model.predict(input_array)
-print(input_array.shape, output_array.shape)
+output_array = model.predict(X_train)
+print(X_train.shape, output_array.shape)
 
 
 print('Train...')
