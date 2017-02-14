@@ -111,17 +111,21 @@ print('X_train shape:', X_train.shape)
 
 model = Sequential()
 
-model.add(Embedding(input_dim=17, output_dim=128, input_length=10, mask_zero=True))
+input_array = np.random.randint(17, size=(333, 10))  # 333 datapoints, 10 items each
 
-#model.add(LSTM(128, activation="sigmoid", input_shape=(3228, 100), return_sequences=True))
-#model.add(Dropout(0.2))
+model.add(Embedding(input_dim=17,
+                    output_dim=128,
+                    input_length=10,
+                    mask_zero=True))
 
-#model.add(Dense(64, input_dim=10, activation="relu"))
+model.add(Dense(output_dim=64,
+                input_dim=128, activation="relu"))
+
 #model.add(Dense(26, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
-input_array = np.random.randint(17, size=(333, 10))
+
 output_array = model.predict(input_array)
 print(input_array.shape, output_array.shape)
 
