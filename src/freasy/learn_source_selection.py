@@ -111,12 +111,12 @@ print('X_train shape:', X_train.shape)
 
 model = Sequential()
 
-model.add(Embedding(128, 10))
+#model.add(Embedding(128, 10))
 
 #model.add(LSTM(128, activation="sigmoid", input_shape=(3228, 100), return_sequences=True))
 #model.add(Dropout(0.2))
 
-model.add(Dense(64, input_dim=128, activation="relu"))
+model.add(Dense(64, input_dim=10, activation="relu"))
 model.add(Dense(26, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
