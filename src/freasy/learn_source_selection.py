@@ -134,7 +134,7 @@ model.add(LSTM(output_dim=32,
                activation="relu",
                return_sequences=False))
 
-model.add(Dense(3, activation='softmax'))
+model.add(Dense(26, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
@@ -144,11 +144,11 @@ print(input_array.shape, output_array.shape)
 
 
 print('Train...')
-model.fit(input_array, output_array,
+model.fit(X_train, Y_train,
           batch_size=32,
           nb_epoch=10)
 #          validation_data=[X_test, Y_test])
 
-x = model.predict(input_array[0])
-print(x)
-print(output_array[0])
+#x = model.predict(input_array[0])
+#print(x)
+#print(output_array[0])
