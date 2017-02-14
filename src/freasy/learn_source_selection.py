@@ -116,7 +116,7 @@ input_array = np.random.randint(17, size=(333, 10))  # 333 datapoints, 10 items 
 model.add(Embedding(input_dim=17,
                     output_dim=128,
                     input_length=10,
-                    mask_zero=True))
+                    mask_zero=False))
 
 model.add(Dense(output_dim=64,
                 input_dim=128, activation="relu"))
