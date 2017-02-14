@@ -101,8 +101,8 @@ print(X_train.shape, Y_train.shape, X_test.shape, Y_test.shape)
 print(X_train[0], Y_train[0])
 
 print("Pad sequences (samples x time)")
-X_train = sequence.pad_sequences(X_train, maxlen=100)
-X_test = sequence.pad_sequences(X_test, maxlen=100)
+X_train = sequence.pad_sequences(X_train, maxlen=10)
+X_test = sequence.pad_sequences(X_test, maxlen=10)
 print('X_train shape:', X_train.shape)
 
 #X_train_reshaped = np.reshape(X_train, (3228, 100, 1))
@@ -116,7 +116,7 @@ model = Sequential()
 #model.add(LSTM(128, activation="sigmoid", input_shape=(3228, 100), return_sequences=True))
 #model.add(Dropout(0.2))
 
-model.add(Dense(128, input_dim=100, activation="sigmoid"))
+model.add(Dense(18, input_dim=100, activation="sigmoid"))
 model.add(Dense(26, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
