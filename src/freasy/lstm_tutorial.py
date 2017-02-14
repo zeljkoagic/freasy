@@ -1,6 +1,7 @@
 # Naive LSTM to learn three-char time steps to one-char mapping
 import numpy
 from keras.models import Sequential
+from keras.layers import Embedding
 
 model = Sequential()
 model.add(Embedding(1000, 64,
