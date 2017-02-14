@@ -123,9 +123,10 @@ model.add(Embedding(input_dim=17,
 
 model.add(LSTM(output_dim=64,
                input_dim=128,
-               input_length=10))
+               input_length=10,
+               activation="relu"))
 
-#model.add(Dense(26, activation='softmax'))
+model.add(Dense(26, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
