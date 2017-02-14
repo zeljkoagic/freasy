@@ -124,7 +124,14 @@ model.add(Embedding(input_dim=17,
 model.add(LSTM(output_dim=64,
                input_dim=128,
                input_length=10,
-               activation="relu"))
+               activation="relu",
+               return_sequences=True))
+
+model.add(LSTM(output_dim=32,
+               input_dim=64,
+               input_length=10,
+               activation="relu",
+               return_sequences=False))
 
 model.add(Dense(26, activation='softmax'))
 
