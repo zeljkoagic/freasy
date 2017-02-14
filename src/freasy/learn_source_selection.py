@@ -50,23 +50,23 @@ one_hot = {
 }
 
 one_hot = {
-    "ADJ":   1,
-    "ADP":   2,
-    "ADV":   3,
-    "AUX":   4,
-    "CONJ":  5,
-    "DET":   6,
-    "INTJ":  7,
-    "NOUN":  8,
-    "NUM":   9,
-    "PART":  10,
-    "PRON":  11,
-    "PROPN": 12,
-    "PUNCT": 13,
-    "SCONJ": 14,
-    "SYM":   15,
-    "VERB":  16,
-    "X":     17
+    "ADJ":   0,
+    "ADP":   1,
+    "ADV":   2,
+    "AUX":   3,
+    "CONJ":  4,
+    "DET":   5,
+    "INTJ":  6,
+    "NOUN":  7,
+    "NUM":   8,
+    "PART":  9,
+    "PRON":  10,
+    "PROPN": 11,
+    "PUNCT": 12,
+    "SCONJ": 13,
+    "SYM":   14,
+    "VERB":  15,
+    "X":     16
 }
 
 X_train = []
@@ -111,18 +111,23 @@ print('X_train shape:', X_train.shape)
 
 model = Sequential()
 
-#model.add(Embedding(128, 10))
+model.add(Embedding(input_dim=17, output_dim=128, input_length=10, mask_zero=True))
 
 #model.add(LSTM(128, activation="sigmoid", input_shape=(3228, 100), return_sequences=True))
 #model.add(Dropout(0.2))
 
-model.add(Dense(64, input_dim=10, activation="relu"))
-model.add(Dense(26, activation='softmax'))
+#model.add(Dense(64, input_dim=10, activation="relu"))
+#model.add(Dense(26, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
-print('Train...')
-model.fit(X_train, Y_train,
-          batch_size=1,
-          nb_epoch=10,
-          validation_data=[X_test, Y_test])
+input_array = np.random.randint(17, size=(333, 10))
+output_array = model.predict(input_array)
+print(input_array.shape, output_array.shape)
+
+
+#print('Train...')
+#model.fit(X_train, Y_train,
+#          batch_size=1,
+#          nb_epoch=10,
+#          validation_data=[X_test, Y_test])
