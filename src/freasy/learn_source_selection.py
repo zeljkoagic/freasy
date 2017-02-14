@@ -111,15 +111,19 @@ print('X_train shape:', X_train.shape)
 
 model = Sequential()
 
-input_array = np.random.randint(17, size=(333, 10))  # 333 datapoints, 10 items each
+input_array = np.random.randint(17, size=(333, 10))  # 333 datapoints, 10 items each, values from 0 to 16
 
 model.add(Embedding(input_dim=17,
                     output_dim=128,
                     input_length=10,
                     mask_zero=False))
 
-model.add(Dense(output_dim=64,
-                input_dim=128, activation="relu"))
+#model.add(Dense(output_dim=64,
+#                input_dim=128, activation="relu"))
+
+model.add(LSTM(output_dim=64,
+               input_dim=128,
+               input_length=10))
 
 #model.add(Dense(26, activation='softmax'))
 
