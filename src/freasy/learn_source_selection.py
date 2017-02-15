@@ -84,10 +84,10 @@ for item in training_data:
     X_train.append(all)
     ranks[lang] = 0
     ranks = softmax(ranks)
-    yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)], dtype=float)
+    yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
     am = np.argmax(yval)
     yval2 = [float(i == am) for i, _ in enumerate(yval)]
-    Y_train.append(yval2) # if y in dev_langs])
+    Y_train.append(yval2)
     print(yval2)
 
 X_train = np.array(X_train[:-100])
@@ -134,7 +134,7 @@ model.add(LSTM(output_dim=16,
                activation="tanh",
                return_sequences=False))
 
-model.add(Dense(26, activation='softmax'))
+model.add(Dense(3, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
