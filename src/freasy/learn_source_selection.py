@@ -50,23 +50,23 @@ one_hot = {
 }
 
 one_hot = {
-    "ADJ":   0,
-    "ADP":   1,
-    "ADV":   2,
-    "AUX":   3,
-    "CONJ":  4,
-    "DET":   5,
-    "INTJ":  6,
-    "NOUN":  7,
-    "NUM":   8,
-    "PART":  9,
-    "PRON":  10,
-    "PROPN": 11,
-    "PUNCT": 12,
-    "SCONJ": 13,
-    "SYM":   14,
-    "VERB":  15,
-    "X":     16
+    "ADJ":   1,
+    "ADP":   2,
+    "ADV":   3,
+    "AUX":   4,
+    "CONJ":  5,
+    "DET":   6,
+    "INTJ":  7,
+    "NOUN":  8,
+    "NUM":   9,
+    "PART":  10,
+    "PRON":  11,
+    "PROPN": 12,
+    "PUNCT": 13,
+    "SCONJ": 14,
+    "SYM":   15,
+    "VERB":  16,
+    "X":     17
 }
 
 X_train = []
@@ -79,7 +79,7 @@ for item in training_data:
         all.append(one_hot[pos])
 
     all = np.array(all, dtype=float)
-    all /= 17.0
+   #all /= 17.0
 
     X_train.append(all)
     ranks[lang] = 0
