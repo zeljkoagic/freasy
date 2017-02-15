@@ -105,7 +105,7 @@ X_train = sequence.pad_sequences(X_train, maxlen=10)
 X_test = sequence.pad_sequences(X_test, maxlen=10)
 print('X_train shape:', X_train.shape)
 
-X_train_reshaped = np.reshape(X_train, (3228, 10, 1))
+X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 10, 1))
 X_test_reshaped = np.reshape(X_test, (100, 10, 1))
 #print('X_train reshaped:', X_train_reshaped.shape)
 #print(X_train_reshaped)
