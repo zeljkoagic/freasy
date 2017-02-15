@@ -106,6 +106,7 @@ X_test = sequence.pad_sequences(X_test, maxlen=10)
 print('X_train shape:', X_train.shape)
 
 X_train_reshaped = np.reshape(X_train, (3228, 10, 1))
+X_test_reshaped = np.reshape(X_test, (100, 10, 1))
 #print('X_train reshaped:', X_train_reshaped.shape)
 #print(X_train_reshaped)
 
@@ -147,4 +148,4 @@ print('Train...')
 model.fit(X_train_reshaped, Y_train,
           batch_size=16,
           nb_epoch=100,
-          validation_data=[X_test, Y_test])
+          validation_data=[X_test_reshaped, Y_test])
