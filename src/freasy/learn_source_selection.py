@@ -115,16 +115,16 @@ model = Sequential()
 #input_array = np.random.randint(17, size=(333, 10))  # 333 datapoints, 10 items each, values from 0 to 16
 #output_array = np.random.randint(8, size=(333, 3))  # 333 datapoints, 3 items each, values from 0 to 8
 
-#model.add(Embedding(input_dim=17,
-#                    output_dim=128,
-#                    input_length=10,
-#                    mask_zero=False))
+model.add(Embedding(input_dim=17,
+                    output_dim=128,
+                    input_length=10,
+                    mask_zero=False))
 
 #model.add(Dense(output_dim=64,
 #                input_dim=128, activation="relu"))
 
 model.add(LSTM(output_dim=32,
-               input_dim=1,
+               input_dim=128,
                input_length=10,
                activation="tanh",
                return_sequences=True))
@@ -146,6 +146,6 @@ model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train_reshaped, Y_train,
-          batch_size=16,
-          nb_epoch=100,
+          batch_size=32,
+          nb_epoch=500,
           validation_data=[X_test_reshaped, Y_test])
