@@ -115,25 +115,29 @@ model = Sequential()
 #input_array = np.random.randint(17, size=(333, 10))  # 333 datapoints, 10 items each, values from 0 to 16
 #output_array = np.random.randint(8, size=(333, 3))  # 333 datapoints, 3 items each, values from 0 to 8
 
-model.add(Embedding(input_dim=17,
-                    output_dim=128,
-                    input_length=10,
-                    mask_zero=False))
+#model.add(Embedding(input_dim=17,
+#                    output_dim=128,
+#                    input_length=10,
+#                    mask_zero=False))
 
 #model.add(Dense(output_dim=64,
 #                input_dim=128, activation="relu"))
 
 model.add(LSTM(output_dim=32,
-               input_dim=128,
+               input_dim=1,
                input_length=10,
-               activation="tanh",
+               activation="relu",
                return_sequences=True))
+
+Dropout(0.5)
 
 model.add(LSTM(output_dim=16,
                input_dim=32,
                input_length=10,
-               activation="tanh",
+               activation="relu",
                return_sequences=False))
+
+Dropout(0.5)
 
 model.add(Dense(3, activation='softmax'))
 
