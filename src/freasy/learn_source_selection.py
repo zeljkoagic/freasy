@@ -123,7 +123,7 @@ model = Sequential()
 #model.add(Dense(output_dim=64,
 #                input_dim=128, activation="relu"))
 
-model.add(LSTM(output_dim=32,
+model.add(LSTM(output_dim=64,
                input_dim=1,
                input_length=10,
                activation="relu",
@@ -131,8 +131,8 @@ model.add(LSTM(output_dim=32,
 
 Dropout(0.5)
 
-model.add(LSTM(output_dim=16,
-               input_dim=32,
+model.add(LSTM(output_dim=31,
+               input_dim=64,
                input_length=10,
                activation="relu",
                return_sequences=False))
