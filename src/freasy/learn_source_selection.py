@@ -16,7 +16,7 @@ parser.add_argument("--data_root", required=True, help="root for data files")
 parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "proj"], help="POS source")
 args = parser.parse_args()
 
-dev_langs = ["en", "de", "es"]
+dev_langs = ["en", "es", "de", "fr", "it", "hi", "hr", "cs", "he", "id"]
 
 training_data = []
 
@@ -139,7 +139,7 @@ model.add(LSTM(output_dim=16,
 
 Dropout(0.5)
 
-model.add(Dense(3, activation='softmax'))
+model.add(Dense(10, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
