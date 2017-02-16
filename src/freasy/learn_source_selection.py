@@ -121,7 +121,7 @@ model.compile('rmsprop', 'categorical_crossentropy', metrics=['accuracy'])
 
 
 print('Train...')
-model.fit(X_train_reshaped, Y_train,
+model.fit(X_train, Y_train,
           batch_size=32,
           nb_epoch=500,
-          validation_data=[X_test_reshaped, Y_test])
+          validation_data=[X_test, Y_test])
