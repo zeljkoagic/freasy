@@ -100,8 +100,9 @@ model = Sequential()
 #                input_dim=128, activation="relu"))
 
 model.add(Bidirectional(LSTM(output_dim=64,
-                             input_dim=1,
-                             input_length=10,
+                             #input_dim=1,
+                             #input_length=10,
+                             input_shape=(X_train.shape[0], 10, 1),
                              activation="relu",
                              return_sequences=True)))
 
