@@ -84,15 +84,14 @@ X_test_reshaped = np.reshape(X_test, (100, 10, 1))
 
 model = Sequential()
 
-model.add(Embedding(input_dim=18,
-                    output_dim=128,
-                    input_length=10))
+#model.add(Embedding(input_dim=18,
+#                    output_dim=128,
+#                    input_length=10))
 
-Dropout(0.2)
 
 model.add(Bidirectional(LSTM(output_dim=64,
-                             #input_dim=1,
-                             #input_length=10,
+                             input_dim=1,
+                             input_length=10,
                              activation="relu",
                              return_sequences=True,
                              dropout_U=0.2,
@@ -111,7 +110,7 @@ model.add(Dense(10, activation='softmax'))
 model.compile('rmsprop', 'categorical_crossentropy', metrics=['accuracy'])
 
 print('Train...')
-model.fit(X_train, Y_train,
+model.fit(X_train_reshaped, Y_train,
           batch_size=32,
           nb_epoch=500,
-          validation_data=[X_test, Y_test])
+          validation_data=[X_test_reshaped, Y_test])
