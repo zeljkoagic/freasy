@@ -91,7 +91,7 @@ model = Sequential()
 #input_array = np.random.randint(17, size=(333, 10))  # 333 datapoints, 10 items each, values from 0 to 16
 #output_array = np.random.randint(8, size=(333, 3))  # 333 datapoints, 3 items each, values from 0 to 8
 
-model.add(Embedding(input_dim=17,
+model.add(Embedding(input_dim=18,
                     output_dim=128,
                     input_length=10))
 
