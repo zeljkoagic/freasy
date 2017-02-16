@@ -88,29 +88,23 @@ model.add(Embedding(input_dim=18,
                     output_dim=128,
                     input_length=10))
 
-model.add(Bidirectional(LSTM(output_dim=128,
+Dropout(0.2)
+
+model.add(Bidirectional(LSTM(output_dim=64,
                              #input_dim=1,
                              #input_length=10,
                              activation="relu",
-                             return_sequences=True)))
-
-Dropout(0.5)
-
-model.add(Bidirectional(LSTM(output_dim=64,
-                             # input_dim=64,
-                             # input_length=10,
-                             activation="relu",
-                             return_sequences=True)))
-
-Dropout(0.5)
+                             return_sequences=True,
+                             dropout_U=0.2,
+                             dropout_W=0.2)))
 
 model.add(Bidirectional(LSTM(output_dim=32,
                              # input_dim=64,
                              # input_length=10,
                              activation="relu",
-                             return_sequences=False)))
-
-Dropout(0.5)
+                             return_sequences=False,
+                             dropout_U=0.2,
+                             dropout_W=0.2)))
 
 model.add(Dense(10, activation='softmax'))
 
