@@ -75,8 +75,8 @@ Y_test = np.array(Y_train[-100:])
 
 print(X_train.shape, Y_train.shape, X_test.shape, Y_test.shape)
 print("Pad sequences (samples x time)")
-X_train = sequence.pad_sequences(X_train, maxlen=30)
-X_test = sequence.pad_sequences(X_test, maxlen=30)
+X_train = sequence.pad_sequences(X_train, maxlen=10)
+X_test = sequence.pad_sequences(X_test, maxlen=10)
 print(X_train.shape, Y_train.shape, X_test.shape, Y_test.shape)
 
 X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 10, 1))
