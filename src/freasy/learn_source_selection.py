@@ -91,7 +91,7 @@ model.add(LSTM(output_dim=32,
 
 model.add(Dense(10, activation='softmax'))
 
-model.compile('rmsprop', 'categorical_crossentropy', metrics=['accuracy'])
+model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train_reshaped, Y_train,
