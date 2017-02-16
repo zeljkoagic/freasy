@@ -73,13 +73,13 @@ model = Sequential()
 #                    input_length=10))
 
 
-#model.add(LSTM(output_dim=64,
-#               input_dim=1,
-#               input_length=10,
-#               activation="relu",
-#               return_sequences=True))
-
 model.add(LSTM(output_dim=32,
+               input_dim=1,
+               input_length=10,
+               activation="relu",
+               return_sequences=True))
+
+model.add(LSTM(output_dim=16,
                input_dim=1,
                input_length=10,
                activation="relu",
@@ -87,7 +87,7 @@ model.add(LSTM(output_dim=32,
 
 model.add(Dense(10, activation='softmax'))
 
-model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
+model.compile('rmsprop', 'categorical_crossentropy', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train_reshaped, Y_train,
