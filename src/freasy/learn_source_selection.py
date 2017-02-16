@@ -75,12 +75,12 @@ Y_test = np.array(Y_train[-100:])
 
 print(X_train.shape, Y_train.shape, X_test.shape, Y_test.shape)
 print("Pad sequences (samples x time)")
-X_train = sequence.pad_sequences(X_train, maxlen=10)
-X_test = sequence.pad_sequences(X_test, maxlen=10)
+X_train = sequence.pad_sequences(X_train, maxlen=30)
+X_test = sequence.pad_sequences(X_test, maxlen=30)
 print(X_train.shape, Y_train.shape, X_test.shape, Y_test.shape)
 
-X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 10, 1))
-X_test_reshaped = np.reshape(X_test, (100, 10, 1))
+X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 30, 1))
+X_test_reshaped = np.reshape(X_test, (100, 30, 1))
 
 model = Sequential()
 
@@ -89,21 +89,21 @@ model = Sequential()
 #                    input_length=10))
 
 
-model.add(Bidirectional(LSTM(output_dim=64,
+model.add(LSTM(output_dim=64,
                              input_dim=1,
-                             input_length=10,
+                             input_length=30,
                              activation="relu",
                              return_sequences=True,
                              dropout_U=0.2,
-                             dropout_W=0.2)))
+                             dropout_W=0.2))
 
-model.add(Bidirectional(LSTM(output_dim=32,
+model.add(LSTM(output_dim=32,
                              # input_dim=64,
                              # input_length=10,
                              activation="relu",
                              return_sequences=False,
                              dropout_U=0.2,
-                             dropout_W=0.2)))
+                             dropout_W=0.2))
 
 model.add(Dense(10, activation='softmax'))
 
