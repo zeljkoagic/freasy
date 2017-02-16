@@ -79,8 +79,8 @@ X_train = sequence.pad_sequences(X_train, maxlen=30)
 X_test = sequence.pad_sequences(X_test, maxlen=30)
 print(X_train.shape, Y_train.shape, X_test.shape, Y_test.shape)
 
-X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 30, 1))
-X_test_reshaped = np.reshape(X_test, (100, 30, 1))
+X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 10, 1))
+X_test_reshaped = np.reshape(X_test, (100, 10, 1))
 
 model = Sequential()
 
@@ -91,7 +91,7 @@ model = Sequential()
 
 model.add(LSTM(output_dim=64,
                              input_dim=1,
-                             input_length=30,
+                             input_length=10,
                              activation="relu",
                              return_sequences=True,
                              dropout_U=0.2,
@@ -111,6 +111,6 @@ model.compile('rmsprop', 'categorical_crossentropy', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train_reshaped, Y_train,
-          batch_size=32,
+          batch_size=16,
           nb_epoch=500,
           validation_data=[X_test_reshaped, Y_test])
