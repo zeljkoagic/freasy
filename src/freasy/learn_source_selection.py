@@ -129,15 +129,15 @@ model.add(LSTM(output_dim=64,
                activation="relu",
                return_sequences=True))
 
-Dropout(0.5)
+Dropout(0.2)
 
-model.add(LSTM(output_dim=31,
+model.add(LSTM(output_dim=32,
                input_dim=64,
                input_length=10,
                activation="relu",
                return_sequences=False))
 
-Dropout(0.5)
+Dropout(0.2)
 
 model.add(Dense(10, activation='softmax'))
 
