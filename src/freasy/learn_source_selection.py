@@ -79,7 +79,7 @@ for item in training_data:
         all.append(one_hot[pos])
 
     all = np.array(all, dtype=float)
-    all /= 18.0
+    #all /= 18.0
 
     X_train.append(all)
     ranks[lang] = 0
