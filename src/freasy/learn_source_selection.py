@@ -131,6 +131,12 @@ model.add(LSTM(output_dim=64,
 
 #Dropout(0.2)
 
+model.add(LSTM(output_dim=64,
+               input_dim=64,
+               input_length=10,
+               activation="relu",
+               return_sequences=True))
+
 model.add(LSTM(output_dim=32,
                input_dim=64,
                input_length=10,
