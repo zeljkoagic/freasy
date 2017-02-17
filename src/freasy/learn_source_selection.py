@@ -17,13 +17,20 @@ parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "pro
 args = parser.parse_args()
 
 dev_langs = ["en", "es", "de", "fr", "it", "hi", "hr", "cs", "he", "id"]
+test_langs = ["pt", "pl", "id", "da"]
 
 training_data = []
+test_data = []
 
 for lang in dev_langs:
     target_sentences = dill.load(open("{}/pickles/target_lang_{}.pos_source_{}.nn_training_data"
                                       .format(args.data_root, lang, args.pos_source), "rb"))
     training_data += target_sentences
+
+for lang in test_langs:
+    target_sentences = dill.load(open("{}/pickles/target_lang_{}.pos_source_{}.nn_training_data"
+                                      .format(args.data_root, lang, args.pos_source), "rb"))
+    test_data += target_sentences
 
 # 1. map data to one-hot
 # 2. create arch
@@ -71,6 +78,8 @@ one_hot = {
 
 X_train = []
 Y_train = []
+X_test = []
+Y_test = []
 
 for item in training_data:
     lang, idx, poss, ranks = item
@@ -88,22 +97,39 @@ for item in training_data:
     am = np.argmax(yval)
     yval2 = [float(i == am) for i, _ in enumerate(yval)]
     Y_train.append(yval2)
-    print(yval2)
+    # print(yval2)
 
-X_train = np.array(X_train[:-100])
-Y_train = np.array(Y_train[:-100])
+for item in test_data:
+    lang, idx, poss, ranks = item
+    all = []
+    for pos in poss:
+        all.append(one_hot[pos])
 
-X_test = np.array(X_train[-100:])
-Y_test = np.array(Y_train[-100:])
+    all = np.array(all, dtype=float)
+    #all /= 18.0
 
-print(X_train.shape, Y_train.shape, X_test.shape, Y_test.shape)
+    X_test.append(all)
+    ranks[lang] = 0
+    ranks = softmax(ranks)
+    yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in test_langs], dtype=float)
+    am = np.argmax(yval)
+    yval2 = [float(i == am) for i, _ in enumerate(yval)]
+    Y_test.append(yval2)
+    # print(yval2)
 
-print(X_train[0], Y_train[0])
 
-print("Pad sequences (samples x time)")
+X_train = np.array(X_train)
+Y_train = np.array(Y_train)
+
+#print(X_train.shape, Y_train.shape, X_test.shape, Y_test.shape)
+#print(X_train[0], Y_train[0])
+
+#print("Pad sequences (samples x time)")
+
 X_train = sequence.pad_sequences(X_train, maxlen=10)
 X_test = sequence.pad_sequences(X_test, maxlen=10)
-print('X_train shape:', X_train.shape)
+
+#print('X_train shape:', X_train.shape)
 
 X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 10, 1))
 X_test_reshaped = np.reshape(X_test, (100, 10, 1))
@@ -131,14 +157,14 @@ model.add(LSTM(output_dim=64,
 
 #Dropout(0.2)
 
-model.add(LSTM(output_dim=64,
+model.add(LSTM(output_dim=32,
                input_dim=64,
                input_length=10,
                activation="relu",
                return_sequences=True))
 
-model.add(LSTM(output_dim=32,
-               input_dim=64,
+model.add(LSTM(output_dim=16,
+               input_dim=32,
                input_length=10,
                activation="relu",
                return_sequences=False))
