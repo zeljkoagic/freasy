@@ -111,7 +111,7 @@ for item in test_data:
     X_test.append(all)
     ranks[lang] = 0
     ranks = softmax(ranks)
-    yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in test_langs], dtype=float)
+    yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
     am = np.argmax(yval)
     yval2 = [float(i == am) for i, _ in enumerate(yval)]
     Y_test.append(yval2)
