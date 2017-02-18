@@ -128,7 +128,7 @@ X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 30, 1))
 X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 30, 1))
 
 print(X_test_reshaped[0], Y_test[0])
-exit(1)
+#exit(1)
 
 model = Sequential()
 
