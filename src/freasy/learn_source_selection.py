@@ -121,25 +121,16 @@ for item in test_data:
 X_train = np.array(X_train)
 Y_train = np.array(Y_train)
 
-#print(X_train.shape, Y_train.shape, X_test.shape, Y_test.shape)
-#print(X_train[0], Y_train[0])
-
-#print("Pad sequences (samples x time)")
-
 X_train = sequence.pad_sequences(X_train, maxlen=10)
 X_test = sequence.pad_sequences(X_test, maxlen=10)
 
-#print('X_train shape:', X_train.shape)
-
 X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 10, 1))
 X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 10, 1))
-#print('X_train reshaped:', X_train_reshaped.shape)
-#print(X_train_reshaped)
+
+print(X_test_reshaped[0], Y_test[0])
+exit(1)
 
 model = Sequential()
-
-#input_array = np.random.randint(17, size=(333, 10))  # 333 datapoints, 10 items each, values from 0 to 16
-#output_array = np.random.randint(8, size=(333, 3))  # 333 datapoints, 3 items each, values from 0 to 8
 
 #model.add(Embedding(input_dim=17,
 #                    output_dim=128,
@@ -174,11 +165,6 @@ model.add(LSTM(output_dim=16,
 model.add(Dense(10, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
-
-
-#output_array = model.predict(X_train)
-#print(X_train.shape, output_array.shape)
-
 
 print('Train...')
 model.fit(X_train_reshaped, Y_train,
