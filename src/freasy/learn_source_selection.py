@@ -163,11 +163,14 @@ model = Sequential()
 #Dropout(0.2)
 
 model.add(Dense(input_dim=128, output_dim=512, activation="relu"))
-model.add(Dense(input_dim=512, output_dim=512, activation="relu"))
+#model.add(Dense(input_dim=512, output_dim=512, activation="relu"))
+model.add(Dropout(0.5))
 model.add(Dense(input_dim=512, output_dim=256, activation="relu"))
+model.add(Dropout(0.5))
 model.add(Dense(input_dim=256, output_dim=128, activation="relu"))
+model.add(Dropout(0.5))
 model.add(Dense(input_dim=128, output_dim=64, activation="relu"))
-
+model.add(Dropout(0.5))
 model.add(Dense(10, activation='softmax'))
 
 model.compile('adam', 'mse', metrics=['accuracy'])
@@ -175,5 +178,5 @@ model.compile('adam', 'mse', metrics=['accuracy'])
 print('Train...')
 model.fit(X_train, Y_train,
           batch_size=32,
-          nb_epoch=500,
+          nb_epoch=100,
           validation_data=[X_test, Y_test])
