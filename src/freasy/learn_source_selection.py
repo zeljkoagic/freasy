@@ -96,7 +96,7 @@ for item in training_data:
     yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
     am = np.argmax(yval)
     yval2 = [float(i == am) for i, _ in enumerate(yval)]
-    Y_train.append(yval)
+    Y_train.append(yval.tolist())
     # print(yval2)
 
 for item in test_data:
@@ -114,7 +114,7 @@ for item in test_data:
     yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
     am = np.argmax(yval)
     yval2 = [float(i == am) for i, _ in enumerate(yval)]  # if categorical, and not softmax
-    Y_test.append(yval)
+    Y_test.append(yval.tolist())
     # print(yval2)
 
 
