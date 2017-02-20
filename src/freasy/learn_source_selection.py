@@ -121,11 +121,11 @@ for item in test_data:
 X_train = np.array(X_train)
 Y_train = np.array(Y_train)
 
-X_train = sequence.pad_sequences(X_train, maxlen=64)
-X_test = sequence.pad_sequences(X_test, maxlen=64)
+X_train = sequence.pad_sequences(X_train, maxlen=128)
+X_test = sequence.pad_sequences(X_test, maxlen=128)
 
-X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 64, 1))
-X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 64, 1))
+X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 128, 1))
+X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 128, 1))
 
 print(X_test_reshaped[0], Y_test[0])
 #exit(1)
@@ -162,7 +162,7 @@ model = Sequential()
 
 #Dropout(0.2)
 
-model.add(Dense(input_dim=64, output_dim=1024, activation="relu"))
+model.add(Dense(input_dim=128, output_dim=1024, activation="relu"))
 model.add(Dense(input_dim=1024, output_dim=1024, activation="relu"))
 model.add(Dense(input_dim=1024, output_dim=512, activation="relu"))
 model.add(Dense(input_dim=512, output_dim=512, activation="relu"))
