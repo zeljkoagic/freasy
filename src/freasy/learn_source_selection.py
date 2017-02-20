@@ -124,8 +124,8 @@ Y_train = np.array(Y_train)
 X_train = sequence.pad_sequences(X_train, maxlen=64)
 X_test = sequence.pad_sequences(X_test, maxlen=64)
 
-X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 32, 1))
-X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 32, 1))
+X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 64, 1))
+X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 64, 1))
 
 print(X_test_reshaped[0], Y_test[0])
 #exit(1)
