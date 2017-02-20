@@ -96,7 +96,7 @@ for item in training_data:
     yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
     am = np.argmax(yval)
     yval2 = [float(i == am) for i, _ in enumerate(yval)]
-    Y_train.append(yval2)
+    Y_train.append(yval)
     # print(yval2)
 
 for item in test_data:
@@ -113,8 +113,8 @@ for item in test_data:
     ranks = softmax(ranks)
     yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
     am = np.argmax(yval)
-    yval2 = [float(i == am) for i, _ in enumerate(yval)]
-    Y_test.append(yval2)
+    yval2 = [float(i == am) for i, _ in enumerate(yval)]  # if categorical, and not softmax
+    Y_test.append(yval)
     # print(yval2)
 
 
@@ -171,7 +171,7 @@ model.add(Dense(input_dim=128, output_dim=64, activation="relu"))
 
 model.add(Dense(10, activation='softmax'))
 
-model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
+model.compile('adam', 'mse', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train, Y_train,
