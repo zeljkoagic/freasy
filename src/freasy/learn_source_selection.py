@@ -162,7 +162,7 @@ model = Sequential()
 
 #Dropout(0.2)
 
-model.add(Dense(input_dim=1, output_dim=64, activation="sigmoid"))
+model.add(Dense(input_dim=30, output_dim=64, activation="sigmoid"))
 model.add(Dense(input_dim=64, output_dim=64, activation="sigmoid"))
 model.add(Dense(input_dim=64, output_dim=32, activation="sigmoid"))
 model.add(Dense(input_dim=32, output_dim=16, activation="sigmoid"))
