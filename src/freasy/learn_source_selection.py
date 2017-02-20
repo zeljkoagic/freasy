@@ -162,11 +162,12 @@ model = Sequential()
 
 #Dropout(0.2)
 
-model.add(Dense(input_dim=64, output_dim=256, activation="relu"))
+model.add(Dense(input_dim=64, output_dim=1024, activation="relu"))
+model.add(Dense(input_dim=1024, output_dim=512, activation="relu"))
+model.add(Dense(input_dim=512, output_dim=256, activation="relu"))
 model.add(Dense(input_dim=256, output_dim=128, activation="relu"))
 model.add(Dense(input_dim=128, output_dim=64, activation="relu"))
 model.add(Dense(input_dim=64, output_dim=32, activation="relu"))
-model.add(Dense(input_dim=32, output_dim=16, activation="relu"))
 
 model.add(Dense(10, activation='softmax'))
 
