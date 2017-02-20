@@ -148,19 +148,24 @@ model = Sequential()
 
 #Dropout(0.2)
 
-model.add(LSTM(output_dim=32,
-               input_dim=1,
-               input_length=30,
-               activation="relu",
-               return_sequences=True))
+#model.add(LSTM(output_dim=32,
+#               input_dim=1,
+#               input_length=30,
+#               activation="relu",
+#               return_sequences=True))
 
-model.add(LSTM(output_dim=16,
-               input_dim=32,
-               input_length=30,
-               activation="relu",
-               return_sequences=False))
+#model.add(LSTM(output_dim=16,
+#               input_dim=32,
+#               input_length=30,
+#               activation="relu",
+#               return_sequences=False))
 
-Dropout(0.2)
+#Dropout(0.2)
+
+model.add(Dense(input_dim=1, output_dim=64, activation="sigmoid"))
+model.add(Dense(input_dim=64, output_dim=64, activation="sigmoid"))
+model.add(Dense(input_dim=64, output_dim=32, activation="sigmoid"))
+model.add(Dense(input_dim=32, output_dim=16, activation="sigmoid"))
 
 model.add(Dense(10, activation='softmax'))
 
