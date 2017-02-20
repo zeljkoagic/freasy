@@ -162,11 +162,11 @@ model = Sequential()
 
 #Dropout(0.2)
 
-model.add(Dense(input_dim=64, output_dim=256, activation="sigmoid"))
-model.add(Dense(input_dim=256, output_dim=128, activation="sigmoid"))
-model.add(Dense(input_dim=128, output_dim=64, activation="sigmoid"))
-model.add(Dense(input_dim=64, output_dim=32, activation="sigmoid"))
-model.add(Dense(input_dim=32, output_dim=16, activation="sigmoid"))
+model.add(Dense(input_dim=64, output_dim=256, activation="relu"))
+model.add(Dense(input_dim=256, output_dim=128, activation="relu"))
+model.add(Dense(input_dim=128, output_dim=64, activation="relu"))
+model.add(Dense(input_dim=64, output_dim=32, activation="relu"))
+model.add(Dense(input_dim=32, output_dim=16, activation="relu"))
 
 model.add(Dense(10, activation='softmax'))
 
