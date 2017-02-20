@@ -11,6 +11,17 @@ from keras.preprocessing import sequence
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, GRU
 
+
+def to_ranks(lasvals):
+    """ Converts LAS values to source ranks. WHAT ABOUT TIES???
+    """
+    array = np.array(lasvals)
+    temp = array.argsort()
+    tranks = np.empty(len(array), int)
+    tranks[temp] = np.arange(len(array))
+    return tranks+1
+
+
 parser = argparse.ArgumentParser(description="TODO")
 parser.add_argument("--data_root", required=True, help="root for data files")
 parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "proj"], help="POS source")
@@ -96,7 +107,8 @@ for item in training_data:
     yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
     am = np.argmax(yval)
     yval2 = [float(i == am) for i, _ in enumerate(yval)]
-    Y_train.append(yval.tolist())
+    yval_ranks = to_ranks(yval.tolist())
+    Y_train.append(yval_ranks.tolist())
     # print(yval2)
 
 for item in test_data:
@@ -114,7 +126,8 @@ for item in test_data:
     yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
     am = np.argmax(yval)
     yval2 = [float(i == am) for i, _ in enumerate(yval)]  # if categorical, and not softmax
-    Y_test.append(yval.tolist())
+    yval_ranks = to_ranks(yval.tolist())
+    Y_test.append(yval_ranks.tolist())
     # print(yval2)
 
 
