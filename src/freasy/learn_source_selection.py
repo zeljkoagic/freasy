@@ -125,43 +125,29 @@ model = Sequential()
 #                    input_length=10,
 #                    mask_zero=False))
 
-#model.add(Dense(output_dim=64,
-#                input_dim=128, activation="relu"))
 
-#model.add(LSTM(output_dim=64,
-#               input_dim=1,
-#               input_length=30,
-#               activation="relu",
-#               return_sequences=True))
+model.add(LSTM(output_dim=64,
+               input_dim=1,
+               input_length=128,
+               activation="relu",
+               return_sequences=True))
 
 #Dropout(0.2)
 
-#model.add(LSTM(output_dim=32,
-#               input_dim=1,
-#               input_length=30,
-#               activation="relu",
-#               return_sequences=True))
+model.add(LSTM(output_dim=32,
+               input_dim=64,
+               input_length=128,
+               activation="relu",
+               return_sequences=True))
 
-#model.add(LSTM(output_dim=16,
-#               input_dim=32,
-#               input_length=30,
-#               activation="relu",
-#               return_sequences=False))
+model.add(LSTM(output_dim=16,
+               input_dim=32,
+               input_length=128,
+               activation="relu",
+               return_sequences=False))
 
 #Dropout(0.2)
 
-model.add(Dense(input_dim=128, output_dim=512, activation="relu"))
-model.add(Dropout(0.5))
-model.add(Dense(input_dim=512, output_dim=512, activation="relu"))
-model.add(Dropout(0.5))
-model.add(Dense(input_dim=512, output_dim=512, activation="relu"))
-model.add(Dropout(0.5))
-model.add(Dense(input_dim=512, output_dim=256, activation="relu"))
-model.add(Dropout(0.5))
-model.add(Dense(input_dim=256, output_dim=128, activation="relu"))
-model.add(Dropout(0.5))
-model.add(Dense(input_dim=128, output_dim=64, activation="relu"))
-model.add(Dropout(0.5))
 model.add(Dense(10, activation='softmax'))
 
 model.compile('adam', 'mse', metrics=['accuracy'])
