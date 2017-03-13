@@ -121,13 +121,13 @@ model.add(LSTM(output_dim=256,
                return_sequences=True))
 
 model.add(LSTM(output_dim=128,
-               input_dim=1,
-               input_length=256,
+               input_dim=256,
+               input_length=128,
                activation="relu",
                return_sequences=True))
 
 model.add(LSTM(output_dim=64,
-               input_dim=1,
+               input_dim=256,
                input_length=128,
                activation="relu",
                return_sequences=True))
