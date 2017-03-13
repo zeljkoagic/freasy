@@ -5,7 +5,6 @@ import dill
 import operator
 from softmax import softmax
 import numpy as np
-import tensorflow as tf
 
 from keras.preprocessing import sequence
 from keras.models import Sequential
@@ -48,26 +47,6 @@ for lang in test_langs:
 # 3. train
 
 one_hot = {
-    "ADJ":   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    "ADP":   [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    "ADV":   [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    "AUX":   [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    "CONJ":  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    "DET":   [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    "INTJ":  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    "NOUN":  [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    "NUM":   [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-    "PART":  [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-    "PRON":  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-    "PROPN": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-    "PUNCT": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-    "SCONJ": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-    "SYM":   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-    "VERB":  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-    "X":     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
-}
-
-one_hot = {
     "ADJ":   1,
     "ADP":   2,
     "ADV":   3,
@@ -99,7 +78,7 @@ for item in training_data:
         all.append(one_hot[pos])
 
     all = np.array(all, dtype=float)
-    #all /= 18.0
+    all /= 17
 
     X_train.append(all)
     ranks[lang] = 0
@@ -107,10 +86,7 @@ for item in training_data:
     yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
     am = np.argmax(yval)
     yval2 = [float(i == am) for i, _ in enumerate(yval)]
-    yval_ranks = to_ranks(yval.tolist())
-    #yval_ranks /= float(len(yval_ranks))
     Y_train.append(yval2)
-    # print(yval2)
 
 for item in test_data:
     lang, idx, poss, ranks = item
@@ -119,7 +95,7 @@ for item in test_data:
         all.append(one_hot[pos])
 
     all = np.array(all, dtype=float)
-    #all /= 18.0
+    all /= 17
 
     X_test.append(all)
     ranks[lang] = 0
@@ -127,10 +103,7 @@ for item in test_data:
     yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
     am = np.argmax(yval)
     yval2 = [float(i == am) for i, _ in enumerate(yval)]  # if categorical, and not softmax
-    yval_ranks = to_ranks(yval.tolist())
-    #yval_ranks /= float(len(yval_ranks))
     Y_test.append(yval2)
-    # print(yval2)
 
 
 X_train = np.array(X_train)
