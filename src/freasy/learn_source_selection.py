@@ -109,7 +109,7 @@ for item in training_data:
     yval2 = [float(i == am) for i, _ in enumerate(yval)]
     yval_ranks = to_ranks(yval.tolist())
     #yval_ranks /= float(len(yval_ranks))
-    Y_train.append(yval_ranks.tolist())
+    Y_train.append(yval2)
     # print(yval2)
 
 for item in test_data:
@@ -129,7 +129,7 @@ for item in test_data:
     yval2 = [float(i == am) for i, _ in enumerate(yval)]  # if categorical, and not softmax
     yval_ranks = to_ranks(yval.tolist())
     #yval_ranks /= float(len(yval_ranks))
-    Y_test.append(yval.tolist())
+    Y_test.append(yval2)
     # print(yval2)
 
 
