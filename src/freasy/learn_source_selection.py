@@ -78,7 +78,7 @@ for item in training_data:
         all.append(one_hot[pos])
 
     all = np.array(all, dtype=float)
-    all /= 17
+    all /= 17.0
 
     X_train.append(all)
     ranks[lang] = 0
@@ -95,7 +95,7 @@ for item in test_data:
         all.append(one_hot[pos])
 
     all = np.array(all, dtype=float)
-    all /= 17
+    all /= 17.0
 
     X_test.append(all)
     ranks[lang] = 0
