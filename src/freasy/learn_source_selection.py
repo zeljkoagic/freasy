@@ -104,8 +104,8 @@ for item in test_data:
     Y_test.append(yval2)
 
 
-X_train = np.array(X_train, dtype=float)
-Y_train = np.array(Y_train, dtype=float)
+#X_train = np.array(X_train, dtype=float)
+#Y_train = np.array(Y_train, dtype=float)
 
 X_train = sequence.pad_sequences(X_train, maxlen=32)
 X_test = sequence.pad_sequences(X_test, maxlen=32)
