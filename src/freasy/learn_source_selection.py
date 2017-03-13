@@ -130,7 +130,7 @@ model.add(LSTM(output_dim=64,
                input_dim=256,
                input_length=128,
                activation="relu",
-               return_sequences=True))
+               return_sequences=False))
 
 model.add(Dense(10, activation='softmax'))
 
