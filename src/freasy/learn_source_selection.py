@@ -108,7 +108,7 @@ for item in training_data:
     am = np.argmax(yval)
     yval2 = [float(i == am) for i, _ in enumerate(yval)]
     yval_ranks = to_ranks(yval.tolist())
-    yval_ranks /= float(len(yval_ranks))
+    #yval_ranks /= float(len(yval_ranks))
     Y_train.append(yval_ranks.tolist())
     # print(yval2)
 
@@ -128,7 +128,7 @@ for item in test_data:
     am = np.argmax(yval)
     yval2 = [float(i == am) for i, _ in enumerate(yval)]  # if categorical, and not softmax
     yval_ranks = to_ranks(yval.tolist())
-    yval_ranks /= float(len(yval_ranks))
+    #yval_ranks /= float(len(yval_ranks))
     Y_test.append(yval.tolist())
     # print(yval2)
 
