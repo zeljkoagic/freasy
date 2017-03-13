@@ -28,7 +28,7 @@ parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "pro
 args = parser.parse_args()
 
 dev_langs = ["en", "es", "de", "fr", "it", "hi", "hr", "cs", "he", "id"]
-test_langs = ["pt", "pl", "id", "da"]
+test_langs = ["pt", "pl", "da"]
 
 training_data = []
 test_data = []
