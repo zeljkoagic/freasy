@@ -107,7 +107,7 @@ for item in test_data:
 #X_train = np.array(X_train, dtype=float)
 #Y_train = np.array(Y_train, dtype=float)
 
-X_train = sequence.pad_sequences(X_train, maxlen=32)
+X_train = sequence.pad_sequences(X_train, maxlen=32, dtype=float)
 X_test = sequence.pad_sequences(X_test, maxlen=32)
 
 X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 32, 1))
