@@ -125,16 +125,16 @@ model = Sequential()
 #                    mask_zero=False))
 
 
-model.add(LSTM(output_dim=64,
-               input_dim=1,
-               input_length=32,
-               activation="relu",
-               return_sequences=True))
+#model.add(LSTM(output_dim=64,
+#               input_dim=1,
+#               input_length=32,
+#               activation="relu",
+#               return_sequences=True))
 
 #Dropout(0.2)
 
 model.add(LSTM(output_dim=32,
-               input_dim=64,
+               input_dim=1,
                input_length=32,
                activation="relu",
                return_sequences=True))
