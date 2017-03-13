@@ -75,7 +75,7 @@ for item in training_data:
     lang, idx, poss, ranks = item
     all = []
     for pos in poss:
-        all.append(one_hot[pos] / len(one_hot))
+        all.append(float(one_hot[pos]) / len(one_hot))
 
     all = np.array(all, dtype=float)
 
@@ -91,7 +91,7 @@ for item in test_data:
     lang, idx, poss, ranks = item
     all = []
     for pos in poss:
-        all.append(one_hot[pos] / len(one_hot))
+        all.append(float(one_hot[pos]) / len(one_hot))
 
     all = np.array(all, dtype=float)
 
