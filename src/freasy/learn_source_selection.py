@@ -116,7 +116,6 @@ X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 128, 1))
 X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 128, 1))
 
 print(X_test_reshaped[0], Y_test[0])
-#exit(1)
 
 model = Sequential()
 
@@ -126,7 +125,7 @@ model = Sequential()
 #                    mask_zero=False))
 
 
-model.add(LSTM(output_dim=64,
+model.add(LSTM(output_dim=256,
                input_dim=1,
                input_length=128,
                activation="relu",
@@ -134,14 +133,14 @@ model.add(LSTM(output_dim=64,
 
 #Dropout(0.2)
 
-model.add(LSTM(output_dim=32,
-               input_dim=64,
+model.add(LSTM(output_dim=128,
+               input_dim=256,
                input_length=128,
                activation="relu",
                return_sequences=True))
 
-model.add(LSTM(output_dim=16,
-               input_dim=32,
+model.add(LSTM(output_dim=64,
+               input_dim=128,
                input_length=128,
                activation="relu",
                return_sequences=False))
@@ -150,7 +149,7 @@ model.add(LSTM(output_dim=16,
 
 model.add(Dense(10, activation='softmax'))
 
-model.compile('adam', 'mse', metrics=['accuracy'])
+model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train_reshaped, Y_train,
