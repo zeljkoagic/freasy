@@ -104,46 +104,21 @@ for item in test_data:
     Y_test.append(yval2)
 
 
-#X_train = np.array(X_train, dtype=float)
-#Y_train = np.array(Y_train, dtype=float)
+X_train = sequence.pad_sequences(X_train, maxlen=128, dtype=float)
+X_test = sequence.pad_sequences(X_test, maxlen=128, dtype=float)
 
-X_train = sequence.pad_sequences(X_train, maxlen=32, dtype=float)
-X_test = sequence.pad_sequences(X_test, maxlen=32, dtype=float)
-
-X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 32, 1))
-X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 32, 1))
+X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 128, 1))
+X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 128, 1))
 
 print(X_test_reshaped[0], Y_test[0])
 
 model = Sequential()
 
-#model.add(Embedding(input_dim=17,
-#                    output_dim=128,
-#                    input_length=10,
-#                    mask_zero=False))
-
-
-#model.add(LSTM(output_dim=64,
-#               input_dim=1,
-#               input_length=32,
-#               activation="relu",
-#               return_sequences=True))
-
-#Dropout(0.2)
-
 model.add(LSTM(output_dim=32,
                input_dim=1,
-               input_length=32,
-               activation="relu",
-               return_sequences=True))
-
-model.add(LSTM(output_dim=16,
-               input_dim=32,
-               input_length=32,
+               input_length=128,
                activation="relu",
                return_sequences=False))
-
-#Dropout(0.2)
 
 model.add(Dense(10, activation='softmax'))
 
