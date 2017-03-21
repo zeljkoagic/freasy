@@ -42,10 +42,6 @@ for lang in test_langs:
                                       .format(args.data_root, lang, args.pos_source), "rb"))
     test_data += target_sentences
 
-# 1. map data to one-hot
-# 2. create arch
-# 3. train
-
 one_hot = {
     "ADJ":   1,
     "ADP":   2,
@@ -114,20 +110,20 @@ print(X_test_reshaped[0], Y_test[0])
 
 model = Sequential()
 
-model.add(LSTM(output_dim=256,
-               input_dim=1,
-               input_length=128,
-               activation="relu",
-               return_sequences=True))
+#model.add(LSTM(output_dim=256,
+#               input_dim=1,
+#               input_length=128,
+#               activation="relu",
+#               return_sequences=True))
 
-model.add(LSTM(output_dim=128,
-               input_dim=256,
-               input_length=128,
-               activation="relu",
-               return_sequences=True))
+#model.add(LSTM(output_dim=128,
+#               input_dim=256,
+#               input_length=128,
+#               activation="relu",
+#               return_sequences=True))
 
 model.add(LSTM(output_dim=64,
-               input_dim=256,
+               input_dim=1,
                input_length=128,
                activation="relu",
                return_sequences=False))
