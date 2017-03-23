@@ -122,22 +122,10 @@ print(X_test_reshaped[0], Y_test[0])
 
 model = Sequential()
 
-model.add(LSTM(output_dim=256,
+model.add(LSTM(output_dim=128,
                input_dim=1,
                input_length=64,
-               activation="relu",
-               return_sequences=True))
-
-model.add(LSTM(output_dim=128,
-               input_dim=256,
-               input_length=64,
-               activation="relu",
-               return_sequences=True))
-
-model.add(LSTM(output_dim=64,
-               input_dim=128,
-               input_length=64,
-               activation="relu",
+               activation="sigmoid",
                return_sequences=False))
 
 model.add(Dense(10, activation='softmax'))
