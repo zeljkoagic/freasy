@@ -139,8 +139,8 @@ model.add(Dense(10, activation='softmax'))
 model.compile('adam', 'mse', metrics=['accuracy'])
 
 print('Train...')
-model.fit(X_train_reshaped, Y_train,
+model.fit(X_train, Y_train,
           batch_size=16,
           nb_epoch=10,
-          validation_data=[X_test_reshaped, Y_test])
+          validation_data=[X_test, Y_test])
 
