@@ -70,9 +70,7 @@ Y_test = []
 for item in training_data:
     lang, idx, poss, ranks = item
 
-    if 20 > len(poss) > 50:
-        print(len(poss))
-        continue
+    print(len(poss))
 
     all = []
     for pos in poss:
@@ -90,9 +88,6 @@ for item in training_data:
 
 for item in test_data:
     lang, idx, poss, ranks = item
-
-    if 20 > len(poss) > 50:
-        continue
 
     all = []
     for pos in poss:
