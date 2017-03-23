@@ -108,7 +108,7 @@ for item in test_data:
 
     ranks[lang] = 0  # target language does not participate
     ranks = softmax(ranks, temperature=0.1)  # softmax the correct head counts
-    y_val = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in test_langs], dtype=float)
+    y_val = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
     Y_test.append(y_val)
 
 
