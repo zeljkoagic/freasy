@@ -70,7 +70,7 @@ Y_test = []
 for item in training_data:
     lang, idx, poss, ranks = item
 
-    if 20 <= len(poss) <= 50:
+    if 20 > len(poss) > 50:
         continue
 
     all = []
@@ -89,8 +89,10 @@ for item in training_data:
 
 for item in test_data:
     lang, idx, poss, ranks = item
-    if 20 <= len(poss) <= 50:
+
+    if 20 > len(poss) > 50:
         continue
+
     all = []
     for pos in poss:
         all.append(float(one_hot[pos]) / float(len(one_hot)))
