@@ -87,7 +87,7 @@ for item in training_data:
     ranks[lang] = 0  # target language does not participate
     ranks = softmax(ranks, temperature=0.1)  # softmax the correct head counts
     y_val = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
-    Y_train.append(y_val)
+    Y_train.append(y_val.tolist())
 
 for item in test_data:
     lang, idx, poss, ranks = item  # get the training instance: target lang, sentence id, list of POS tags, corr heads
@@ -109,7 +109,7 @@ for item in test_data:
     ranks[lang] = 0  # target language does not participate
     ranks = softmax(ranks, temperature=0.1)  # softmax the correct head counts
     y_val = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
-    Y_test.append(y_val)
+    Y_test.append(y_val.tolist())
 
 
 X_train = sequence.pad_sequences(X_train, maxlen=64, dtype=float)
