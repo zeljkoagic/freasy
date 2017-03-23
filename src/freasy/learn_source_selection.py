@@ -108,11 +108,11 @@ for item in test_data:
     Y_test.append(yval2)
 
 
-X_train = sequence.pad_sequences(X_train, maxlen=128, dtype=float)
-X_test = sequence.pad_sequences(X_test, maxlen=128, dtype=float)
+X_train = sequence.pad_sequences(X_train, maxlen=64, dtype=float)
+X_test = sequence.pad_sequences(X_test, maxlen=64, dtype=float)
 
-X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 128, 1))
-X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 128, 1))
+X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 64, 1))
+X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 64, 1))
 
 print(X_test_reshaped[0], Y_test[0])
 
@@ -130,9 +130,9 @@ model = Sequential()
 #               activation="relu",
 #               return_sequences=True))
 
-model.add(LSTM(output_dim=64,
+model.add(LSTM(output_dim=32,
                input_dim=1,
-               input_length=128,
+               input_length=64,
                activation="relu",
                return_sequences=False))
 
