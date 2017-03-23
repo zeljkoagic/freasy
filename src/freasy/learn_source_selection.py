@@ -68,46 +68,48 @@ X_test = []
 Y_test = []
 
 for item in training_data:
-    lang, idx, poss, ranks = item
+    lang, idx, poss, ranks = item  # get the training instance: target lang, sentence id, list of POS tags, corr heads
 
+    # filter out the sentences that are too short or too long
     n_tokens = len(poss)
     if n_tokens < 20 or n_tokens > 50:
         continue
 
+    # translate the POS tags into floats
     all = []
     for pos in poss:
         all.append(float(one_hot[pos]) / float(len(one_hot)))
-
     all = np.array(all, dtype=float)
 
+    # add training instance
     X_train.append(all)
-    ranks[lang] = 0
-    ranks = softmax(ranks)
-    yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
-    am = np.argmax(yval)
-    yval2 = [float(i == am) for i, _ in enumerate(yval)]
-    Y_train.append(yval2)
+
+    ranks[lang] = 0  # target language does not participate
+    ranks = softmax(ranks, temperature=0.1)  # softmax the correct head counts
+    y_val = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
+    Y_train.append(y_val)
 
 for item in test_data:
-    lang, idx, poss, ranks = item
+    lang, idx, poss, ranks = item  # get the training instance: target lang, sentence id, list of POS tags, corr heads
 
+    # filter out the sentences that are too short or too long
     n_tokens = len(poss)
     if n_tokens < 20 or n_tokens > 50:
         continue
 
+    # translate the POS tags into floats
     all = []
     for pos in poss:
         all.append(float(one_hot[pos]) / float(len(one_hot)))
-
     all = np.array(all, dtype=float)
 
+    # add training instance
     X_test.append(all)
-    ranks[lang] = 0
-    ranks = softmax(ranks)
-    yval = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
-    am = np.argmax(yval)
-    yval2 = [float(i == am) for i, _ in enumerate(yval)]  # if categorical, and not softmax
-    Y_test.append(yval2)
+
+    ranks[lang] = 0  # target language does not participate
+    ranks = softmax(ranks, temperature=0.1)  # softmax the correct head counts
+    y_val = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False) if y in test_langs], dtype=float)
+    Y_test.append(y_val)
 
 
 X_train = sequence.pad_sequences(X_train, maxlen=64, dtype=float)
@@ -140,7 +142,7 @@ model.add(LSTM(output_dim=32,
 
 model.add(Dense(10, activation='softmax'))
 
-model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
+model.compile('adam', 'mse', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train_reshaped, Y_train,
