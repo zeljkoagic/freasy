@@ -136,7 +136,7 @@ model.add(LSTM(output_dim=32,
                activation="relu",
                return_sequences=False))
 
-model.add(Dense(output_dim=10, activation='softmax'))
+model.add(Dense(input_length=32, output_dim=10, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
