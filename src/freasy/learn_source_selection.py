@@ -122,20 +122,14 @@ print(X_test_reshaped[0], Y_test[0])
 
 model = Sequential()
 
-#model.add(LSTM(output_dim=256,
-#               input_dim=1,
-#               input_length=128,
-#               activation="relu",
-#               return_sequences=True))
+model.add(Embedding(
+    input_dim=1,
+    output_dim=8,
+    input_length=64
+))
 
-#model.add(LSTM(output_dim=128,
-#               input_dim=256,
-#               input_length=128,
-#               activation="relu",
-#               return_sequences=True))
-
-model.add(LSTM(output_dim=32,
-               input_dim=1,
+model.add(LSTM(output_dim=1024,
+               input_dim=8,
                input_length=64,
                activation="relu",
                return_sequences=False))
