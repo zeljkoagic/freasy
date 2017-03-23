@@ -143,6 +143,5 @@ model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 print('Train...')
 model.fit(X_train_reshaped, Y_train,
           batch_size=16,
-          nb_epoch=10,
-          validation_data=[X_test_reshaped, Y_test])
+          nb_epoch=10)
 
