@@ -35,19 +35,11 @@ test_data = []
 for lang in dev_langs:
     target_sentences = dill.load(open("{}/pickles/target_lang_{}.pos_source_{}.nn_training_data"
                                       .format(args.data_root, lang, args.pos_source), "rb"))
-
-    #ntok = len(target_sentences[2])
-    #if 20 <= ntok <= 50:
-    #    training_data += target_sentences
+    training_data += target_sentences
 
 for lang in test_langs:
     target_sentences = dill.load(open("{}/pickles/target_lang_{}.pos_source_{}.nn_training_data"
                                       .format(args.data_root, lang, args.pos_source), "rb"))
-
-    #ntok = len(target_sentences[2])
-    #if 20 <= ntok <= 50:
-    #    training_data += target_sentences
-
     test_data += target_sentences
 
 one_hot = {
@@ -77,6 +69,10 @@ Y_test = []
 
 for item in training_data:
     lang, idx, poss, ranks = item
+
+    if 20 <= len(poss) <= 50:
+        continue
+
     all = []
     for pos in poss:
         all.append(float(one_hot[pos]) / float(len(one_hot)))
@@ -93,6 +89,8 @@ for item in training_data:
 
 for item in test_data:
     lang, idx, poss, ranks = item
+    if 20 <= len(poss) <= 50:
+        continue
     all = []
     for pos in poss:
         all.append(float(one_hot[pos]) / float(len(one_hot)))
