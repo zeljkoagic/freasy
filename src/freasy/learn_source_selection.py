@@ -71,6 +71,7 @@ for item in training_data:
     lang, idx, poss, ranks = item
 
     if 20 > len(poss) > 50:
+        print(len(poss))
         continue
 
     all = []
