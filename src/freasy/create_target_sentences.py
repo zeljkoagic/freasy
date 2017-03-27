@@ -43,7 +43,7 @@ for source_language in source_languages:
     #handles.append(open("{}/test/{}-ud-test.conllu.delex.sampled_10k.with_{}_pos.parsed_with_{}"
     #                    .format(args.data_root, args.target_name, args.pos_source, source_language)))
     # added for cleandata repos
-    handles.append(open("{}/ud14/train/{}-ud-train.no_sent_id.no_mwe.no_feat.basic_deprel.ceil_10k.{}_pos.delex.conll_2009_parsed_by_{}"
+    handles.append(open("{}/ud14/train/{}-ud-train.no_sent_id.no_mwe.no_feat.basic_deprel.ceil_10k.{}_pos.delex.conll_2009.parsed_by_{}"
                        .format(args.data_root, args.target_name, args.pos_source, source_language)))
     source_languages_per_handle.append(source_language)  # record the sequence
 
