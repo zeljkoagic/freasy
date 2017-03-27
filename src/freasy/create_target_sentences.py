@@ -3,9 +3,18 @@ import dill
 from collections import defaultdict
 from target_sentence import TargetSentence
 
+# old tacl/udw stuff
 # list of languages used in the experiment (WTC constrained), note "ALL" (multi-source delex)
-all_languages = sorted(["ar", "bg", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "he", "hi", "hr", "hu",
-                        "id", "it", "nl", "no", "pl", "pt", "ro", "sl", "sv", "ta", "ALL"])
+# all_languages = sorted(["ar", "bg", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "he", "hi", "hr", "hu",
+#                        "id", "it", "nl", "no", "pl", "pt", "ro", "sl", "sv", "ta", "ALL"])
+
+# added for cleandata repos
+all_languages = sorted(["ar", "bg", "ca", "cop", "cs", "cs_cac", "cs_cltt", "cu", "da", "de", "el", "en", "en_esl",
+                        "en_lines", "es", "es_ancora", "et", "eu", "fa", "fi", "fi_ftb", "fr", "ga", "gl", "gl_treegal",
+                        "got", "grc", "grc_proiel", "he", "hi", "hr", "hu", "id", "it", "ja", "ja_ktc", "kk", "la",
+                        "la_ittb", "la_proiel", "lv", "nl", "nl_lassysmall", "no", "pl", "pt", "pt_bosque", "pt_br",
+                        "ro", "ru", "ru_syntagrus", "sa", "sk", "sl", "sl_sst", "sv", "sv_lines", "swl", "ta", "tr",
+                        "ug", "uk", "vi", "zh"])
 
 # argparse stuff
 parser = argparse.ArgumentParser(description="Collect target sentences into a pickle file.")
@@ -16,8 +25,13 @@ args = parser.parse_args()
 
 assert args.target_name in all_languages, "Unknown language: {}".format(args.target_name)
 
+# old tacl/udw stuff
 # add the target first; note this is a *gold* POS file
-handles = [open("{}/test/{}-ud-test.conllu.lex.with_gold_pos".format(args.data_root, args.target_name))]
+# handles = [open("{}/test/{}-ud-test.conllu.lex.with_gold_pos".format(args.data_root, args.target_name))]
+
+# added for cleandata repos
+handles = [open("{}/ud14/train/{}-ud-train.no_sent_id.no_mwe.no_feat.basic_deprel.ceil_10k.{}_pos.delex.conll_2009"
+                .format(args.data_root, args.target_name, args.pos_source))]
 
 source_languages = sorted(set(all_languages) - {args.target_name})
 source_languages_per_handle = []  # remember the sequence of source languages, just in case
@@ -25,8 +39,12 @@ source_languages_per_handle = []  # remember the sequence of source languages, j
 # open all the source file handles
 for source_language in source_languages:
     assert source_language != args.target_name, "Target cannot be source!"
-    handles.append(open("{}/test/{}-ud-test.conllu.delex.sampled_10k.with_{}_pos.parsed_with_{}"
-                        .format(args.data_root, args.target_name, args.pos_source, source_language)))
+    # old tacl/udw stuff
+    #handles.append(open("{}/test/{}-ud-test.conllu.delex.sampled_10k.with_{}_pos.parsed_with_{}"
+    #                    .format(args.data_root, args.target_name, args.pos_source, source_language)))
+    # added for cleandata repos
+    handles.append(open("{}/ud14/train/{}-ud-train.no_sent_id.no_mwe.no_feat.basic_deprel.ceil_10k.{}_pos.delex.conll_2009_parsed_by_{}"
+                       .format(args.data_root, args.target_name, args.pos_source, source_language)))
     source_languages_per_handle.append(source_language)  # record the sequence
 
 # list of target sentences as final result of the script
