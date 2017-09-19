@@ -144,7 +144,7 @@ model.compile('adam', 'mse', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train, Y_train,
-          batch_size=16,
-          nb_epoch=10,
+          batch_size=32,
+          nb_epoch=100,
           validation_data=[X_test, Y_test])
 
