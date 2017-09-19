@@ -130,10 +130,10 @@ X_test = sequence.pad_sequences(X_test, maxlen=64, dtype=float)
 
 model = Sequential()
 
-model.add(Embedding(len(one_hot)+1, 10))
+model.add(Embedding(len(one_hot)+1, 12))
 
-model.add(LSTM(output_dim=32,
-               input_dim=10,
+model.add(LSTM(output_dim=64,
+               input_dim=12,
                input_length=64,
                activation="sigmoid",
                return_sequences=False))
