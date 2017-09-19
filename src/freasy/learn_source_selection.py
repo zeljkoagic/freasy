@@ -122,7 +122,7 @@ print(X_test_reshaped[0], Y_test[0])
 
 model = Sequential()
 
-model.add(LSTM(output_dim=128,
+model.add(LSTM(output_dim=32,
                input_dim=1,
                input_length=64,
                activation="sigmoid",
