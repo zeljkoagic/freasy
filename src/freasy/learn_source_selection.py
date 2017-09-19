@@ -115,10 +115,10 @@ for item in test_data:
 X_train = sequence.pad_sequences(X_train, maxlen=64, dtype=float)
 X_test = sequence.pad_sequences(X_test, maxlen=64, dtype=float)
 
-X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 64, 1))
-X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 64, 1))
+#X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 64, 1))
+#X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 64, 1))
 
-print(X_test_reshaped[0], Y_test[0])
+#print(X_test_reshaped[0], Y_test[0])
 
 model = Sequential()
 
@@ -135,8 +135,8 @@ model.add(Dense(10, activation='softmax'))
 model.compile('adam', 'mse', metrics=['accuracy'])
 
 print('Train...')
-model.fit(X_train_reshaped, Y_train,
+model.fit(X_train, Y_train,
           batch_size=16,
           nb_epoch=10,
-          validation_data=[X_test_reshaped, Y_test])
+          validation_data=[X_test, Y_test])
 
