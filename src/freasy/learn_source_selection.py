@@ -135,7 +135,7 @@ model.add(Embedding(len(one_hot)+1, 12))
 model.add(LSTM(output_dim=32,
                input_dim=12,
                input_length=64,
-               activation="sigmoid",
+               activation="relu",
                return_sequences=False))
 
 model.add(Dense(10, activation='softmax'))
