@@ -122,8 +122,10 @@ print(X_test_reshaped[0], Y_test[0])
 
 model = Sequential()
 
+model.add(Embedding(len(one_hot), 10))
+
 model.add(LSTM(output_dim=32,
-               input_dim=1,
+               input_dim=10,
                input_length=64,
                activation="sigmoid",
                return_sequences=False))
