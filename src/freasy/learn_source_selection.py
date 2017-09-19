@@ -132,15 +132,16 @@ model = Sequential()
 
 model.add(Embedding(len(one_hot)+1, 12))
 
-model.add(LSTM(output_dim=32,
+model.add(LSTM(output_dim=64,
                input_dim=12,
                input_length=64,
                activation="relu",
                return_sequences=False))
 
+model.add(Dense(32, activation='softmax'))
 model.add(Dense(10, activation='softmax'))
 
-model.compile('adam', 'binary_crossentropy', metrics=['binary_accuracy'])
+model.compile('adam', 'kullback_leibler_divergence', metrics=['binary_accuracy'])
 
 print('Train...')
 model.fit(X_train, Y_train,
