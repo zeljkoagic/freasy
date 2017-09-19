@@ -78,7 +78,7 @@ for item in training_data:
     # translate the POS tags into floats
     all = []
     for pos in poss:
-        all.append(float(one_hot[pos]) / float(len(one_hot)))
+        all.append(float(one_hot[pos]))
     all = np.array(all, dtype=float)
 
     # add training instance
@@ -100,7 +100,7 @@ for item in test_data:
     # translate the POS tags into floats
     all = []
     for pos in poss:
-        all.append(float(one_hot[pos]) / float(len(one_hot)))
+        all.append(float(one_hot[pos]))
     all = np.array(all, dtype=float)
 
     # add training instance
