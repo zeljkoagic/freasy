@@ -132,15 +132,15 @@ model = Sequential()
 
 model.add(Embedding(len(one_hot)+1, 12))
 
-model.add(Bidirectional(LSTM(output_dim=64,
+model.add(LSTM(output_dim=32,
                input_dim=12,
                input_length=64,
                activation="sigmoid",
-               return_sequences=False)))
+               return_sequences=False))
 
 model.add(Dense(10, activation='softmax'))
 
-model.compile('adam', 'binary_crossentropy', metrics=['accuracy'])
+model.compile('adam', 'binary_crossentropy', metrics=['binary_accuracy'])
 
 print('Train...')
 model.fit(X_train, Y_train,
