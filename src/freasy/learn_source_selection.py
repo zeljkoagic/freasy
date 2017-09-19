@@ -132,11 +132,11 @@ model = Sequential()
 
 model.add(Embedding(len(one_hot)+1, 12))
 
-model.add(LSTM(output_dim=64,
+model.add(Bidirectional(LSTM(output_dim=64,
                input_dim=12,
                input_length=64,
                activation="sigmoid",
-               return_sequences=False))
+               return_sequences=False)))
 
 model.add(Dense(10, activation='softmax'))
 
