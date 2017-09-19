@@ -140,7 +140,7 @@ model.add(Bidirectional(LSTM(output_dim=64,
 
 model.add(Dense(10, activation='softmax'))
 
-model.compile('adam', 'mse', metrics=['accuracy'])
+model.compile('adam', 'binary_crossentropy', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train, Y_train,
