@@ -27,7 +27,7 @@ parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "pro
 args = parser.parse_args()
 
 dev_langs = ["en", "es", "de", "fr", "it", "hi", "hr", "cs", "he", "id"]
-test_langs = ["pt", "pl", "da"]
+test_langs = ["en", "es", "de", "fr", "it", "hi", "hr", "cs", "he", "id"]
 
 training_data = []
 test_data = []
@@ -93,14 +93,14 @@ model.add(LSTM(output_dim=64,
                activation="relu",
                return_sequences=False))
 
-model.add(Dense(32, activation='softmax'))
+#model.add(Dense(32, activation='softmax'))
 model.add(Dense(10, activation='softmax'))
 
-model.compile('adam', 'categorical_crossentropy', metrics=['binary_accuracy'])
+model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
 print('Train...')
 model.fit(X_train, Y_train,
           batch_size=32,
-          nb_epoch=100,
+          nb_epoch=10,
           validation_data=[X_test, Y_test])
 
