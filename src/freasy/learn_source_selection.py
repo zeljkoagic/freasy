@@ -68,12 +68,12 @@ for data in [(test_data, X_test, Y_test), (training_data, X_train, Y_train)]:
         X.append(encoded_pos_sequence)
 
         ranks[target_lang] = 0
-        ranks2 = {langg: ranks[langg] for langg in dev_langs}
-        ranks2 = softmax(ranks2, temperature=0.1)  # softmax the correct head counts
-        y_val = np.array([x for y, x in sorted(ranks2.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
-        am = np.argmax(y_val)
+        ranks = softmax({lang: ranks[lang] for lang in dev_langs}, temperature=0.1)
+        y_val = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)
+                          if y in dev_langs], dtype=float)
+        index_of_max = np.argmax(y_val)
         y_val = np.zeros_like(y_val)
-        y_val[am] = 1
+        y_val[index_of_max] = 1
         Y.append(y_val.tolist())
 
 X_train = sequence.pad_sequences(X_train, maxlen=64, dtype=float)
