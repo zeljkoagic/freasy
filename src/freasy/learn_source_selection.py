@@ -42,95 +42,46 @@ for lang in test_langs:
                                       .format(args.data_root, lang, args.pos_source), "rb"))
     test_data += target_sentences
 
-one_hot = {
-    "ADJ":   1,
-    "ADP":   2,
-    "ADV":   3,
-    "AUX":   4,
-    "CONJ":  5,
-    "DET":   6,
-    "INTJ":  7,
-    "NOUN":  8,
-    "NUM":   9,
-    "PART":  10,
-    "PRON":  11,
-    "PROPN": 12,
-    "PUNCT": 13,
-    "SCONJ": 14,
-    "SYM":   15,
-    "VERB":  16,
-    "X":     17
-}
+ud_pos_tags = sorted(["ADJ", "ADP", "ADV", "AUX", "CONJ", "DET", "INTJ", "NOUN", "NUM", "PART", "PRON",
+                      "PROPN", "PUNCT", "SCONJ", "SYM", "VERB", "X"])
+
+tag_ids = {x: i for i, x in enumerate(ud_pos_tags)}  # tag mapping to ids
 
 X_train = []
 Y_train = []
 X_test = []
 Y_test = []
 
-for item in training_data:
-    lang, idx, poss, ranks = item  # get the training instance: target lang, sentence id, list of POS tags, corr heads
+for data in [(test_data, X_test, Y_test), (training_data, X_train, Y_train)]:
+    the_data, X, Y = data
+    for item in the_data:
+        # get the training instance: target lang, sentence id, list of POS tags, corr heads
+        target_lang, idx, poss, ranks = item
 
-    # filter out the sentences that are too short or too long
-    n_tokens = len(poss)
-    if n_tokens < 20 or n_tokens > 50:
-        continue
+        # filter out the sentences that are too short or too long
+        n_tokens = len(poss)
+        if n_tokens < 20 or n_tokens > 50:
+            continue
 
-    # translate the POS tags into floats
-    all = []
-    for pos in poss:
-        all.append(float(one_hot[pos]))
-    all = np.array(all, dtype=float)
+        # translate the POS tags into floats, and add training instance
+        encoded_pos_sequence = np.array([tag_ids[pos] for pos in poss], dtype=float)
+        X.append(encoded_pos_sequence)
 
-    # add training instance
-    X_train.append(all)
-
-    ranks[lang] = 0  # target language does not participate
-    ranks2 = {langg: ranks[langg] for langg in dev_langs}
-    ranks2 = softmax(ranks2, temperature=0.1)  # softmax the correct head counts
-    y_val = np.array([x for y, x in sorted(ranks2.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
-    am = np.argmax(y_val)
-    y_val = np.zeros_like(y_val)
-    y_val[am] = 1
-    Y_train.append(y_val.tolist())
-
-for item in test_data:
-    lang, idx, poss, ranks = item  # get the training instance: target lang, sentence id, list of POS tags, corr heads
-
-    # filter out the sentences that are too short or too long
-    n_tokens = len(poss)
-    if n_tokens < 20 or n_tokens > 50:
-        continue
-
-    # translate the POS tags into floats
-    all = []
-    for pos in poss:
-        all.append(float(one_hot[pos]))
-    all = np.array(all, dtype=float)
-
-    # add training instance
-    X_test.append(all)
-
-    ranks[lang] = 0  # target language does not participate
-    ranks2 = {langg:ranks[langg] for langg in dev_langs}
-    ranks2 = softmax(ranks2, temperature=0.1)  # softmax the correct head counts
-    y_val = np.array([x for y, x in sorted(ranks2.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
-    am = np.argmax(y_val)
-    y_val = np.zeros_like(y_val)
-    y_val[am] = 1
-    Y_test.append(y_val.tolist())
-
+        ranks[target_lang] = 0
+        ranks2 = {langg: ranks[langg] for langg in dev_langs}
+        ranks2 = softmax(ranks2, temperature=0.1)  # softmax the correct head counts
+        y_val = np.array([x for y, x in sorted(ranks2.items(), key=operator.itemgetter(0), reverse=False) if y in dev_langs], dtype=float)
+        am = np.argmax(y_val)
+        y_val = np.zeros_like(y_val)
+        y_val[am] = 1
+        Y.append(y_val.tolist())
 
 X_train = sequence.pad_sequences(X_train, maxlen=64, dtype=float)
 X_test = sequence.pad_sequences(X_test, maxlen=64, dtype=float)
 
-#X_train_reshaped = np.reshape(X_train, (X_train.shape[0], 64, 1))
-#X_test_reshaped = np.reshape(X_test, (X_test.shape[0], 64, 1))
-
-#print(X_test_reshaped[0], Y_test[0])
-
 model = Sequential()
 
-model.add(Embedding(len(one_hot)+1, 12))
+model.add(Embedding(len(tag_ids)+1, 12))
 
 model.add(LSTM(output_dim=64,
                input_dim=12,
