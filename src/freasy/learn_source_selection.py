@@ -88,8 +88,7 @@ model = Sequential()
 model.add(Embedding(len(tag_ids)+1, 12))
 
 model.add(LSTM(output_dim=64,
-               input_dim=12,
-               input_length=64,
+               input_shape=(64, 12), 
                activation="relu",
                return_sequences=False))
 
@@ -101,6 +100,6 @@ model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 print('Train...')
 model.fit(X_train, Y_train,
           batch_size=32,
-          nb_epoch=10,
+          epochs=10,
           validation_data=[X_test, Y_test])
 
