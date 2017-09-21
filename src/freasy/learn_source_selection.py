@@ -67,13 +67,17 @@ for data in [(test_data, X_test, Y_test), (training_data, X_train, Y_train)]:
         encoded_pos_sequence = np.array([tag_ids[pos] for pos in poss], dtype=float)
         X.append(encoded_pos_sequence)
 
+        # convert reverse ranks to softmax
         ranks[target_lang] = 0
         ranks = softmax({lang: ranks[lang] for lang in dev_langs}, temperature=0.1)
+        # sort by key to avoid python dictionary shite
         y_val = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)
                           if y in dev_langs], dtype=float)
+        # put all to 0 save for the single best source
         index_of_max = np.argmax(y_val)
         y_val = np.zeros_like(y_val)
         y_val[index_of_max] = 1
+        # add to training data
         Y.append(y_val.tolist())
 
 X_train = sequence.pad_sequences(X_train, maxlen=64, dtype=float)
@@ -92,7 +96,7 @@ model.add(LSTM(output_dim=64,
 model.add(Dense(32, activation='softmax'))
 model.add(Dense(10, activation='softmax'))
 
-model.compile('adam', 'kullback_leibler_divergence', metrics=['binary_accuracy'])
+model.compile('adam', 'categorical_crossentropy', metrics=['binary_accuracy'])
 
 print('Train...')
 model.fit(X_train, Y_train,
