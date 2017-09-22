@@ -26,13 +26,13 @@ parser.add_argument("--data_root", required=True, help="root for data files")
 parser.add_argument("--pos_source", required=True, choices=["gold", "pred", "proj"], help="POS source")
 args = parser.parse_args()
 
-dev_langs = ["en", "es", "de", "fr", "it", "hi", "hr", "cs", "he", "id"]
+train_langs = ["en", "es", "de", "fr", "it", "hi", "hr", "cs", "he", "id"]
 test_langs = ["pt", "pl", "da"]
 
 training_data = []
 test_data = []
 
-for lang in dev_langs:
+for lang in train_langs:
     target_sentences = dill.load(open("{}/pickles/target_lang_{}.pos_source_{}.nn_training_data"
                                       .format(args.data_root, lang, args.pos_source), "rb"))
     training_data += target_sentences
@@ -69,10 +69,10 @@ for data in [(test_data, X_test, Y_test), (training_data, X_train, Y_train)]:
 
         # convert reverse ranks to softmax
         ranks[target_lang] = 0
-        ranks = softmax({lang: ranks[lang] for lang in dev_langs}, temperature=0.1)
+        ranks = softmax({lang: ranks[lang] for lang in train_langs}, temperature=0.1)
         # sort by key to avoid python dictionary shite
         y_val = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)
-                          if y in dev_langs], dtype=float)
+                          if y in train_langs], dtype=float)
         # put all to 0 save for the single best source
         index_of_max = np.argmax(y_val)
         y_val = np.zeros_like(y_val)
