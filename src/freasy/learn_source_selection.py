@@ -45,7 +45,7 @@ for lang in test_langs:
 ud_pos_tags = sorted(["ADJ", "ADP", "ADV", "AUX", "CONJ", "DET", "INTJ", "NOUN", "NUM", "PART", "PRON",
                       "PROPN", "PUNCT", "SCONJ", "SYM", "VERB", "X"])
 
-tag_ids = {x: i for i, x in enumerate(ud_pos_tags)}  # tag mapping to ids
+tag_ids = {x: i+1 for i, x in enumerate(ud_pos_tags)}  # tag mapping to ids
 
 X_train = []
 Y_train = []
