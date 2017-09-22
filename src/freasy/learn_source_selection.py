@@ -60,7 +60,9 @@ for data in [(test_data, X_test, Y_test), (training_data, X_train, Y_train)]:
 
         # filter out the sentences that are too short or too long
         n_tokens = len(poss)
-        if n_tokens < 20 or n_tokens > 50:
+        #if n_tokens < 20 or n_tokens > 50:
+        #    continue
+        if n_tokens > 5:
             continue
 
         # translate the POS tags into floats, and add training instance
