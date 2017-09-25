@@ -62,8 +62,8 @@ for data in [(test_data, X_test, Y_test), (training_data, X_train, Y_train)]:
         n_tokens = len(poss)
         #if n_tokens < 20 or n_tokens > 50:
         #    continue
-        if n_tokens > 5:
-            continue
+        #if n_tokens > 5:
+        #    continue
 
         # translate the POS tags into floats, and add training instance
         encoded_pos_sequence = np.array([tag_ids[pos] for pos in poss], dtype=float)
@@ -92,9 +92,16 @@ model.add(Embedding(len(tag_ids)+1, 12))
 model.add(Bidirectional(LSTM(units=64,
                input_shape=(64, 12),
                activation="relu",
-               return_sequences=False,
+               return_sequences=True,
                dropout=0.2,
                recurrent_dropout=0.2)))
+
+model.add(Bidirectional(LSTM(units=32,
+                             input_shape=(64, 64, 12),
+                             activation="relu",
+                             return_sequences=False,
+                             dropout=0.2,
+                             recurrent_dropout=0.2)))
 
 model.add(Dense(10, activation='softmax'))
 
