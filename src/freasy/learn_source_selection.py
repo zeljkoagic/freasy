@@ -70,7 +70,7 @@ for data in [(test_data, X_test, Y_test), (training_data, X_train, Y_train)]:
         X.append(encoded_pos_sequence)
 
         # convert reverse ranks to softmax
-        ranks[target_lang] = 0
+        ranks[target_lang] = 1  # TODO Here I make this problem into target language guessing
         ranks = softmax({lang: ranks[lang] for lang in train_langs}, temperature=0.1)
         # sort by key to avoid python dictionary shite
         y_val = np.array([x for y, x in sorted(ranks.items(), key=operator.itemgetter(0), reverse=False)
@@ -78,7 +78,7 @@ for data in [(test_data, X_test, Y_test), (training_data, X_train, Y_train)]:
         # put all to 0 save for the single best source
         index_of_max = np.argmax(y_val)
         y_val = np.zeros_like(y_val)
-        y_val[index_of_max] = 1
+        # y_val[index_of_max] = 1  # TODO Here is the best source
         # add to training data
         Y.append(y_val.tolist())
 
