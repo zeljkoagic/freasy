@@ -82,15 +82,15 @@ for data in [(test_data, X_test, Y_test), (training_data, X_train, Y_train)]:
         # add to training data
         Y.append(y_val.tolist())
 
-X_train = sequence.pad_sequences(X_train, maxlen=32, dtype=float)
-X_test = sequence.pad_sequences(X_test, maxlen=32, dtype=float)
+X_train = sequence.pad_sequences(X_train, maxlen=64, dtype=float)
+X_test = sequence.pad_sequences(X_test, maxlen=64, dtype=float)
 
 model = Sequential()
 
 model.add(Embedding(len(tag_ids)+1, 12))
 
 model.add(Bidirectional(LSTM(units=32,
-                             input_shape=(32, 12),
+                             input_shape=(64, 12),
                              activation="relu",
                              return_sequences=False,
                              dropout=0.2,
@@ -112,6 +112,6 @@ model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 print('Train...')
 model.fit(X_train, Y_train,
           batch_size=32,
-          epochs=5,
+          epochs=20,
           validation_data=[X_test, Y_test])
 
