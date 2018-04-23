@@ -8,7 +8,7 @@ import numpy as np
 
 from keras.preprocessing import sequence
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, GRU
+from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, GRU, TimeDistributed
 
 
 def to_ranks(lasvals):
@@ -102,6 +102,8 @@ model.add(Bidirectional(LSTM(units=32,
 #                             return_sequences=False,
 #                             dropout=0.2,
 #                             recurrent_dropout=0.2)))
+
+model.add(TimeDistributed(Dense(len(tag_ids)+1)))
 
 model.add(Dense(10, activation='softmax'))
 
