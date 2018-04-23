@@ -90,18 +90,18 @@ model = Sequential()
 model.add(Embedding(len(tag_ids)+1, 12))
 
 model.add(Bidirectional(LSTM(units=128,
-               input_shape=(64, 12),
-               activation="relu",
-               return_sequences=True,
-               dropout=0.2,
-               recurrent_dropout=0.2)))
-
-model.add(Bidirectional(LSTM(units=64,
-                             input_shape=(128, 64, 12),
+                             input_shape=(64, 12),
                              activation="relu",
                              return_sequences=False,
                              dropout=0.2,
                              recurrent_dropout=0.2)))
+
+#model.add(Bidirectional(LSTM(units=64,
+#                             input_shape=(128, 64, 12),
+#                             activation="relu",
+#                             return_sequences=False,
+#                             dropout=0.2,
+#                             recurrent_dropout=0.2)))
 
 model.add(Dense(10, activation='softmax'))
 
