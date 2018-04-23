@@ -103,7 +103,7 @@ model.add(Bidirectional(LSTM(units=32,
 #                             dropout=0.2,
 #                             recurrent_dropout=0.2)))
 
-model.add(TimeDistributed(Dense(len(tag_ids)+1)))
+#model.add(TimeDistributed(Dense(len(tag_ids)+1)))
 
 model.add(Dense(10, activation='softmax'))
 
