@@ -92,7 +92,7 @@ model.add(Embedding(len(tag_ids)+1, 12))
 model.add(Bidirectional(LSTM(units=32,
                              input_shape=(32, 12),
                              activation="relu",
-                             return_sequences=True,
+                             return_sequences=False,
                              dropout=0.2,
                              recurrent_dropout=0.2)))
 
