@@ -92,7 +92,7 @@ model.add(Embedding(len(tag_ids)+1, 12))
 model.add(Bidirectional(LSTM(units=32,
                              input_shape=(32, 12),
                              activation="relu",
-                             return_sequences=False,
+                             return_sequences=True,
                              dropout=0.2,
                              recurrent_dropout=0.2)))
 
@@ -103,9 +103,9 @@ model.add(Bidirectional(LSTM(units=32,
 #                             dropout=0.2,
 #                             recurrent_dropout=0.2)))
 
-model.add(TimeDistributed(Dense(10, activation='softmax')))
+model.add(TimeDistributed(Dense(len(tag_ids)+1)))
 
-#model.add(Dense(10, activation='softmax'))
+model.add(Dense(10, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
