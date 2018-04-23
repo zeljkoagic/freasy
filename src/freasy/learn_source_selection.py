@@ -89,12 +89,12 @@ model = Sequential()
 
 model.add(Embedding(len(tag_ids)+1, 12))
 
-model.add(Bidirectional(LSTM(units=128,
+model.add(Bidirectional(LSTM(units=64,
                              input_shape=(32, 12),
                              activation="relu",
                              return_sequences=False,
-                             dropout=0.5,
-                             recurrent_dropout=0.5)))
+                             dropout=0.2,
+                             recurrent_dropout=0.2)))
 
 #model.add(Bidirectional(LSTM(units=64,
 #                             input_shape=(128, 64, 12),
@@ -103,6 +103,7 @@ model.add(Bidirectional(LSTM(units=128,
 #                             dropout=0.2,
 #                             recurrent_dropout=0.2)))
 
+model.add(Dense(32, activation='softmax'))
 model.add(Dense(10, activation='softmax'))
 
 model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
@@ -110,6 +111,6 @@ model.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 print('Train...')
 model.fit(X_train, Y_train,
           batch_size=32,
-          epochs=5,
+          epochs=2,
           validation_data=[X_test, Y_test])
 
